@@ -11,18 +11,23 @@ export type PartnerOffer = {
   id: string;
   slug: string;
   partnerName: string;
+  partnerLogoUrl?: string;
   offerTitle: string;
   category: OfferCategory;
   description: string;
   promotionalLabel: string;
   ctaLabel: string;
   outboundUrl: string;
+  isExternal: boolean;
   logoInitials: string;
   featured: boolean;
   active: boolean;
   expiry?: string;
   termsNote?: string;
 };
+
+export const OFFERS_BASE_PATH = "/offers";
+export const getOfferDetailPath = (slug: string) => `${OFFERS_BASE_PATH}/${slug}`;
 
 export const offerCategories: Array<"All Offers" | OfferCategory> = [
   "All Offers",
@@ -47,6 +52,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "25% off setup",
     ctaLabel: "Claim Offer",
     outboundUrl: "https://example.com/rbp-offers/ledgerlift-cashflow",
+    isExternal: true,
     logoInitials: "LL",
     featured: true,
     active: true,
@@ -64,6 +70,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "Free policy review",
     ctaLabel: "View Deal",
     outboundUrl: "https://example.com/rbp-offers/coverwise-review",
+    isExternal: true,
     logoInitials: "CW",
     featured: true,
     active: true,
@@ -80,6 +87,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "3 months free",
     ctaLabel: "Get Discount",
     outboundUrl: "https://example.com/rbp-offers/peopledesk-foundation",
+    isExternal: true,
     logoInitials: "PD",
     featured: true,
     active: true,
@@ -96,6 +104,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "Save $350 on setup",
     ctaLabel: "Explore Offer",
     outboundUrl: "https://example.com/rbp-offers/opspilot-starter",
+    isExternal: true,
     logoInitials: "OP",
     featured: true,
     active: true,
@@ -112,6 +121,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "20% off first year",
     ctaLabel: "View Deal",
     outboundUrl: "https://example.com/rbp-offers/stackbridge-productivity",
+    isExternal: true,
     logoInitials: "SB",
     featured: false,
     active: true,
@@ -127,6 +137,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "Fixed-fee review",
     ctaLabel: "Claim Offer",
     outboundUrl: "https://example.com/rbp-offers/clausepoint-review",
+    isExternal: true,
     logoInitials: "CP",
     featured: false,
     active: true,
@@ -143,6 +154,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "Free audit report",
     ctaLabel: "Explore Offer",
     outboundUrl: "https://example.com/rbp-offers/marketmile-audit",
+    isExternal: true,
     logoInitials: "MM",
     featured: false,
     active: true,
@@ -158,6 +170,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "15% partner discount",
     ctaLabel: "Get Discount",
     outboundUrl: "https://example.com/rbp-offers/processworks-review",
+    isExternal: true,
     logoInitials: "PW",
     featured: false,
     active: true,
@@ -173,6 +186,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "Bonus asset pack",
     ctaLabel: "View Deal",
     outboundUrl: "https://example.com/rbp-offers/northline-refresh",
+    isExternal: true,
     logoInitials: "NC",
     featured: false,
     active: true,
@@ -188,6 +202,7 @@ export const partnerOffers: PartnerOffer[] = [
     promotionalLabel: "10% off review",
     ctaLabel: "Claim Offer",
     outboundUrl: "https://example.com/rbp-offers/teampolicy-review",
+    isExternal: true,
     logoInitials: "TP",
     featured: false,
     active: true,
