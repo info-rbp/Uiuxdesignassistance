@@ -30,8 +30,8 @@ const allComplexities = ["All Levels", "Simple", "Standard", "Complex"];
 const sortOptions = ["Featured", "A–Z", "Z–A", "Quickest Delivery", "Complexity: Low–High"];
 
 export function DocumentCategoryPage() {
-  const { id = "a" } = useParams<{ id: string }>();
-  const meta = categoryMeta[id.toLowerCase()] ?? categoryMeta["a"];
+  const { id = "business-setup-governance" } = useParams<{ id: string }>();
+  const meta = categoryMeta[id.toLowerCase()] ?? categoryMeta["business-setup-governance"];
   const docs = allDocuments[id.toLowerCase()] ?? [];
 
   const [search, setSearch] = useState("");

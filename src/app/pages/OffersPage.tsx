@@ -12,7 +12,7 @@ const offers = [
     title: "Starter Advisory Bundle",
     badge: "Best for New Businesses",
     badgeColor: "bg-blue-700",
-    price: "From £499",
+    price: "From $499",
     duration: "4-week engagement",
     desc: "Perfect for businesses just getting started with professional advisory. Includes an initial business assessment, 2 consulting sessions, and a 30-day action plan.",
     includes: [
@@ -27,7 +27,7 @@ const offers = [
     title: "Growth Partner Programme",
     badge: "Most Popular",
     badgeColor: "bg-amber-500",
-    price: "From £1,299/mo",
+    price: "From $1,299/mo",
     duration: "3-month minimum",
     desc: "Our flagship ongoing advisory programme. Regular sessions, continuous support, and full access to our toolkit suite for businesses serious about scaling.",
     includes: [

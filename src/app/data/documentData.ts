@@ -16,6 +16,10 @@ export type DocumentItem = {
   whatsIncluded: string[];
   useCases: string[];
   faqs: { q: string; a: string }[];
+  stripeProductId?: string;
+  stripePriceId?: string;
+  fulfilmentType: "instant_download" | "tailored_service" | "hybrid";
+  status: "active" | "published" | "draft";
 };
 
 export type CategoryMeta = {
@@ -30,35 +34,115 @@ export type CategoryMeta = {
 };
 
 export const categoryMeta: Record<string, CategoryMeta> = {
-  a: {
-    id: "A",
-    title: "Category A",
-    desc: "Essential business documents that form the foundation of your operations. These are the core documents every business needs.",
+  "business-setup-governance": {
+    id: "business-setup-governance",
+    title: "Business Setup & Governance",
+    desc: "Business formation, governance, ownership, director, and internal management documents.",
     color: "bg-blue-700",
     lightBg: "bg-blue-50",
     accent: "text-blue-700",
-    tag: "Core",
+    tag: "A",
     tagColor: "bg-blue-100 text-blue-700",
   },
-  b: {
-    id: "B",
-    title: "Category B",
-    desc: "Supporting documents that complement your core operations and help your business run more efficiently.",
+  "operations-process": {
+    id: "operations-process",
+    title: "Operations & Process",
+    desc: "Documents that help businesses standardise how work is performed, managed, reviewed, and improved.",
     color: "bg-violet-700",
     lightBg: "bg-violet-50",
     accent: "text-violet-700",
-    tag: "Supporting",
+    tag: "B",
     tagColor: "bg-violet-100 text-violet-700",
   },
-  c: {
-    id: "C",
-    title: "Category C",
-    desc: "Specialist documents for specific business needs, compliance requirements, and advanced operational scenarios.",
+  "hr-employment": {
+    id: "hr-employment",
+    title: "HR & Employment",
+    desc: "Employment, onboarding, staff management, performance, workplace conduct, and people-related documents.",
     color: "bg-emerald-700",
     lightBg: "bg-emerald-50",
     accent: "text-emerald-700",
-    tag: "Specialist",
+    tag: "C",
     tagColor: "bg-emerald-100 text-emerald-700",
+  },
+  "finance-administration": {
+    id: "finance-administration",
+    title: "Finance & Administration",
+    desc: "Administrative, financial, reporting, record-keeping, and internal business management documents.",
+    color: "bg-amber-600",
+    lightBg: "bg-amber-50",
+    accent: "text-amber-700",
+    tag: "D",
+    tagColor: "bg-amber-100 text-amber-700",
+  },
+  "sales-marketing-client-management": {
+    id: "sales-marketing-client-management",
+    title: "Sales, Marketing & Client Management",
+    desc: "Documents that support customer acquisition, client communication, sales processes, proposals, and relationship management.",
+    color: "bg-rose-600",
+    lightBg: "bg-rose-50",
+    accent: "text-rose-700",
+    tag: "E",
+    tagColor: "bg-rose-100 text-rose-700",
+  },
+  "compliance-risk": {
+    id: "compliance-risk",
+    title: "Compliance & Risk",
+    desc: "Documents that help businesses identify, manage, document, and review operational, regulatory, commercial, and workplace risks.",
+    color: "bg-cyan-700",
+    lightBg: "bg-cyan-50",
+    accent: "text-cyan-700",
+    tag: "F",
+    tagColor: "bg-cyan-100 text-cyan-700",
+  },
+  "policies-procedures": {
+    id: "policies-procedures",
+    title: "Policies & Procedures",
+    desc: "Reusable policies and procedural documents that can be tailored to the business and used internally or externally.",
+    color: "bg-indigo-700",
+    lightBg: "bg-indigo-50",
+    accent: "text-indigo-700",
+    tag: "G",
+    tagColor: "bg-indigo-100 text-indigo-700",
+  },
+  "strategy-planning": {
+    id: "strategy-planning",
+    title: "Strategy & Planning",
+    desc: "Documents that help business owners clarify direction, assess options, make decisions, and plan future growth.",
+    color: "bg-teal-700",
+    lightBg: "bg-teal-50",
+    accent: "text-teal-700",
+    tag: "H",
+    tagColor: "bg-teal-100 text-teal-700",
+  },
+  "custom-business-documents": {
+    id: "custom-business-documents",
+    title: "Custom Business Documents",
+    desc: "Tailored document services for businesses that need a document prepared or adapted to their specific situation.",
+    color: "bg-slate-700",
+    lightBg: "bg-slate-50",
+    accent: "text-slate-700",
+    tag: "I",
+    tagColor: "bg-slate-100 text-slate-700",
+  },
+  "documentation-suites": {
+    id: "documentation-suites",
+    title: "Documentation Suites",
+    desc: "A set of policies and procedures related to specific document categories/areas.",
+    color: "bg-slate-900",
+    lightBg: "bg-slate-100",
+    accent: "text-slate-900",
+    tag: "Suites",
+    tagColor: "bg-slate-200 text-slate-900",
+  },
+  "toolkits": {
+    id: "toolkits",
+    title: "Toolkits",
+    desc: "Full implementation kits to equip your business operations.",
+    color: "bg-indigo-900",
+    lightBg: "bg-indigo-50",
+    accent: "text-indigo-900",
+    tag: "Kits",
+    tagColor: "bg-indigo-100 text-indigo-900",
   },
 };
 
@@ -66,10 +150,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
   a: [
     {
       id: "a1", name: "Business Plan", type: "Planning", format: "PDF / Word", deliveryTime: "3–5 days",
-      complexity: "Standard", popular: true, category: "a",
+      complexity: "Standard", popular: true, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A comprehensive business plan covering strategy, financials, and operational structure.",
       tags: ["Planning", "Strategy"],
-      price: "£299",
+      price: "$299",
       fullDescription: "Our Business Plan document is a professionally crafted, fully structured plan tailored to your specific business. It covers your executive summary, market analysis, competitive landscape, operational plan, financial projections, and growth strategy. Designed for use with banks, investors, or internal planning purposes.",
       whatsIncluded: [
         "Executive summary",
@@ -92,10 +176,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a2", name: "Company Profile", type: "Marketing", format: "PDF", deliveryTime: "2–3 days",
-      complexity: "Standard", popular: true, category: "a",
+      complexity: "Standard", popular: true, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A professional company overview document for clients, partners, and stakeholders.",
       tags: ["Marketing", "Branding"],
-      price: "£149",
+      price: "$149",
       fullDescription: "A polished, professional Company Profile document that introduces your business to clients, partners, and prospects. Covers who you are, what you do, your values, your team, and your key services or products — all presented in a clean, branded format ready to share.",
       whatsIncluded: [
         "Company introduction & background",
@@ -115,10 +199,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a3", name: "Terms & Conditions", type: "Legal", format: "Word / PDF", deliveryTime: "3–4 days",
-      complexity: "Complex", popular: false, category: "a",
+      complexity: "Complex", popular: false, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "Tailored terms and conditions for your business services or products.",
       tags: ["Legal", "Compliance"],
-      price: "£249",
+      price: "$249",
       fullDescription: "Professionally drafted Terms & Conditions tailored to your specific business model — whether you sell products, provide services, or operate online. Covers payment terms, liability, intellectual property, dispute resolution, and all key legal clauses relevant to your business.",
       whatsIncluded: [
         "Service or product description clauses",
@@ -140,10 +224,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a4", name: "Privacy Policy", type: "Legal", format: "Word / PDF", deliveryTime: "2–3 days",
-      complexity: "Standard", popular: true, category: "a",
+      complexity: "Standard", popular: true, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A GDPR-aligned privacy policy document suitable for websites and services.",
       tags: ["Legal", "Compliance"],
-      price: "£149",
+      price: "$149",
       fullDescription: "A GDPR-aligned Privacy Policy tailored to your business and data practices. Covers what personal data you collect, how it is used, stored, and protected, and the rights of your users or customers under UK/EU data protection law.",
       whatsIncluded: [
         "Data controller information",
@@ -165,10 +249,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a5", name: "Shareholder Agreement", type: "Legal", format: "Word", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: false, category: "a",
+      complexity: "Complex", popular: false, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A formal agreement outlining shareholder rights, obligations, and governance.",
       tags: ["Legal", "Governance"],
-      price: "£449",
+      price: "$449",
       fullDescription: "A comprehensive Shareholder Agreement that governs the relationship between the shareholders of your company. Covers share ownership, voting rights, decision-making processes, dividend policy, exit provisions, and protections for minority shareholders.",
       whatsIncluded: [
         "Share structure & ownership percentages",
@@ -191,10 +275,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a6", name: "Operations Manual", type: "Operations", format: "PDF / Word", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: false, category: "a",
+      complexity: "Complex", popular: false, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A structured manual covering your business processes, procedures, and standards.",
       tags: ["Operations", "Process"],
-      price: "£349",
+      price: "$349",
       fullDescription: "A structured, comprehensive Operations Manual that documents how your business operates — covering processes, responsibilities, standards, and procedures. Ideal for scaling your team, onboarding staff, or maintaining consistency as your business grows.",
       whatsIncluded: [
         "Business overview & structure",
@@ -217,10 +301,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a7", name: "Brand Guidelines", type: "Marketing", format: "PDF", deliveryTime: "3–5 days",
-      complexity: "Standard", popular: true, category: "a",
+      complexity: "Standard", popular: true, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A brand guidelines document covering logo usage, typography, colours, and tone of voice.",
       tags: ["Marketing", "Branding"],
-      price: "£199",
+      price: "$199",
       fullDescription: "A professional Brand Guidelines document that defines how your brand looks, sounds, and feels — ensuring consistency across all communications and channels. Covers your visual identity, typography, colour palette, logo usage rules, and brand voice.",
       whatsIncluded: [
         "Brand story & positioning",
@@ -242,10 +326,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "a8", name: "Investment Proposal", type: "Finance", format: "PDF / PPT", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: false, category: "a",
+      complexity: "Complex", popular: false, category: "a", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "tailored_service", status: "published",
       description: "A persuasive investment proposal document for approaching investors or funding bodies.",
       tags: ["Finance", "Strategy"],
-      price: "£399",
+      price: "$399",
       fullDescription: "A compelling, professionally structured Investment Proposal designed to attract investment or funding. Covers your business opportunity, market potential, financial ask, use of funds, and projected returns — presented in a clear, persuasive format.",
       whatsIncluded: [
         "Executive summary",
@@ -271,10 +355,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
   b: [
     {
       id: "b1", name: "Employee Handbook", type: "HR", format: "PDF / Word", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: true, category: "b",
+      complexity: "Complex", popular: true, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "A complete employee handbook covering policies, procedures, conduct, and benefits.",
       tags: ["HR", "Policy"],
-      price: "£349",
+      price: "$349",
       fullDescription: "A comprehensive Employee Handbook tailored to your business — covering everything your staff need to know about working for you. From employment conditions and conduct standards to leave policies and grievance procedures, this handbook keeps your team informed and your business protected.",
       whatsIncluded: ["Welcome & company introduction", "Employment terms overview", "Code of conduct", "Attendance & working hours", "Holiday & leave entitlements", "Disciplinary & grievance procedures", "Health & safety policy overview", "Equal opportunities statement", "Data protection & confidentiality"],
       useCases: ["Staff onboarding", "Policy compliance", "Employment dispute protection", "Team alignment"],
@@ -287,10 +371,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b2", name: "Job Description Template", type: "HR", format: "Word", deliveryTime: "1–2 days",
-      complexity: "Simple", popular: true, category: "b",
+      complexity: "Simple", popular: true, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "Professionally structured job description templates ready to customise.",
       tags: ["HR", "Recruitment"],
-      price: "£79",
+      price: "$79",
       fullDescription: "A set of professionally structured Job Description templates covering all key sections — ready to customise for any role in your business. Saves time on recruitment and ensures every role is clearly and consistently defined.",
       whatsIncluded: ["Job title & department", "Role purpose summary", "Key responsibilities", "Required skills & qualifications", "Desirable attributes", "Reporting structure", "Salary & benefits placeholder", "Equal opportunities statement"],
       useCases: ["Recruiting new staff", "Redefining existing roles", "HR process documentation", "Performance management foundation"],
@@ -303,10 +387,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b3", name: "Client Proposal Template", type: "Sales", format: "Word / PDF", deliveryTime: "2–3 days",
-      complexity: "Standard", popular: true, category: "b",
+      complexity: "Standard", popular: true, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "A polished client proposal template for pitching services or solutions.",
       tags: ["Sales", "Marketing"],
-      price: "£149",
+      price: "$149",
       fullDescription: "A professional Client Proposal template that helps you win business. Structured to guide your client through your understanding of their problem, your proposed solution, the value you'll deliver, your process, timeline, and investment — all in a polished, persuasive format.",
       whatsIncluded: ["Cover page & introduction", "Client challenge / context section", "Proposed solution & approach", "Scope of work", "Timeline & milestones", "Investment summary", "About us section", "Terms & next steps", "Acceptance page"],
       useCases: ["Sales proposals", "Tender responses", "Project scoping", "Service pitches"],
@@ -319,10 +403,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b4", name: "Service Level Agreement", type: "Legal", format: "Word", deliveryTime: "3–4 days",
-      complexity: "Standard", popular: false, category: "b",
+      complexity: "Standard", popular: false, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "An SLA document defining service standards, KPIs, and performance expectations.",
       tags: ["Legal", "Operations"],
-      price: "£199",
+      price: "$199",
       fullDescription: "A professional Service Level Agreement (SLA) tailored to your services and client relationships. Defines exactly what service your clients can expect — including response times, delivery standards, KPIs, escalation procedures, and remedies for non-compliance.",
       whatsIncluded: ["Service definition & scope", "Service hours & availability", "Performance KPIs & targets", "Response & resolution times", "Escalation process", "Reporting & review schedule", "Remedies & penalties", "Review & amendment provisions"],
       useCases: ["Client contracts", "Supplier agreements", "Internal service standards", "IT & support services"],
@@ -335,10 +419,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b5", name: "NDA Template", type: "Legal", format: "Word", deliveryTime: "1–2 days",
-      complexity: "Simple", popular: true, category: "b",
+      complexity: "Simple", popular: true, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "A mutual or one-way non-disclosure agreement template for business use.",
       tags: ["Legal", "Compliance"],
-      price: "£99",
+      price: "$99",
       fullDescription: "A professionally drafted Non-Disclosure Agreement (NDA) template — available in both mutual (two-way) and one-way formats. Protects your confidential information when working with clients, partners, suppliers, or potential investors.",
       whatsIncluded: ["Parties & recitals", "Definition of confidential information", "Obligations of receiving party", "Permitted disclosures", "Duration of obligations", "Return / destruction of information", "Governing law & jurisdiction", "Signature block"],
       useCases: ["Client meetings", "Supplier negotiations", "Investor discussions", "Partnership talks"],
@@ -351,10 +435,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b6", name: "Risk Register", type: "Operations", format: "Excel / PDF", deliveryTime: "2–3 days",
-      complexity: "Standard", popular: false, category: "b",
+      complexity: "Standard", popular: false, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "A structured risk register template for tracking and managing business risks.",
       tags: ["Operations", "Risk"],
-      price: "£129",
+      price: "$129",
       fullDescription: "A structured Risk Register template for identifying, assessing, and managing business risks. Includes a pre-populated framework with risk categories, likelihood/impact scoring, mitigation actions, and owner assignment — ready for you to populate with your specific risks.",
       whatsIncluded: ["Risk category framework", "Risk description fields", "Likelihood & impact matrix", "Risk score calculation", "Current controls column", "Mitigation action plan", "Risk owner assignment", "Review date tracking"],
       useCases: ["Business risk management", "ISO or compliance preparation", "Board reporting", "Project risk tracking"],
@@ -367,10 +451,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b7", name: "Meeting Minutes Template", type: "Operations", format: "Word", deliveryTime: "1 day",
-      complexity: "Simple", popular: false, category: "b",
+      complexity: "Simple", popular: false, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "A professional meeting minutes template for board, team, and client meetings.",
       tags: ["Operations", "Governance"],
-      price: "£49",
+      price: "$49",
       fullDescription: "A clean, professional Meeting Minutes template covering all the essentials — attendees, agenda, decisions, actions, and follow-ups. Available in variants for board meetings, team meetings, and client meetings.",
       whatsIncluded: ["Meeting header (date, location, attendees)", "Agenda items structure", "Discussion summary fields", "Decisions & approvals section", "Action items table (owner, deadline)", "Next meeting details", "Approval signature block"],
       useCases: ["Board meetings", "Team meetings", "Client update calls", "Project reviews"],
@@ -383,10 +467,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "b8", name: "Performance Review Template", type: "HR", format: "Word / PDF", deliveryTime: "1–2 days",
-      complexity: "Simple", popular: false, category: "b",
+      complexity: "Simple", popular: false, category: "b", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "instant_download", status: "published",
       description: "Structured employee performance review templates for annual and mid-year reviews.",
       tags: ["HR", "Management"],
-      price: "£89",
+      price: "$89",
       fullDescription: "Structured Performance Review templates for annual and mid-year employee reviews. Covers goal setting, competency assessment, development planning, and rating scales — all in a clear, professional format.",
       whatsIncluded: ["Employee & reviewer details", "Review period", "Goal review section", "Competency assessment framework", "Performance rating scale", "Development & training plan", "Employee self-assessment section", "Manager summary & recommendations", "Signature & acknowledgement block"],
       useCases: ["Annual appraisals", "Mid-year check-ins", "Probation reviews", "Promotion assessments"],
@@ -401,10 +485,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
   c: [
     {
       id: "c1", name: "GDPR Compliance Pack", type: "Compliance", format: "PDF / Word", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: true, category: "c",
+      complexity: "Complex", popular: true, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "A full GDPR compliance documentation pack including policies, notices, and registers.",
       tags: ["Legal", "Compliance"],
-      price: "£499",
+      price: "$499",
       fullDescription: "A comprehensive GDPR Compliance Pack containing all the core documentation your business needs to demonstrate compliance with UK GDPR and the Data Protection Act 2018. Tailored to your specific data processing activities.",
       whatsIncluded: ["Privacy policy", "Record of processing activities (ROPA)", "Data retention schedule", "Data subject rights procedure", "Data breach response procedure", "Data Protection Impact Assessment (DPIA) template", "Supplier / processor agreement template", "Cookie policy", "Staff data protection guidance note"],
       useCases: ["GDPR compliance programme", "ICO audit preparation", "Client due diligence", "New business setup"],
@@ -417,10 +501,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c2", name: "Due Diligence Report", type: "Finance", format: "PDF", deliveryTime: "7–10 days",
-      complexity: "Complex", popular: false, category: "c",
+      complexity: "Complex", popular: false, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "A structured due diligence report template for M&A, investment, or partnership assessments.",
       tags: ["Finance", "Strategy"],
-      price: "£549",
+      price: "$549",
       fullDescription: "A structured Due Diligence Report framework for assessing a target business, investment, or partnership opportunity. Covers commercial, financial, legal, and operational dimensions — providing a comprehensive picture to inform your decision.",
       whatsIncluded: ["Executive summary", "Commercial & market assessment", "Financial review framework", "Legal & regulatory review", "Operational assessment", "Management & team review", "Risk summary", "Key findings & recommendations"],
       useCases: ["Acquisition assessment", "Investment evaluation", "Partnership due diligence", "Supplier assessment"],
@@ -433,10 +517,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c3", name: "Board Resolution Template", type: "Governance", format: "Word", deliveryTime: "1–2 days",
-      complexity: "Simple", popular: false, category: "c",
+      complexity: "Simple", popular: false, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "Formal board resolution templates for common governance and corporate decisions.",
       tags: ["Legal", "Governance"],
-      price: "£79",
+      price: "$79",
       fullDescription: "A set of formal Board Resolution templates covering the most common corporate decisions — from appointing directors and approving accounts to authorising contracts and opening bank accounts. Essential for maintaining proper corporate governance.",
       whatsIncluded: ["Resolution to appoint / remove director", "Resolution to approve annual accounts", "Resolution to open bank account", "Resolution to authorise contract signing", "Resolution to allot shares", "Resolution to approve dividend", "Blank / general resolution template"],
       useCases: ["Corporate governance", "Companies House filings", "Bank account opening", "Director changes"],
@@ -449,10 +533,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c4", name: "Business Continuity Plan", type: "Operations", format: "Word / PDF", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: false, category: "c",
+      complexity: "Complex", popular: false, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "A business continuity planning document covering risk scenarios, responses, and recovery.",
       tags: ["Operations", "Risk"],
-      price: "£349",
+      price: "$349",
       fullDescription: "A comprehensive Business Continuity Plan (BCP) tailored to your business — identifying critical functions, potential disruption scenarios, response procedures, and recovery strategies. Ensures your business can continue operating through unexpected events.",
       whatsIncluded: ["Business impact analysis framework", "Critical business functions identification", "Risk & threat scenario register", "Response & activation procedures", "Communication plan", "Recovery time objectives (RTOs)", "Key contacts & escalation list", "Testing & review schedule"],
       useCases: ["Operational resilience", "Client / tender requirements", "Insurance requirements", "ISO 22301 preparation"],
@@ -465,10 +549,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c5", name: "ESG Policy Document", type: "Compliance", format: "PDF", deliveryTime: "5–7 days",
-      complexity: "Complex", popular: true, category: "c",
+      complexity: "Complex", popular: true, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "An Environmental, Social, and Governance (ESG) policy document tailored to your business.",
       tags: ["Compliance", "Strategy"],
-      price: "£299",
+      price: "$299",
       fullDescription: "A professional ESG Policy Document that defines your business's commitments to Environmental, Social, and Governance responsibilities. Demonstrates your values to clients, partners, investors, and staff — increasingly required in tender processes and procurement frameworks.",
       whatsIncluded: ["ESG framework & commitments overview", "Environmental policy (carbon, waste, energy)", "Social responsibility commitments", "Governance standards", "Supply chain & procurement standards", "Reporting & measurement approach", "Roles & responsibilities", "Review & update schedule"],
       useCases: ["Tender & procurement requirements", "Investor due diligence", "Staff engagement", "Brand & reputation"],
@@ -481,10 +565,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c6", name: "Franchise Agreement", type: "Legal", format: "Word", deliveryTime: "7–10 days",
-      complexity: "Complex", popular: false, category: "c",
+      complexity: "Complex", popular: false, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "A comprehensive franchise agreement covering rights, obligations, and operating standards.",
       tags: ["Legal", "Operations"],
-      price: "£649",
+      price: "$649",
       fullDescription: "A comprehensive Franchise Agreement that governs the relationship between you (the franchisor) and your franchisees. Covers territory rights, brand usage, operating standards, fees, training obligations, term, renewal, and termination provisions.",
       whatsIncluded: ["Grant of franchise rights", "Territory & exclusivity provisions", "Brand & IP usage rights", "Franchisee obligations", "Franchisor obligations", "Fee structure (initial & ongoing)", "Training & support provisions", "Operating standards requirements", "Term, renewal & termination", "Dispute resolution"],
       useCases: ["Launching a franchise", "Formalising existing franchise relationships", "Franchise expansion"],
@@ -497,10 +581,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c7", name: "Restructuring Plan", type: "Strategy", format: "PDF / PPT", deliveryTime: "7–10 days",
-      complexity: "Complex", popular: false, category: "c",
+      complexity: "Complex", popular: false, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "A structured business restructuring plan for organisational change programmes.",
       tags: ["Strategy", "Operations"],
-      price: "£449",
+      price: "$449",
       fullDescription: "A structured Business Restructuring Plan for managing significant organisational change — whether you're restructuring for growth, responding to financial pressure, or reorganising following an acquisition or leadership change.",
       whatsIncluded: ["Restructuring rationale & objectives", "Current state assessment", "Target operating model", "Organisational changes overview", "Financial impact assessment", "Implementation roadmap & timeline", "Communication plan", "Risk register", "Stakeholder management plan"],
       useCases: ["Business turnaround", "Post-acquisition integration", "Growth restructuring", "Cost reduction programme"],
@@ -513,10 +597,10 @@ export const allDocuments: Record<string, DocumentItem[]> = {
     },
     {
       id: "c8", name: "IP Assignment Agreement", type: "Legal", format: "Word", deliveryTime: "2–3 days",
-      complexity: "Standard", popular: false, category: "c",
+      complexity: "Standard", popular: false, category: "c", stripeProductId: "prod_mock", stripePriceId: "price_mock", fulfilmentType: "hybrid", status: "published",
       description: "An intellectual property assignment agreement for transferring IP ownership.",
       tags: ["Legal", "Compliance"],
-      price: "£199",
+      price: "$199",
       fullDescription: "A professionally drafted Intellectual Property (IP) Assignment Agreement for transferring ownership of intellectual property from one party to another. Covers all key IP types — trademarks, copyright, patents, designs, and trade secrets.",
       whatsIncluded: ["IP being assigned (schedule)", "Assignment of copyright", "Assignment of trademarks", "Assignment of patents & designs", "Moral rights waiver", "Warranties from assignor", "Consideration & payment terms", "Governing law & jurisdiction"],
       useCases: ["Buying or selling a business", "Commissioning creative work", "Employee / contractor IP transfers", "Business acquisition"],

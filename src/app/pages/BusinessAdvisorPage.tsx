@@ -129,7 +129,7 @@ const testimonials = [
   },
   {
     quote:
-      "It's like having a senior consultant in a box. I answered the questions honestly and got back a report I could have paid £5,000 for at a big consultancy.",
+      "It's like having a senior consultant in a box. I answered the questions honestly and got back a report I could have paid $5,000 for at a big consultancy.",
     name: "Priya K.",
     role: "Founder, SaaS Startup",
     initials: "PK",
@@ -197,7 +197,7 @@ export function BusinessAdvisorPage() {
         breadcrumb="Business Advisor"
         image={heroImage}
         bullets={["Structured written reports", "6 review categories", "Results in minutes"]}
-        ctaPrimary={{ label: "Start a Review", href: "/contact" }}
+        ctaPrimary={{ label: "Start a Review", href: "/business-advisor/intake" }}
         ctaSecondary={{ label: "See How It Works", href: "#how-it-works" }}
         stat={{ value: "4.8/5", label: "User Rating", sublabel: "Based on advisor sessions" }}
       />
@@ -352,7 +352,7 @@ export function BusinessAdvisorPage() {
 
           <div className="text-center mt-10">
             <Link
-              to="/contact"
+              to="/business-advisor/intake"
               className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-0.5"
             >
               Start Your First Review
@@ -509,7 +509,7 @@ export function BusinessAdvisorPage() {
           <div className="text-center mt-10">
             <p className="text-slate-500 text-sm mb-4">Ready to get started?</p>
             <Link
-              to="/contact"
+              to="/business-advisor/intake"
               className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-200 hover:shadow-xl hover:-translate-y-0.5"
             >
               Start a Review Today

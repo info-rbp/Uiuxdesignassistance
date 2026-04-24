@@ -1,6 +1,8 @@
 import { createBrowserRouter, Outlet } from "react-router";
 import { HomePage } from "./pages/HomePage";
 import { ServicesPage } from "./pages/ServicesPage";
+import { ServiceCategoryPage } from "./pages/ServiceCategoryPage";
+import { ServiceDetailPage } from "./pages/ServiceDetailPage";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
 import { DocuSharePage } from "./pages/DocuSharePage";
@@ -13,8 +15,8 @@ import { BusinessAdvisorPage } from "./pages/BusinessAdvisorPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
 import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
 import { DocumentProductPage } from "./pages/DocumentProductPage";
-import { ServiceCategoryPage } from "./pages/ServiceCategoryPage";
-import { ServiceDetailPage } from "./pages/ServiceDetailPage";
+import { ApplicationDetailPage } from "./pages/ApplicationDetailPage";
+import { BusinessAdvisorIntakePage } from "./pages/BusinessAdvisorIntakePage";
 
 function Root() {
   return <Outlet />;
@@ -33,11 +35,13 @@ export const router = createBrowserRouter([
       { path: "contact", Component: ContactPage },
       { path: "docushare", Component: DocuSharePage },
       { path: "applications", Component: ApplicationsPage },
+      { path: "applications/:slug", Component: ApplicationDetailPage },
       { path: "offers", Component: OffersPage },
       { path: "finance", Component: FinancePage },
       { path: "resources", Component: ResourcesPage },
       { path: "membership", Component: MembershipPage },
       { path: "business-advisor", Component: BusinessAdvisorPage },
+      { path: "business-advisor/intake", Component: BusinessAdvisorIntakePage },
       { path: "document-nucleus/overview", Component: DocumentOverviewPage },
       { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
       { path: "document-nucleus/product/:id", Component: DocumentProductPage },
