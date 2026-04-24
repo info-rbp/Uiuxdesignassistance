@@ -13,6 +13,8 @@ import { BusinessAdvisorPage } from "./pages/BusinessAdvisorPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
 import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
 import { DocumentProductPage } from "./pages/DocumentProductPage";
+import { ServiceCategoryPage } from "./pages/ServiceCategoryPage";
+import { ServiceDetailPage } from "./pages/ServiceDetailPage";
 
 function Root() {
   return <Outlet />;
@@ -25,6 +27,8 @@ export const router = createBrowserRouter([
     children: [
       { index: true, Component: HomePage },
       { path: "services", Component: ServicesPage },
+      { path: "services/:category", Component: ServiceCategoryPage },
+      { path: "service/:slug", Component: ServiceDetailPage },
       { path: "about", Component: AboutPage },
       { path: "contact", Component: ContactPage },
       { path: "docushare", Component: DocuSharePage },
