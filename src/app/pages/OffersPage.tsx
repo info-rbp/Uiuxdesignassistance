@@ -106,8 +106,9 @@ function OfferCard({ offer, variant = "standard" }: { offer: PartnerOffer; varia
           aria-label={`${offer.ctaLabel} from ${offer.partnerName}`}
         >
           {offer.ctaLabel}
-          <ExternalLink className="h-4 w-4" />
+          {offer.isExternal ? <ExternalLink className="h-4 w-4" /> : <ArrowRight className="h-4 w-4" />}
         </a>
+
       </div>
     </article>
   );
@@ -282,6 +283,9 @@ export function OffersPage() {
                 />
               </label>
             </div>
+            <p className="mt-4 text-xs font-semibold text-slate-500">
+              Showing {filteredOffers.length} {filteredOffers.length === 1 ? "offer" : "offers"}
+            </p>
           </div>
 
           {filteredOffers.length > 0 ? (

@@ -10,7 +10,7 @@ const secondaryLinks = [
   { label: "Services Hub", href: "/services" },
   { label: "Document Nucleus", href: "/docushare" },
   { label: "Application Launchpad", href: "/applications" },
-  { label: "Offers & Deals", href: "/offers" },
+  { label: "Offers", href: "/offers" },
   { label: "Finance Center", href: "/finance" },
   { label: "Resource Base", href: "/resources" },
   { label: "Membership Central", href: "/membership" },
