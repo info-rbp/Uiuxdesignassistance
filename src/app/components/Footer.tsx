@@ -77,8 +77,8 @@ export function Footer() {
                 { label: "About Us", href: "/about" },
                 { label: "Resources", href: "/resources" },
                 { label: "Contact Us", href: "/contact" },
+                { label: "Referral Disclosure", href: "/referral-disclosure" },
                 { label: "Privacy Policy", href: "#" },
-                { label: "Terms of Service", href: "#" },
               ].map((item) => (
                 <li key={item.label}>
                   <Link
@@ -99,25 +99,25 @@ export function Footer() {
               <li className="flex items-start gap-3">
                 <Mail className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
                 <a
-                  href="mailto:info@remotebusinesspartner.com"
+                  href="mailto:info@remotebusinesspartner.com.au"
                   className="text-slate-400 hover:text-white text-sm transition-colors"
                 >
-                  info@remotebusinesspartner.com
+                  info@remotebusinesspartner.com.au
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
                 <a
-                  href="tel:+1234567890"
+                  href="tel:+61234567890"
                   className="text-slate-400 hover:text-white text-sm transition-colors"
                 >
-                  +1 (234) 567-890
+                  +61 (02) 3456 7890
                 </a>
               </li>
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
                 <span className="text-slate-400 text-sm">
-                  Remote — Operating Globally
+                  Australia — Operating Globally
                 </span>
               </li>
             </ul>
@@ -130,9 +130,9 @@ export function Footer() {
             &copy; {new Date().getFullYear()} Remote Business Partner. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
+            <Link to="/referral-disclosure" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Referral Disclosure</Link>
             <a href="#" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Privacy</a>
             <a href="#" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Terms</a>
-            <a href="#" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Cookies</a>
           </div>
         </div>
       </div>

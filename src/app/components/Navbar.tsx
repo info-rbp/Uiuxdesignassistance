@@ -3,14 +3,15 @@ import { Link, useLocation } from "react-router";
 import { Menu, X, Briefcase } from "lucide-react";
 
 const topLinks = [
-  { label: "About Us", href: "/about" },
+  { label: "Sign In", href: "/login" },
 ];
 
 const secondaryLinks = [
   { label: "Services Hub", href: "/services" },
+  { label: "Managed Solutions", href: "/managed-solutions" },
   { label: "Document Nucleus", href: "/docushare" },
   { label: "Application Launchpad", href: "/applications" },
-  { label: "Offers", href: "/offers" },
+  { label: "Partner Offers", href: "/offers" },
   { label: "Finance Center", href: "/finance" },
   { label: "Resource Base", href: "/resources" },
   { label: "Membership Central", href: "/membership" },
@@ -79,10 +80,10 @@ export function Navbar() {
                 </Link>
               ))}
               <Link
-                to="/contact"
+                to="/signup"
                 className="bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold px-5 py-2.5 rounded-lg transition-all shadow-sm hover:shadow-md ml-1"
               >
-                Contact Us
+                Sign Up
               </Link>
             </div>
 
@@ -142,20 +143,20 @@ export function Navbar() {
           ))}
           <div className="pt-3 border-t border-slate-100 mt-3 flex flex-col gap-2 px-4">
             <Link
-              to="/about"
+              to="/login"
               className={`py-3 rounded-xl text-sm font-semibold text-center transition-all ${
-                location.pathname === "/about"
+                location.pathname === "/login"
                   ? "bg-blue-50 text-blue-700"
                   : "text-slate-700 hover:bg-slate-50"
               }`}
             >
-              About Us
+              Sign In
             </Link>
             <Link
-              to="/contact"
+              to="/signup"
               className="bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold px-5 py-3 rounded-xl transition-all text-center"
             >
-              Contact Us
+              Sign Up
             </Link>
           </div>
         </div>

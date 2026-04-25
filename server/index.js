@@ -136,7 +136,37 @@ app.post('/api/create-checkout-session', async (req, res) => {
   }
 });
 
+// ── Stripe Customer Billing Portal ──────────────────────────────────────────
+// Called by the "Manage Billing" button in the portal and the Subscription page.
+// If no real Stripe key is configured, returns a mock redirect for local dev.
+app.post('/api/create-billing-portal-session', async (req, res) => {
+  const { customerId } = req.body;
+
+  if (!customerId) {
+    return res.status(400).json({ error: 'customerId is required' });
+  }
+
+  // Dev mock — returns the portal subscription page so UX can be verified locally
+  if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_mock') {
+    const origin = req.headers.origin || 'http://localhost:5173';
+    console.log(`[mock] Billing portal session for customer: ${customerId}`);
+    return res.json({ url: `${origin}/portal/subscription?mock_billing=true` });
+  }
+
+  try {
+    const origin = req.headers.origin || 'http://localhost:5173';
+    const session = await stripe.billingPortal.sessions.create({
+      customer: customerId,
+      return_url: `${origin}/portal/membership`,
+    });
+    res.json({ url: session.url });
+  } catch (error) {
+    console.error('Error creating billing portal session:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Document Nucleus Backend running on port ${PORT}`);
+  console.log(`🚀 RBP Backend running on port ${PORT}`);
 });

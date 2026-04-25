@@ -22,6 +22,11 @@ const services = [
   "Admin & Finance Consulting",
   "DocuShare",
   "Applications",
+  "Managed Solutions",
+  "Managed Connectivity",
+  "Managed Wi-Fi",
+  "Backup Connectivity",
+  "Multi-site Connectivity",
   "Other",
 ];
 
