@@ -1,138 +1,112 @@
 import { Link } from "react-router";
 import { Briefcase, Mail, Phone, MapPin, Linkedin, Twitter, Facebook } from "lucide-react";
 
+const footerLinks = {
+  "On-Demand": [
+    { label: "Business Advisor", href: "/on-demand/business-advisor" },
+    { label: "On-Demand Services", href: "/on-demand/services" },
+    { label: "Document Centre", href: "/on-demand/documents" },
+    { label: "Decision Desk", href: "/on-demand/decision-desk" },
+  ],
+  "Managed Services": [
+    { label: "Bid Management", href: "/managed-services/bid-management" },
+    { label: "Real Estate", href: "/managed-services/real-estate" },
+    { label: "HR Services", href: "/managed-services/hr-services" },
+  ],
+  Platform: [
+    { label: "Business Applications", href: "/applications" },
+    { label: "Business Marketplace", href: "/marketplace" },
+    { label: "Membership Hub", href: "/membership" },
+    { label: "Resource Center", href: "/resources" },
+    { label: "Business Offers", href: "/offers" },
+  ],
+  Operations: [
+    { label: "Operations Center", href: "/operations" },
+    { label: "Business Finance", href: "/operations/finance" },
+    { label: "Business Insurance", href: "/operations/insurance" },
+    { label: "Finance Calculators", href: "/operations/calculators" },
+  ],
+  Company: [
+    { label: "About Us", href: "/about" },
+    { label: "Help Center", href: "/help" },
+    { label: "Contact Us", href: "/contact" },
+    { label: "Privacy Policy", href: "#" },
+    { label: "Terms of Service", href: "#" },
+  ],
+};
+
 export function Footer() {
   return (
     <footer className="bg-slate-900 text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          {/* Brand Column */}
-          <div className="lg:col-span-2">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10 mb-12">
+          {/* Brand */}
+          <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-5">
               <div className="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
                 <Briefcase className="w-5 h-5 text-white" />
               </div>
               <div>
-                <span className="text-white font-black tracking-tight text-lg leading-none block">
-                  Remote Business Partner
-                </span>
-                <span className="text-blue-400 text-xs font-semibold tracking-wider uppercase">
-                  Agile Authority in Consulting
-                </span>
+                <span className="text-white font-black tracking-tight text-base leading-none block">Remote Business</span>
+                <span className="text-blue-400 font-black tracking-tight text-base leading-none block">Partner</span>
               </div>
             </Link>
-            <p className="text-slate-400 text-sm leading-relaxed mb-6 max-w-xs">
-              Empowering high-growth small businesses with the structural integrity of top-tier consultancy and the kinetic energy of modern fintech.
+            <p className="text-slate-400 text-xs leading-relaxed mb-4">
+              An integrated business support ecosystem for small businesses, startups, and SMEs.
             </p>
-            <div className="flex items-center gap-3">
-              <a
-                href="#"
-                className="w-9 h-9 bg-slate-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Linkedin className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-slate-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Twitter className="w-4 h-4" />
-              </a>
-              <a
-                href="#"
-                className="w-9 h-9 bg-slate-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors"
-              >
-                <Facebook className="w-4 h-4" />
-              </a>
+            <p className="text-blue-400 text-xs font-semibold uppercase tracking-wider mb-5">
+              Agile Authority in Consulting
+            </p>
+            <div className="flex items-center gap-2">
+              {[Linkedin, Twitter, Facebook].map((Icon, i) => (
+                <a key={i} href="#" className="w-8 h-8 bg-slate-800 hover:bg-blue-700 rounded-lg flex items-center justify-center transition-colors">
+                  <Icon className="w-3.5 h-3.5" />
+                </a>
+              ))}
             </div>
           </div>
 
-          {/* Services */}
-          <div>
-            <h5 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">Services</h5>
-            <ul className="space-y-2.5">
-              {[
-                { label: "Advisory Services", href: "/services" },
-                { label: "DocuShare", href: "/docushare" },
-                { label: "Applications", href: "/applications" },
-                { label: "Offers", href: "/offers" },
-                { label: "Finance", href: "/finance" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Nav columns */}
+          {Object.entries(footerLinks).map(([heading, links]) => (
+            <div key={heading}>
+              <h5 className="font-bold text-white mb-4 text-xs uppercase tracking-wider">{heading}</h5>
+              <ul className="space-y-2.5">
+                {links.map((item) => (
+                  <li key={item.label}>
+                    <Link to={item.href} className="text-slate-400 hover:text-white text-xs transition-colors">
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-          {/* Company */}
-          <div>
-            <h5 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">Company</h5>
-            <ul className="space-y-2.5">
-              {[
-                { label: "About Us", href: "/about" },
-                { label: "Resources", href: "/resources" },
-                { label: "Contact Us", href: "/contact" },
-                { label: "Referral Disclosure", href: "/referral-disclosure" },
-                { label: "Privacy Policy", href: "#" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <Link
-                    to={item.href}
-                    className="text-slate-400 hover:text-white text-sm transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h5 className="font-bold text-white mb-4 text-sm uppercase tracking-wider">Contact</h5>
-            <ul className="space-y-3">
-              <li className="flex items-start gap-3">
-                <Mail className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                <a
-                  href="mailto:info@remotebusinesspartner.com.au"
-                  className="text-slate-400 hover:text-white text-sm transition-colors"
-                >
-                  info@remotebusinesspartner.com.au
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <Phone className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                <a
-                  href="tel:+61234567890"
-                  className="text-slate-400 hover:text-white text-sm transition-colors"
-                >
-                  +61 (02) 3456 7890
-                </a>
-              </li>
-              <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 text-blue-400 mt-0.5 flex-shrink-0" />
-                <span className="text-slate-400 text-sm">
-                  Australia — Operating Globally
-                </span>
-              </li>
-            </ul>
+        {/* Contact strip */}
+        <div className="border-t border-slate-800 pt-8 mb-6">
+          <div className="flex flex-wrap gap-6">
+            <a href="mailto:info@remotebusinesspartner.com" className="flex items-center gap-2 text-slate-400 hover:text-white text-xs transition-colors">
+              <Mail className="w-3.5 h-3.5 text-blue-400" /> info@remotebusinesspartner.com
+            </a>
+            <a href="tel:+1234567890" className="flex items-center gap-2 text-slate-400 hover:text-white text-xs transition-colors">
+              <Phone className="w-3.5 h-3.5 text-blue-400" /> +1 (234) 567-890
+            </a>
+            <span className="flex items-center gap-2 text-slate-400 text-xs">
+              <MapPin className="w-3.5 h-3.5 text-blue-400" /> Remote — Operating Globally
+            </span>
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="border-t border-slate-800 mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-slate-500 text-sm">
+        {/* Bottom bar */}
+        <div className="border-t border-slate-800 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p className="text-slate-500 text-xs">
             &copy; {new Date().getFullYear()} Remote Business Partner. All rights reserved.
           </p>
-          <div className="flex items-center gap-6">
-            <Link to="/referral-disclosure" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Referral Disclosure</Link>
-            <a href="#" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Privacy</a>
-            <a href="#" className="text-slate-500 hover:text-slate-300 text-sm transition-colors">Terms</a>
+          <div className="flex items-center gap-4">
+            {["Privacy", "Terms", "Cookies"].map((l) => (
+              <a key={l} href="#" className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l}</a>
+            ))}
           </div>
         </div>
       </div>

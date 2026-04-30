@@ -1,54 +1,49 @@
 import { createBrowserRouter, Outlet } from "react-router";
+
+// Existing pages
 import { HomePage } from "./pages/HomePage";
-import { ServicesPage } from "./pages/ServicesPage";
-import { ServiceCategoryPage } from "./pages/ServiceCategoryPage";
-import { ServiceDetailPage } from "./pages/ServiceDetailPage";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
-import { DocuSharePage } from "./pages/DocuSharePage";
-import { ApplicationsPage } from "./pages/ApplicationsPage";
-import { OffersPage } from "./pages/OffersPage";
-import { FinancePage } from "./pages/FinancePage";
-import { ResourcesPage } from "./pages/ResourcesPage";
 import { MembershipPage } from "./pages/MembershipPage";
-import { BusinessAdvisorPage } from "./pages/BusinessAdvisorPage";
+import { ResourcesPage } from "./pages/ResourcesPage";
+import { OffersPage } from "./pages/OffersPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
 import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
 import { DocumentProductPage } from "./pages/DocumentProductPage";
-import { ApplicationDetailPage } from "./pages/ApplicationDetailPage";
-import { BusinessAdvisorIntakePage } from "./pages/BusinessAdvisorIntakePage";
-import { FinanceEnquiryPage } from "./pages/FinanceEnquiryPage";
-import { InsuranceHubPage } from "./pages/InsuranceHubPage";
-import { InsuranceCategoryPage } from "./pages/InsuranceCategoryPage";
-import { InsurancePolicyPage } from "./pages/InsurancePolicyPage";
-import { FinanceProductsHubPage } from "./pages/FinanceProductsHubPage";
-import { FinanceCategoryPage } from "./pages/FinanceCategoryPage";
-import { FinanceProductPage } from "./pages/FinanceProductPage";
-import { FundingHubPage } from "./pages/FundingHubPage";
-import { ReferralDisclosurePage } from "./pages/ReferralDisclosurePage";
-import { ManagedSolutionsPage } from "./pages/ManagedSolutionsPage";
-import { ManagedConnectivityPage } from "./pages/ManagedConnectivityPage";
-import { ManagedInternetPlansPage } from "./pages/ManagedInternetPlansPage";
-import { BackupConnectivityPage } from "./pages/BackupConnectivityPage";
-import { ManagedWifiPage } from "./pages/ManagedWifiPage";
-import { MultiSiteConnectivityPage } from "./pages/MultiSiteConnectivityPage";
-import { LoginPage } from "./pages/LoginPage";
-import { SignupPage } from "./pages/SignupPage";
+import { BusinessAdvisorPage } from "./pages/BusinessAdvisorPage";
+import { ServicesPage } from "./pages/ServicesPage";
+import { DocuSharePage } from "./pages/DocuSharePage";
 
-// Portal shell + pages
-import { PortalLayout } from "./components/layouts/PortalLayout";
-import { PortalDashboardPage } from "./pages/portal/PortalDashboardPage";
-import { PortalMembershipPage } from "./pages/portal/PortalMembershipPage";
-import { PortalSubscriptionPage } from "./pages/portal/PortalSubscriptionPage";
-import { PortalCustomisationRequestsPage } from "./pages/portal/PortalCustomisationRequestsPage";
-import { PortalDiscoveryCallsPage } from "./pages/portal/PortalDiscoveryCallsPage";
-import { PortalSupportPage } from "./pages/portal/PortalSupportPage";
-import { PortalSavedPage } from "./pages/portal/PortalSavedPage";
-import { PortalProfilePage } from "./pages/portal/PortalProfilePage";
+// New hub pages
+import { OnDemandPage } from "./pages/OnDemandPage";
+import { ManagedServicesPage } from "./pages/ManagedServicesPage";
+import { BusinessApplicationsPage } from "./pages/BusinessApplicationsPage";
+import { MarketplacePage } from "./pages/MarketplacePage";
+import { OperationsCenterPage } from "./pages/OperationsCenterPage";
+import { HelpCenterPage } from "./pages/HelpCenterPage";
 
-function Root() {
-  return <Outlet />;
-}
+// On-Demand sub-pages
+import { DecisionDeskPage } from "./pages/on-demand/DecisionDeskPage";
+
+// Managed Services sub-pages
+import { BidManagementPage } from "./pages/managed-services/BidManagementPage";
+import { RealEstatePage } from "./pages/managed-services/RealEstatePage";
+import { HRServicesPage } from "./pages/managed-services/HRServicesPage";
+
+// Operations sub-pages
+import { BusinessLendingPage } from "./pages/finance/BusinessLendingPage";
+import { BusinessInsurancePage } from "./pages/finance/BusinessInsurancePage";
+import { FinancialPlanningPage } from "./pages/finance/FinancialPlanningPage";
+import { CreditFundingPage } from "./pages/finance/CreditFundingPage";
+import { FinancePage } from "./pages/FinancePage";
+import { FinanceCalculatorsPage } from "./pages/operations/FinanceCalculatorsPage";
+import { SuperloopPage } from "./pages/operations/SuperloopPage";
+
+// ApplicationsPage (old)
+import { ApplicationsPage } from "./pages/ApplicationsPage";
+
+function Root() { return <Outlet />; }
+function Layout() { return <Outlet />; }
 
 export const router = createBrowserRouter([
   {
@@ -56,63 +51,104 @@ export const router = createBrowserRouter([
     Component: Root,
     children: [
       { index: true, Component: HomePage },
-      { path: "services", Component: ServicesPage },
-      { path: "services/:category", Component: ServiceCategoryPage },
-      { path: "service/:slug", Component: ServiceDetailPage },
-      { path: "login", Component: LoginPage },
-      { path: "signup", Component: SignupPage },
       { path: "about", Component: AboutPage },
       { path: "contact", Component: ContactPage },
-      { path: "docushare", Component: DocuSharePage },
-      { path: "applications", Component: ApplicationsPage },
-      { path: "applications/:slug", Component: ApplicationDetailPage },
-      { path: "offers", Component: OffersPage },
-      { path: "finance", Component: FinancePage },
-      { path: "finance/enquiry", Component: FinanceEnquiryPage },
+      { path: "help", Component: HelpCenterPage },
 
-      // Insurance Hierarchy
-      { path: "finance/insurance", Component: InsuranceHubPage },
-      { path: "finance/insurance/cat/:categorySlug", Component: InsuranceCategoryPage },
-      { path: "finance/insurance/:slug", Component: InsurancePolicyPage },
+      // ── On-Demand Services ──
+      {
+        path: "on-demand",
+        Component: Layout,
+        children: [
+          { index: true, Component: OnDemandPage },
+          { path: "business-advisor", Component: BusinessAdvisorPage },
+          { path: "services", Component: ServicesPage },
+          { path: "documents", Component: DocuSharePage },
+          { path: "decision-desk", Component: DecisionDeskPage },
+        ],
+      },
 
-      // Finance Products Hierarchy
-      { path: "finance/products", Component: FinanceProductsHubPage },
-      { path: "finance/products/cat/:categorySlug", Component: FinanceCategoryPage },
-      { path: "finance/products/:slug", Component: FinanceProductPage },
+      // ── Managed Services ──
+      {
+        path: "managed-services",
+        Component: Layout,
+        children: [
+          { index: true, Component: ManagedServicesPage },
+          { path: "bid-management", Component: BidManagementPage },
+          { path: "real-estate", Component: RealEstatePage },
+          { path: "hr-services", Component: HRServicesPage },
+        ],
+      },
 
-      // Legacy / Backup
-      { path: "finance/funding", Component: FundingHubPage },
+      // ── Business Applications ──
+      { path: "applications", Component: BusinessApplicationsPage },
 
-      { path: "referral-disclosure", Component: ReferralDisclosurePage },
-      { path: "resources", Component: ResourcesPage },
+      // ── Business Marketplace ──
+      {
+        path: "marketplace",
+        Component: Layout,
+        children: [
+          { index: true, Component: MarketplacePage },
+          { path: "product/:id", Component: MarketplacePage }, // placeholder product detail
+        ],
+      },
+
+      // ── Membership ──
       { path: "membership", Component: MembershipPage },
-      { path: "business-advisor", Component: BusinessAdvisorPage },
-      { path: "business-advisor/intake", Component: BusinessAdvisorIntakePage },
+
+      // ── Resources ──
+      { path: "resources", Component: ResourcesPage },
+
+      // ── Operations Center ──
+      {
+        path: "operations",
+        Component: Layout,
+        children: [
+          { index: true, Component: OperationsCenterPage },
+          {
+            path: "finance",
+            Component: Layout,
+            children: [
+              { index: true, Component: FinancePage },
+              { path: "business-lending", Component: BusinessLendingPage },
+              { path: "business-insurance", Component: BusinessInsurancePage },
+              { path: "financial-planning", Component: FinancialPlanningPage },
+              { path: "credit-and-funding", Component: CreditFundingPage },
+            ],
+          },
+          { path: "insurance", Component: BusinessInsurancePage },
+          { path: "calculators", Component: FinanceCalculatorsPage },
+          { path: "superloop", Component: SuperloopPage },
+        ],
+      },
+
+      // ── Business Offers ──
+      { path: "offers", Component: OffersPage },
+
+      // ── Document Nucleus (legacy + new) ──
+      { path: "docushare", Component: DocuSharePage },
       { path: "document-nucleus/overview", Component: DocumentOverviewPage },
       { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
       { path: "document-nucleus/product/:id", Component: DocumentProductPage },
 
-      // Managed Solutions Hierarchy
-      { path: "managed-solutions", Component: ManagedSolutionsPage },
-      { path: "managed-solutions/managed-connectivity", Component: ManagedConnectivityPage },
-      { path: "managed-solutions/managed-connectivity/internet-plans", Component: ManagedInternetPlansPage },
-      { path: "managed-solutions/managed-connectivity/backup-connectivity", Component: BackupConnectivityPage },
-      { path: "managed-solutions/managed-wifi", Component: ManagedWifiPage },
-      { path: "managed-solutions/multi-site-connectivity", Component: MultiSiteConnectivityPage },
-    ],
-  },
-  {
-    path: "/portal",
-    Component: PortalLayout,
-    children: [
-      { index: true, Component: PortalDashboardPage },
-      { path: "membership", Component: PortalMembershipPage },
-      { path: "subscription", Component: PortalSubscriptionPage },
-      { path: "saved", Component: PortalSavedPage },
-      { path: "customisation-requests", Component: PortalCustomisationRequestsPage },
-      { path: "discovery-calls", Component: PortalDiscoveryCallsPage },
-      { path: "support", Component: PortalSupportPage },
-      { path: "profile", Component: PortalProfilePage },
+      // ── Legacy finance routes (keep for backward compat) ──
+      {
+        path: "finance",
+        Component: Layout,
+        children: [
+          { index: true, Component: FinancePage },
+          { path: "business-lending", Component: BusinessLendingPage },
+          { path: "business-insurance", Component: BusinessInsurancePage },
+          { path: "financial-planning", Component: FinancialPlanningPage },
+          { path: "credit-and-funding", Component: CreditFundingPage },
+        ],
+      },
+
+      // ── Legacy applications route ──
+      { path: "applications-legacy", Component: ApplicationsPage },
+
+      // ── Sign-in placeholder ──
+      { path: "sign-in", Component: ContactPage },
     ],
   },
 ]);

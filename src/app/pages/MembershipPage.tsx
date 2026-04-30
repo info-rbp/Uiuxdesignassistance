@@ -93,7 +93,7 @@ const plans = [
   {
     name: "Professional",
     icon: Star,
-    price: "$99",
+    price: "£99",
     billing: "per month, billed monthly",
     desc: "For growth-stage businesses that want consistent advisory support, tools, and access to the full RBP ecosystem.",
     highlight: true,
@@ -117,7 +117,7 @@ const plans = [
   {
     name: "Executive",
     icon: Crown,
-    price: "$299",
+    price: "£299",
     billing: "per month, billed monthly",
     desc: "For ambitious owners who want an always-on advisory partner, full suite access, and a dedicated RBP consultant in their corner.",
     highlight: false,
@@ -197,7 +197,7 @@ const faqs = [
 const stats = [
   { value: "500+", label: "Active Members" },
   { value: "92%", label: "Renewal Rate" },
-  { value: "$1,200", label: "Avg. Annual Savings" },
+  { value: "£1,200", label: "Avg. Annual Savings" },
   { value: "4.9/5", label: "Member Satisfaction" },
 ];
 
@@ -366,7 +366,7 @@ export function MembershipPage() {
           </div>
 
           <p className="text-center text-sm text-slate-400 mt-8 font-medium">
-            All prices are exclusive of GST. Need a team plan?{" "}
+            All prices are exclusive of VAT. Need a team plan?{" "}
             <Link to="/contact" className="text-blue-700 hover:text-blue-800 font-bold">
               Contact us for a custom quote.
             </Link>
@@ -453,7 +453,7 @@ export function MembershipPage() {
               {[
                 { value: "500+", label: "Active Members" },
                 { value: "92%", label: "Renewal Rate" },
-                { value: "$1,200", label: "Avg. Annual Member Savings" },
+                { value: "£1,200", label: "Avg. Annual Member Savings" },
                 { value: "4.9 / 5", label: "Member Satisfaction Score" },
               ].map((s) => (
                 <div

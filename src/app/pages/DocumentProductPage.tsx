@@ -53,7 +53,7 @@ export function DocumentProductPage() {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [activeTab, setActiveTab] = useState<TabId>("description");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [added, setAdded] = useState(false);
 
   if (!doc) {
     return (
@@ -79,29 +79,9 @@ export function DocumentProductPage() {
   // Related docs — same category, excluding current
   const related = allDocuments[doc.category]?.filter((d) => d.id !== doc.id).slice(0, 4) ?? [];
 
-  const handleAddToOrder = async () => {
-    setIsProcessing(true);
-    try {
-      const res = await fetch("/api/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          internalId: doc.id,
-          stripeProductId: doc.stripeProductId,
-          stripePriceId: doc.stripePriceId,
-          fulfilmentType: doc.fulfilmentType,
-        }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      } else {
-        throw new Error(data.error || "No checkout URL returned");
-      }
-    } catch (err) {
-      console.error("Checkout error:", err);
-      setIsProcessing(false);
-    }
+  const handleAddToOrder = () => {
+    setAdded(true);
+    setTimeout(() => setAdded(false), 2500);
   };
 
   return (
@@ -215,7 +195,7 @@ export function DocumentProductPage() {
             {/* Price */}
             <div className="flex items-end gap-3 mb-6">
               <span className="text-4xl font-extrabold text-slate-900">{doc.price}</span>
-              <span className="text-slate-400 text-sm font-medium mb-1">one-time · ex. GST</span>
+              <span className="text-slate-400 text-sm font-medium mb-1">one-time · ex. VAT</span>
             </div>
 
             {/* Format selector */}
@@ -253,18 +233,19 @@ export function DocumentProductPage() {
             <div className="flex flex-col gap-3 mb-6">
               <button
                 onClick={handleAddToOrder}
-                disabled={isProcessing}
                 className={`inline-flex items-center justify-center gap-2 w-full py-4 px-6 rounded-xl font-extrabold text-base transition-all shadow-lg ${
-                  isProcessing
-                    ? "bg-slate-300 text-slate-500 cursor-not-allowed shadow-none"
-                    : `${meta.color} hover:opacity-90 shadow-blue-200 text-white`
-                }`}
+                  added
+                    ? "bg-emerald-600 shadow-emerald-200"
+                    : `${meta.color} hover:opacity-90 shadow-blue-200`
+                } text-white`}
               >
-                {isProcessing ? (
-                  <>Processing...</>
+                {added ? (
+                  <>
+                    <CheckCircle className="w-5 h-5" /> Added to your order
+                  </>
                 ) : (
                   <>
-                    Secure Checkout — {doc.price}
+                    Add to Order — {doc.price}
                     <ArrowRight className="w-4 h-4" />
                   </>
                 )}
@@ -508,12 +489,9 @@ export function DocumentProductPage() {
           </div>
           <button
             onClick={handleAddToOrder}
-            disabled={isProcessing}
-            className={`inline-flex items-center gap-2 ${
-              isProcessing ? "bg-slate-300 text-slate-500 cursor-not-allowed" : `${meta.color} text-white`
-            } font-bold py-3 px-5 rounded-xl text-sm transition-all hover:opacity-90 flex-shrink-0`}
+            className={`inline-flex items-center gap-2 ${meta.color} text-white font-bold py-3 px-5 rounded-xl text-sm transition-all hover:opacity-90 flex-shrink-0`}
           >
-            {isProcessing ? <>Processing...</> : <>Checkout <ArrowRight className="w-3.5 h-3.5" /></>}
+            {added ? <><CheckCircle className="w-4 h-4" /> Added</> : <>Add to Order <ArrowRight className="w-3.5 h-3.5" /></>}
           </button>
         </div>
       </div>
