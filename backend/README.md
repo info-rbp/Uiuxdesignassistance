@@ -38,5 +38,11 @@ The database schema is defined in `db/schema.sql`. It includes:
 
 ## API Endpoints
 
+### Authentication
+- `POST /api/auth/register`: Register a new user. Body: `{ name, email, password }`
+- `POST /api/auth/login`: Login user. Body: `{ email, password }`
+- `GET /api/me`: Get current user info (Protected). Header: `Authorization: Bearer <token>`
+
+### Health
 - `GET /health`: Health check endpoint.
 - `GET /ping`: Basic ping-pong endpoint.
