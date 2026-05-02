@@ -1,11 +1,13 @@
-import { collection, getDocs, query, where, orderBy, doc, getDoc } from 'firebase/firestore';
+import { collection, getDocs, query, where, orderBy, doc, getDoc, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
-import type { CmsResource, CmsNavigationItem, CmsGlobalSettings, CmsOffer } from '../types/cms';
+import type { CmsResource, CmsNavigationItem, CmsGlobalSettings, CmsOffer, CmsLeadEnquiry } from '../types/cms';
 
 const CMS_RESOURCES = 'cms_resources';
 const CMS_NAVIGATION = 'cms_navigation';
 const CMS_GLOBAL_SETTINGS = 'cms_global_settings';
 const CMS_OFFERS = 'cms_offers';
+const CMS_LEAD_ENQUIRIES = 'cms_lead_enquiries';
+
 
 
 
@@ -60,6 +62,24 @@ export async function fetchPublishedOffers(): Promise<CmsOffer[]> {
   const snap = await getDocs(q);
   return snap.docs.map(doc => doc.data() as CmsOffer);
 }
+
+/**
+ * Submit a lead enquiry to Firestore.
+ */
+export async function submitLeadEnquiry(data: Partial<CmsLeadEnquiry>): Promise<string> {
+  const docRef = await addDoc(collection(db, CMS_LEAD_ENQUIRIES), {
+    ...data,
+    status: 'new',
+    priority: 'normal',
+    createdAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    title: `Enquiry from ${data.name || 'Anonymous'}`,
+    slug: `enquiry-${Date.now()}`,
+    isPublished: false,
+  });
+  return docRef.id;
+}
+
 
 
 

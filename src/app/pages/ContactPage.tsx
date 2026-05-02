@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useLocation } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-import { Mail, Phone, MapPin, Clock, CheckCircle, ArrowRight, MessageCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, CheckCircle, ArrowRight, MessageCircle, Loader2 } from "lucide-react";
+import { submitLeadEnquiry } from "../lib/publicCms";
 
 const enquiryTypes = [
   "General enquiry",
@@ -21,15 +23,31 @@ const enquiryTypes = [
 ];
 
 export function ContactPage() {
+  const location = useLocation();
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setForm] = useState({
     name: "", email: "", company: "", phone: "", enquiryType: "", message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    try {
+      await submitLeadEnquiry({
+        ...form,
+        sourcePath: location.pathname,
+        enquiryType: form.enquiryType as any
+      });
+      setSubmitted(true);
+    } catch (error) {
+      console.error("Submission failed:", error);
+      alert("Something went wrong. Please try again or call us.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
 
   return (
     <div className="bg-white min-h-screen">
@@ -155,10 +173,13 @@ export function ContactPage() {
 
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg shadow-blue-200 hover:-translate-y-0.5"
+                    disabled={isSubmitting}
+                    className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl transition-all shadow-lg shadow-blue-200 hover:-translate-y-0.5 disabled:opacity-50 disabled:translate-y-0"
                   >
-                    Send Enquiry <ArrowRight className="w-4 h-4" />
+                    {isSubmitting ? <Loader2 className="w-5 h-5 animate-spin" /> : "Send Enquiry"}
+                    {!isSubmitting && <ArrowRight className="w-4 h-4" />}
                   </button>
+
 
                   <p className="text-slate-400 text-xs">
                     We aim to respond within 1–2 business days. For urgent matters, please call us directly.
