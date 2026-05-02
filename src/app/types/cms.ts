@@ -23,3 +23,22 @@ export interface CmsResource {
   tags?: string[];
   sortOrder?: number;
 }
+
+export interface CmsNavigationItem {
+  id?: string;
+  title: string;
+  slug: string;
+  label: string;
+  href: string;
+  navArea: 'header' | 'footer' | 'mobile' | 'utility';
+  group?: string;
+  parentId?: string;
+  description?: string;
+  iconKey?: string;
+  isExternal?: boolean;
+  openInNewTab?: boolean;
+  sortOrder?: number;
+  status: CmsStatus;
+  isPublished: boolean;
+}
+
