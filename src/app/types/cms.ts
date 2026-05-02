@@ -42,3 +42,50 @@ export interface CmsNavigationItem {
   isPublished: boolean;
 }
 
+export interface CmsGlobalSettings {
+  id?: string;
+  siteName: string;
+  defaultSeoTitle: string;
+  defaultSeoDescription: string;
+  defaultOgImage?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  primaryCtaLabel?: string;
+  primaryCtaUrl?: string;
+  footerDisclosure?: string;
+  financeDisclaimer?: string;
+  affiliateDisclosure?: string;
+  updatedAt?: unknown;
+  updatedBy?: string;
+}
+
+export interface CmsOffer {
+  id?: string;
+  title: string;
+  slug: string;
+  status: CmsStatus;
+  isPublished: boolean;
+  offerType: 'advisory-package' | 'partner-deal' | 'membership-offer' | 'service-package';
+  badge?: string;
+  priceLabel?: string;
+  durationLabel?: string;
+  excerpt: string;
+  body?: string;
+  inclusions?: string[];
+  partnerName?: string;
+  partnerLogoUrl?: string;
+  category?: string;
+  startDate?: string;
+  endDate?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  terms?: string;
+  disclosure?: string;
+  featured?: boolean;
+  seoTitle?: string;
+  seoDescription?: string;
+  tags?: string[];
+}
+
+
+
