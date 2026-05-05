@@ -118,6 +118,7 @@ export function PortalServices() {
       <PortalAdminReference
         portalRoute="/portal/services"
         controlledBy={["Admin On-Demand Services", "Admin Managed Services"]}
+              status="Live"
       />
 
       {/* ── Header ── */}
