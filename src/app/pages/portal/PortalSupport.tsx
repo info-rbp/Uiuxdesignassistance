@@ -21,6 +21,7 @@ export function PortalSupport() {
       <PortalAdminReference
         portalRoute="/portal/support"
         controlledBy={["Admin Help Center > Support Center"]}
+              status="Live"
       />
 
       {/* Header */}
