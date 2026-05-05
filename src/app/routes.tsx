@@ -134,6 +134,7 @@ export const router = createBrowserRouter([
               { path: "offers",       Component: AdminDashboard },
               { path: "the-fixer",    Component: AdminDashboard },
               { path: "settings",     Component: AdminDashboard },
+              { path: "*",            Component: AdminDashboard },
             ],
           },
         ],

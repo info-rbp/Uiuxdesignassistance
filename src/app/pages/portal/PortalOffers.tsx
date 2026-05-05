@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import { Tag, ExternalLink, CheckCircle, Star, ArrowRight } from "lucide-react";
 
 const offers = [
@@ -79,6 +80,10 @@ const offers = [
 export function PortalOffers() {
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/offers"
+        controlledBy={["Admin Offers"]}
+      />
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4">

@@ -4,8 +4,9 @@ import {
   Layers, Users, TrendingUp, FileText, HeadphonesIcon,
   GraduationCap, BarChart2, CreditCard, X, ArrowRight,
   CheckCircle, ChevronRight, Plus, Sparkles, ExternalLink,
-  Lock,
+  Lock, Plug, RefreshCw, AlertTriangle
 } from "lucide-react";
+import { PortalAdminReference } from "./PortalAdminReference";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -230,6 +231,20 @@ const APPS: AppDef[] = [
   },
 ];
 
+const MOCK_INTEGRATIONS = [
+  { name: "ERPNext", status: "Connected", sync: "Healthy" },
+  { name: "Frappe CRM", status: "Requested", sync: "Pending Setup" },
+  { name: "HRMS", status: "Coming Soon", sync: "N/A" },
+  { name: "Helpdesk", status: "Connected", sync: "Healthy" },
+  { name: "Payments", status: "Manual Setup", sync: "Action Required" },
+  { name: "OpenAI", status: "Requested", sync: "Pending Setup" },
+  { name: "Google Drive", status: "Coming Soon", sync: "N/A" },
+  { name: "Microsoft 365", status: "Coming Soon", sync: "N/A" },
+  { name: "Xero", status: "Manual Setup", sync: "Action Required" },
+  { name: "Stripe", status: "Connected", sync: "Healthy" },
+  { name: "Custom API", status: "Issue", sync: "Failing" }
+];
+
 // ── Status configuration ──────────────────────────────────────────────────────
 
 const STATUS_CONFIG: Record<AppStatus, { badge: string; dot: string; action: string; actionDisabled?: boolean }> = {
@@ -449,6 +464,7 @@ function AppCard({
 // ── Main component ────────────────────────────────────────────────────────────
 
 export function PortalApps() {
+  const [activeTab, setActiveTab] = useState<"Apps" | "Integrations">("Apps");
   const [activeFilter, setActiveFilter] = useState<FilterTab>("All");
   const [selectedApp, setSelectedApp] = useState<AppDef | null>(null);
 
@@ -461,10 +477,16 @@ export function PortalApps() {
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
 
+      <PortalAdminReference
+        portalRoute="/portal/apps"
+        controlledBy={["Admin Applications"]}
+        status="Live"
+      />
+
       {/* ── Page header ── */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="text-xl font-extrabold text-slate-900 mb-1">Applications</h2>
+          <h2 className="text-xl font-extrabold text-slate-900 mb-1">Applications & Tools</h2>
           <p className="text-sm text-slate-500">
             Access the business tools and platform capabilities available through RBP.
           </p>
@@ -485,98 +507,191 @@ export function PortalApps() {
         </div>
       </div>
 
-      {/* ── Summary cards ── */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {SUMMARY_CARDS.map((s) => {
-          const count = APPS.filter((a) => a.status === s.key).length;
-          return (
-            <button
-              key={s.label}
-              onClick={() => setActiveFilter(s.key)}
-              className={`rounded-2xl border p-4 text-left transition-all hover:opacity-80 ${s.color} ${
-                activeFilter === s.key ? "ring-2 ring-offset-1 ring-current" : ""
-              }`}
-            >
-              <div className="text-2xl font-extrabold mb-0.5">{count}</div>
-              <div className="text-xs font-semibold leading-tight">{s.label}</div>
-            </button>
-          );
-        })}
+      {/* Tabs */}
+      <div className="flex items-center gap-4 border-b border-slate-200">
+        <button
+          onClick={() => setActiveTab("Apps")}
+          className={`pb-3 text-sm font-bold transition-all border-b-2 ${
+            activeTab === "Apps" ? "border-blue-600 text-blue-700" : "border-transparent text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Applications
+        </button>
+        <button
+          onClick={() => setActiveTab("Integrations")}
+          className={`pb-3 text-sm font-bold transition-all border-b-2 flex items-center gap-1.5 ${
+            activeTab === "Integrations" ? "border-blue-600 text-blue-700" : "border-transparent text-slate-500 hover:text-slate-700"
+          }`}
+        >
+          Integrations <span className="text-[9px] bg-amber-50 text-amber-700 border border-amber-100 px-1.5 py-0.5 rounded uppercase tracking-wider font-extrabold">Planned</span>
+        </button>
       </div>
 
-      {/* ── Featured recommendation ── */}
-      {(activeFilter === "All" || activeFilter === "Admin Managed") && (
-        <div>
-          <div className="flex items-center gap-2 mb-3">
-            <Sparkles className="w-4 h-4 text-blue-700" />
-            <h3 className="text-sm font-extrabold text-slate-900">Recommended</h3>
+      {activeTab === "Apps" && (
+        <div className="space-y-6">
+          {/* ── Summary cards ── */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {SUMMARY_CARDS.map((s) => {
+              const count = APPS.filter((a) => a.status === s.key).length;
+              return (
+                <button
+                  key={s.label}
+                  onClick={() => setActiveFilter(s.key)}
+                  className={`rounded-2xl border p-4 text-left transition-all hover:opacity-80 ${s.color} ${
+                    activeFilter === s.key ? "ring-2 ring-offset-1 ring-current" : ""
+                  }`}
+                >
+                  <div className="text-2xl font-extrabold mb-0.5">{count}</div>
+                  <div className="text-xs font-semibold leading-tight">{s.label}</div>
+                </button>
+              );
+            })}
           </div>
-          <AppCard
-            app={featuredApp}
-            onViewDetails={setSelectedApp}
-            featured
-          />
+
+          {/* ── Featured recommendation ── */}
+          {(activeFilter === "All" || activeFilter === "Admin Managed") && (
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="w-4 h-4 text-blue-700" />
+                <h3 className="text-sm font-extrabold text-slate-900">Recommended</h3>
+              </div>
+              <AppCard
+                app={featuredApp}
+                onViewDetails={setSelectedApp}
+                featured
+              />
+            </div>
+          )}
+
+          {/* ── Filter tabs ── */}
+          <div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {FILTER_TABS.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveFilter(tab)}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
+                    activeFilter === tab
+                      ? "bg-blue-700 text-white"
+                      : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
+                  }`}
+                >
+                  {tab}
+                  {tab !== "All" && (
+                    <span className={`ml-1.5 text-[10px] ${activeFilter === tab ? "text-blue-200" : "text-slate-400"}`}>
+                      {APPS.filter((a) => a.status === tab).length}
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Application cards grid ── */}
+          {filtered.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+              {filtered
+                .filter((a) => !(activeFilter === "All" && a.id === "operations-finance"))
+                .map((app) => (
+                  <AppCard
+                    key={app.id}
+                    app={app}
+                    onViewDetails={setSelectedApp}
+                  />
+                ))}
+            </div>
+          ) : (
+            /* ── Empty state ── */
+            <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-12 flex flex-col items-center text-center">
+              <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
+                <Layers className="w-7 h-7 text-slate-300" />
+              </div>
+              <div className="text-sm font-bold text-slate-700 mb-2">No active applications yet</div>
+              <p className="text-xs text-slate-400 leading-relaxed mb-5 max-w-xs">
+                Applications you activate through RBP will appear here.
+              </p>
+              <Link
+                to="/portal/support"
+                className="inline-flex items-center gap-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all"
+              >
+                <Plus className="w-3.5 h-3.5" /> Request an Application
+              </Link>
+            </div>
+          )}
         </div>
       )}
 
-      {/* ── Filter tabs ── */}
-      <div>
-        <div className="flex items-center gap-1.5 flex-wrap">
-          {FILTER_TABS.map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveFilter(tab)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
-                activeFilter === tab
-                  ? "bg-blue-700 text-white"
-                  : "bg-white text-slate-600 border border-slate-200 hover:bg-slate-50"
-              }`}
-            >
-              {tab}
-              {tab !== "All" && (
-                <span className={`ml-1.5 text-[10px] ${activeFilter === tab ? "text-blue-200" : "text-slate-400"}`}>
-                  {APPS.filter((a) => a.status === tab).length}
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
+      {activeTab === "Integrations" && (
+        <div className="space-y-6">
+          <PortalAdminReference
+            portalRoute="/portal/apps (Planned: /portal/integrations)"
+            futureRoute="/portal/integrations"
+            controlledBy={["Admin Applications > Integrations"]}
+            status="Planned"
+          />
 
-      {/* ── Application cards grid ── */}
-      {filtered.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-          {filtered
-            .filter((a) => !(activeFilter === "All" && a.id === "operations-finance"))
-            .map((app) => (
-              <AppCard
-                key={app.id}
-                app={app}
-                onViewDetails={setSelectedApp}
-              />
-            ))}
-        </div>
-      ) : (
-        /* ── Empty state ── */
-        <div className="bg-white rounded-2xl border border-dashed border-slate-200 p-12 flex flex-col items-center text-center">
-          <div className="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-4">
-            <Layers className="w-7 h-7 text-slate-300" />
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mb-4 text-sm text-blue-800 flex items-start gap-3">
+            <Plug className="w-5 h-5 flex-shrink-0 text-blue-600 mt-0.5" />
+            <div>
+              <strong className="font-extrabold text-blue-900 block">Integration management is planned.</strong>
+              For now, integrations are visually shown under Applications until a dedicated <code className="text-xs bg-blue-100 px-1 rounded">/portal/integrations</code> route is created later in GitHub/Firebase Studio.
+            </div>
           </div>
-          <div className="text-sm font-bold text-slate-700 mb-2">No active applications yet</div>
-          <p className="text-xs text-slate-400 leading-relaxed mb-5 max-w-xs">
-            Applications you activate through RBP will appear here.
-          </p>
-          <Link
-            to="/portal/support"
-            className="inline-flex items-center gap-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all"
-          >
-            <Plus className="w-3.5 h-3.5" /> Request an Application
-          </Link>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            {[
+              { label: "Connected Integrations", val: 3 },
+              { label: "Pending Setup Requests", val: 2 },
+              { label: "Available Integrations", val: 3 },
+              { label: "Support Required", val: 1 }
+            ].map(stat => (
+              <div key={stat.label} className="bg-white border border-slate-100 rounded-xl p-4 text-center">
+                <div className="text-xl font-extrabold text-slate-800">{stat.val}</div>
+                <div className="text-[10px] text-slate-500 font-bold uppercase mt-1">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-slate-100 bg-slate-50 text-[10px] uppercase font-bold text-slate-500">
+                  <th className="px-4 py-3">Integration</th>
+                  <th className="px-4 py-3">Connection Status</th>
+                  <th className="px-4 py-3">Sync / Health</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-sm">
+                {MOCK_INTEGRATIONS.map((integ, i) => (
+                  <tr key={i} className="hover:bg-slate-50/50">
+                    <td className="px-4 py-3 font-semibold text-slate-800">{integ.name}</td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex items-center gap-1.5 text-[10px] font-bold px-2 py-0.5 rounded-lg ${
+                        integ.status === "Connected" ? "bg-emerald-50 text-emerald-700" :
+                        integ.status === "Requested" ? "bg-blue-50 text-blue-700" :
+                        integ.status === "Manual Setup" ? "bg-amber-50 text-amber-700" :
+                        integ.status === "Issue" ? "bg-rose-50 text-rose-700" :
+                        "bg-slate-100 text-slate-600"
+                      }`}>
+                        {integ.status}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-xs text-slate-600 flex items-center gap-2">
+                      {integ.sync === "Healthy" && <RefreshCw className="w-3.5 h-3.5 text-emerald-500" />}
+                      {integ.sync === "Action Required" && <AlertTriangle className="w-3.5 h-3.5 text-amber-500" />}
+                      {integ.sync === "Failing" && <AlertTriangle className="w-3.5 h-3.5 text-rose-500" />}
+                      {integ.sync}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 
       {/* ── Detail panel ── */}
-      {selectedApp && (
+      {selectedApp && activeTab === "Apps" && (
         <DetailPanel app={selectedApp} onClose={() => setSelectedApp(null)} />
       )}
     </div>

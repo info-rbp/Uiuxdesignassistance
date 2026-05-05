@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import { CalendarCheck, Clock, Users, Video, ArrowRight, ChevronRight, Plus } from "lucide-react";
 
 const upcoming = [
@@ -24,6 +25,10 @@ const typeColor: Record<string, string> = {
 export function PortalSessions() {
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/sessions"
+        controlledBy={["Admin Dashboard > Discovery Calls", "Admin On-Demand Services > Business Advisor"]}
+      />
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4">

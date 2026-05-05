@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import { MessageSquare, Mail, Phone, Clock, ChevronRight, ArrowRight, BookOpen, CheckCircle, AlertCircle } from "lucide-react";
 
 const tickets = [
@@ -17,6 +18,10 @@ const faqs = [
 export function PortalSupport() {
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/support"
+        controlledBy={["Admin Help Center > Support Center"]}
+      />
 
       {/* Header */}
       <div>

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import {
   ChevronRight, Zap, Users, BarChart2, Calculator, Tag,
   FileText, Upload, CheckCircle, ArrowRight, X,
@@ -95,6 +96,10 @@ export function PortalServiceRequest() {
   /* ── Form ── */
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6 max-w-2xl">
+      <PortalAdminReference
+        portalRoute="/portal/services/request"
+        controlledBy={["Admin On-Demand Services", "Admin Managed Services", "Admin The Fixer"]}
+      />
 
       {/* Breadcrumb */}
       <nav className="flex items-center gap-1.5 text-xs text-slate-400">

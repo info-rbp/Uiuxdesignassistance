@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import {
   Zap, CalendarCheck, FileText, CheckCircle, Tag,
   Star, ArrowRight, ChevronRight, TrendingUp, Clock,
@@ -118,6 +119,10 @@ const CONSULTANT_ASSIGNED = true;
 export function PortalDashboard() {
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/dashboard"
+        controlledBy={["Admin Dashboard", "Admin Membership"]}
+      />
 
       {/* ── Welcome banner ── */}
       <div className="bg-blue-700 rounded-2xl px-6 py-5 relative overflow-hidden">

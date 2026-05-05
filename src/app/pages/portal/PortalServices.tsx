@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import {
   Zap, ArrowRight, ChevronRight, CheckCircle, Clock,
   AlertCircle, Plus, FileText, Tag, Calculator, BarChart2,
@@ -114,6 +115,10 @@ export function PortalServices() {
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/services"
+        controlledBy={["Admin On-Demand Services", "Admin Managed Services"]}
+      />
 
       {/* ── Header ── */}
       <div className="flex items-start justify-between gap-4">

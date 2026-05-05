@@ -1,5 +1,6 @@
 import { FileText, Download, Eye, Search, Filter, Clock, CheckCircle, AlertCircle } from "lucide-react";
 import { useState } from "react";
+import { PortalAdminReference } from "./PortalAdminReference";
 
 const documents = [
   { name: "Business Health Assessment Report",   category: "Advisory",  date: "28 Apr 2026", size: "1.2 MB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
@@ -33,6 +34,10 @@ export function PortalDocuments() {
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/documents"
+        controlledBy={["Admin On-Demand Services > Document Nucleus"]}
+      />
 
       {/* Header */}
       <div>

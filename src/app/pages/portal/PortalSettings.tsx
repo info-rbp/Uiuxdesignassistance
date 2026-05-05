@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import { User, Mail, Lock, Bell, Shield, CreditCard, LogOut, CheckCircle, ChevronRight } from "lucide-react";
 
 const tabs = ["Profile", "Security", "Notifications", "Membership", "Billing"] as const;
@@ -32,6 +33,10 @@ export function PortalSettings() {
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/settings"
+        controlledBy={["Admin Membership > Portal Access", "Admin Settings"]}
+      />
 
       {/* Header */}
       <div>

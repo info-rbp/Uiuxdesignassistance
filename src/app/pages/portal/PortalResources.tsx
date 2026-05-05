@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { PortalAdminReference } from "./PortalAdminReference";
 import { BookOpen, ArrowRight, Clock, ChevronRight, TrendingUp, FileText, Video, Mic } from "lucide-react";
 
 const featured = {
@@ -32,6 +33,10 @@ const catColor: Record<string, string> = {
 export function PortalResources() {
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
+      <PortalAdminReference
+        portalRoute="/portal/resources"
+        controlledBy={["Admin Resources", "Admin Help Center > Resources"]}
+      />
 
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
