@@ -81,6 +81,7 @@ function RelationCard({ title, link }: { title: string; link?: AdminSectionLink 
         <h3 className="text-sm font-semibold text-slate-800">{title}</h3>
         <Badge label={status} className={statusClass} />
       </div>
+      <p className="text-xs text-slate-500">{link?.note ?? "Route relationship and publishing mapping."}</p>
       <p className="text-xs text-slate-500">{link?.note ?? "Route relationship and publishing mapping." }</p>
       {link?.href ? (
         <Link to={link.href} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline">
