@@ -96,7 +96,7 @@ export function PortalSupport() {
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h3 className="text-sm font-extrabold text-slate-900">Frequently Asked Questions</h3>
           <Link to="/help" className="text-xs font-semibold text-blue-700 hover:underline flex items-center gap-1">
-            Help Centre <ChevronRight className="w-3.5 h-3.5" />
+            Help Center <ChevronRight className="w-3.5 h-3.5" />
           </Link>
         </div>
         <div className="divide-y divide-slate-50">

@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { Archive, Eye, ExternalLink, FileText, LayoutGrid, Pencil, Plus, Tag } from "lucide-react";
 
 export type AdminSectionStatus =
@@ -82,6 +83,9 @@ function RelationCard({ title, link }: { title: string; link?: AdminSectionLink 
       </div>
       <p className="text-xs text-slate-500">{link?.note ?? "Route relationship and publishing mapping." }</p>
       {link?.href ? (
+        <Link to={link.href} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline">
+          {link.label} <ExternalLink className="h-3.5 w-3.5" />
+        </Link>
         <a href={link.href} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline">
           {link.label} <ExternalLink className="h-3.5 w-3.5" />
         </a>
@@ -121,6 +125,9 @@ export function AdminSectionPage({
               <Plus className="h-4 w-4" /> Add Item
             </button>
             {publicLink?.href && (
+              <Link to={publicLink.href} className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700">
+                <Eye className="h-4 w-4" /> View Public Page
+              </Link>
               <a href={publicLink.href} className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700">
                 <Eye className="h-4 w-4" /> View Public Page
               </a>
