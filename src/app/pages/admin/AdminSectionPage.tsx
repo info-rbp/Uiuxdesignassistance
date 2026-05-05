@@ -82,10 +82,14 @@ function RelationCard({ title, link }: { title: string; link?: AdminSectionLink 
         <Badge label={status} className={statusClass} />
       </div>
       <p className="text-xs text-slate-500">{link?.note ?? "Route relationship and publishing mapping."}</p>
+      <p className="text-xs text-slate-500">{link?.note ?? "Route relationship and publishing mapping." }</p>
       {link?.href ? (
         <Link to={link.href} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline">
           {link.label} <ExternalLink className="h-3.5 w-3.5" />
         </Link>
+        <a href={link.href} className="mt-3 inline-flex items-center gap-1 text-xs font-medium text-blue-700 hover:underline">
+          {link.label} <ExternalLink className="h-3.5 w-3.5" />
+        </a>
       ) : (
         <div className="mt-3 text-xs text-slate-500">No active route link.</div>
       )}
@@ -125,6 +129,9 @@ export function AdminSectionPage({
               <Link to={publicLink.href} className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700">
                 <Eye className="h-4 w-4" /> View Public Page
               </Link>
+              <a href={publicLink.href} className="inline-flex items-center gap-1 rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold text-slate-700">
+                <Eye className="h-4 w-4" /> View Public Page
+              </a>
             )}
           </div>
         </div>
