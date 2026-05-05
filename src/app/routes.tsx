@@ -59,6 +59,13 @@ import { PortalResources }       from "./pages/portal/PortalResources";
 import { PortalSupport }         from "./pages/portal/PortalSupport";
 import { PortalSettings }        from "./pages/portal/PortalSettings";
 
+// ── Admin ──
+// admin/signin sits outside the AdminLayout (no sidebar)
+// admin/* routes are wrapped by the pathless AdminLayout
+import { AdminSignInPage } from "./pages/admin/AdminSignInPage";
+import { AdminLayout }     from "./pages/admin/AdminLayout";
+import { AdminDashboard }  from "./pages/admin/AdminDashboard";
+
 function Root() { return <Outlet />; }
 function Layout() { return <Outlet />; }
 
@@ -105,6 +112,30 @@ export const router = createBrowserRouter([
           { path: "resources",  Component: PortalResources },
           { path: "support",    Component: PortalSupport },
           { path: "settings",   Component: PortalSettings },
+        ],
+      },
+
+      // ── Admin ──
+      // admin/signin sits outside the AdminLayout (no sidebar)
+      // admin/* routes are wrapped by the pathless AdminLayout
+      {
+        path: "admin",
+        children: [
+          { path: "signin", Component: AdminSignInPage },
+          {
+            Component: AdminLayout,
+            children: [
+              { path: "dashboard",    Component: AdminDashboard },
+              { path: "members",      Component: AdminDashboard },
+              { path: "services",     Component: AdminDashboard },
+              { path: "applications", Component: AdminDashboard },
+              { path: "sessions",     Component: AdminDashboard },
+              { path: "documents",    Component: AdminDashboard },
+              { path: "offers",       Component: AdminDashboard },
+              { path: "the-fixer",    Component: AdminDashboard },
+              { path: "settings",     Component: AdminDashboard },
+            ],
+          },
         ],
       },
 

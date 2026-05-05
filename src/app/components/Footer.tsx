@@ -107,6 +107,8 @@ export function Footer() {
             {["Privacy", "Terms", "Cookies"].map((l) => (
               <a key={l} href="#" className="text-slate-500 hover:text-slate-300 text-xs transition-colors">{l}</a>
             ))}
+            <span className="text-slate-700 text-xs select-none">·</span>
+            <a href="/admin/signin" className="text-slate-600 hover:text-slate-300 text-xs transition-colors">Admin</a>
           </div>
         </div>
       </div>
