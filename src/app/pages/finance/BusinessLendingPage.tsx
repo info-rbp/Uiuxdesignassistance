@@ -8,10 +8,10 @@ import { DollarSign, CheckCircle, ArrowRight, Clock, ShieldCheck, BadgePercent, 
 const heroImage = "https://images.unsplash.com/photo-1557869737-514ed88cb747?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMGxvYW4lMjBiYW5rJTIwZmluYW5jZSUyMHNtYWxsJTIwYnVzaW5lc3N8ZW58MXx8fHwxNzc2OTUyMjQ3fDA&ixlib=rb-4.1.0&q=80&w=1080";
 
 const loanTypes = [
-  { icon: Landmark, title: "Term Loans", desc: "Fixed-amount loans repaid over an agreed period — ideal for planned investments, equipment, or expansion projects.", range: "£10,000 – £500,000", term: "1–7 years" },
-  { icon: BarChart3, title: "Working Capital Loans", desc: "Short-term finance to cover day-to-day operational costs, seasonal cash flow gaps, or bridging periods.", range: "£5,000 – £150,000", term: "3–24 months" },
-  { icon: Briefcase, title: "Asset Finance", desc: "Finance the purchase of equipment, vehicles, or machinery — spreading the cost while retaining working capital.", range: "£5,000 – £250,000", term: "1–5 years" },
-  { icon: BadgePercent, title: "Government-Backed Loans", desc: "Access government-guaranteed lending schemes designed to support small business growth with favourable terms.", range: "Up to £250,000", term: "Up to 6 years" },
+  { icon: Landmark, title: "Term Loans", desc: "Fixed-amount loans repaid over an agreed period — ideal for planned investments, equipment, or expansion projects.", range: "$10,000 – $500,000", term: "1–7 years" },
+  { icon: BarChart3, title: "Working Capital Loans", desc: "Short-term finance to cover day-to-day operational costs, seasonal cash flow gaps, or bridging periods.", range: "$5,000 – $150,000", term: "3–24 months" },
+  { icon: Briefcase, title: "Asset Finance", desc: "Finance the purchase of equipment, vehicles, or machinery — spreading the cost while retaining working capital.", range: "$5,000 – $250,000", term: "1–5 years" },
+  { icon: BadgePercent, title: "Government-Backed Loans", desc: "Access government-guaranteed lending schemes designed to support small business growth with favourable terms.", range: "Up to $250,000", term: "Up to 6 years" },
 ];
 
 const process = [
@@ -23,7 +23,7 @@ const process = [
 
 const benefits = [
   "Access to 150+ lender panel",
-  "Loans from £5,000 to £500,000",
+  "Loans from $5,000 to $500,000",
   "Flexible repayment terms",
   "Fast decisions — often within 48 hours",
   "No upfront fees",
@@ -41,7 +41,7 @@ export function BusinessLendingPage() {
         badge="Finance Centre"
         breadcrumb="Business Lending"
         image={heroImage}
-        bullets={["Loans from £5,000 to £500,000", "150+ lender panel", "Decisions in 48 hours"]}
+        bullets={["Loans from $5,000 to $500,000", "150+ lender panel", "Decisions in 48 hours"]}
         ctaPrimary={{ label: "Apply Now", href: "/contact" }}
         ctaSecondary={{ label: "Back to Finance", href: "/finance" }}
         stat={{ value: "96%", label: "Approval Rate", sublabel: "Across our applications" }}
@@ -52,10 +52,10 @@ export function BusinessLendingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {[
-              { value: "£50M+", label: "Funding Facilitated" },
+              { value: "$50M+", label: "Funding Facilitated" },
               { value: "150+", label: "Lender Partners" },
               { value: "48hrs", label: "Avg. Decision Time" },
-              { value: "£5K–£500K", label: "Loan Range" },
+              { value: "$5K–$500K", label: "Loan Range" },
             ].map((s) => (
               <div key={s.label}>
                 <div className="text-2xl sm:text-3xl font-extrabold text-white mb-1">{s.value}</div>

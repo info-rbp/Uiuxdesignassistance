@@ -47,11 +47,11 @@ export function OperationsCenterPage() {
     <div className="bg-white min-h-screen">
       <Navbar />
       <PageHero
-        title="Operations Center"
+        title="Operations Centre"
         titleAccent="for Business"
         subtitle="Finance pathways, insurance guidance, operational tools, and connectivity solutions — everything to support your business infrastructure."
-        badge="Operations Center"
-        breadcrumb="Operations Center"
+        badge="Operations Centre"
+        breadcrumb="Operations Centre"
         image={heroImage}
         bullets={["Finance & funding pathways", "Insurance guidance", "Connectivity solutions"]}
         ctaPrimary={{ label: "Explore Operations Support", href: "/contact" }}
@@ -75,7 +75,7 @@ export function OperationsCenterPage() {
           <div className="text-center mb-14">
             <span className="inline-block text-xs font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full mb-4">Four Areas</span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">Operational support infrastructure</h2>
-            <p className="text-slate-600 max-w-xl mx-auto">The Operations Center brings together finance, insurance, tools, and connectivity — the infrastructure layer of your business.</p>
+            <p className="text-slate-600 max-w-xl mx-auto">The Operations Centre brings together finance, insurance, tools, and connectivity — the infrastructure layer of your business.</p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

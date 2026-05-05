@@ -12,7 +12,7 @@ const solutions = [
     icon: DollarSign,
     title: "Business Lending",
     desc: "Access competitive lending options tailored for small businesses. We connect you with lenders who understand your growth stage and revenue profile.",
-    features: ["Loans from £5,000 to £500,000", "Flexible repayment terms", "Fast approval process", "No hidden fees"],
+    features: ["Loans from $5,000 to $500,000", "Flexible repayment terms", "Fast approval process", "No hidden fees"],
     color: "bg-sky-100 text-sky-700",
   },
   {
@@ -52,7 +52,7 @@ export function FinancePage() {
         bullets={["Competitive lending options", "Business insurance guidance", "Expert financial planning"]}
         ctaPrimary={{ label: "Get Financial Advice", href: "/contact" }}
         ctaSecondary={{ label: "Our Services", href: "/services" }}
-        stat={{ value: "£2M+", label: "Funding Facilitated", sublabel: "For our clients" }}
+        stat={{ value: "$2M+", label: "Funding Facilitated", sublabel: "For our clients" }}
       />
 
       {/* Hero stats */}
@@ -60,7 +60,7 @@ export function FinancePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
             {[
-              { value: "£50M+", label: "Funding Facilitated" },
+              { value: "$50M+", label: "Funding Facilitated" },
               { value: "150+", label: "Lender Partners" },
               { value: "48hrs", label: "Average Turnaround" },
               { value: "96%", label: "Approval Rate" },

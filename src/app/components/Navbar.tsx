@@ -5,16 +5,17 @@ import {
   Headphones, MessageSquare, FileText, Lightbulb,
   BarChart3, Home as HomeIcon, Users, Layers,
   ShoppingBag, Zap, BookOpen, Settings2, Tag, HelpCircle,
-  Wifi, Calculator, Shield, DollarSign,
+  Wifi, Calculator, Shield, DollarSign, Wrench,
 } from "lucide-react";
 
 // ── Nav structure ─────────────────────────────────────────────────────────────
 
 const onDemandLinks = [
-  { icon: Lightbulb, label: "Business Advisor", desc: "Strategic guidance for business owners", href: "/on-demand/business-advisor", color: "text-blue-600 bg-blue-50" },
-  { icon: Headphones, label: "On-Demand Services", desc: "Project-based consulting & support", href: "/on-demand/services", color: "text-violet-600 bg-violet-50" },
-  { icon: FileText, label: "Document Centre", desc: "Templates, toolkits & document suites", href: "/on-demand/documents", color: "text-teal-600 bg-teal-50" },
-  { icon: MessageSquare, label: "Decision Desk", desc: "Submit an issue, get written guidance", href: "/on-demand/decision-desk", color: "text-amber-600 bg-amber-50" },
+  { icon: Lightbulb, label: "Business Advisor",    desc: "Strategic guidance for business owners",       href: "/on-demand/business-advisor", color: "text-blue-600 bg-blue-50" },
+  { icon: Headphones, label: "On-Demand Services", desc: "Project-based consulting & support",            href: "/on-demand/services",          color: "text-violet-600 bg-violet-50" },
+  { icon: FileText,   label: "Document Centre",    desc: "Templates, toolkits & document suites",        href: "/on-demand/documents",         color: "text-teal-600 bg-teal-50" },
+  { icon: MessageSquare, label: "Decision Desk",   desc: "Submit an issue, get written guidance",         href: "/on-demand/decision-desk",     color: "text-amber-600 bg-amber-50" },
+  { icon: Wrench,     label: "The Fixer",          desc: "One specific problem. Fully resolved.",         href: "/on-demand/the-fixer",         color: "text-orange-600 bg-orange-50" },
 ];
 
 const managedLinks = [
@@ -203,7 +204,7 @@ export function Navbar() {
               <Link to="/sign-in" className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 px-3 py-1.5 rounded-lg border border-slate-200 hover:border-slate-300 hover:bg-white transition-all ml-1">
                 <LogIn className="w-3 h-3" /> Sign In
               </Link>
-              <Link to="/membership" className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-lg transition-all ml-1">
+              <Link to="/sign-in" className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-lg transition-all ml-1">
                 <UserPlus className="w-3 h-3" /> Join Now
               </Link>
               {/* Mobile hamburger */}

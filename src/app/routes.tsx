@@ -24,6 +24,7 @@ import { HelpCenterPage } from "./pages/HelpCenterPage";
 
 // On-Demand sub-pages
 import { DecisionDeskPage } from "./pages/on-demand/DecisionDeskPage";
+import { TheFixerPage }     from "./pages/on-demand/TheFixerPage";
 
 // Managed Services sub-pages
 import { BidManagementPage } from "./pages/managed-services/BidManagementPage";
@@ -41,6 +42,22 @@ import { SuperloopPage } from "./pages/operations/SuperloopPage";
 
 // ApplicationsPage (old)
 import { ApplicationsPage } from "./pages/ApplicationsPage";
+import { SignInPage } from "./pages/SignInPage";
+import { DashboardPage } from "./pages/DashboardPage";
+
+// ── Member Portal ──
+import { PortalLayout }          from "./pages/portal/PortalLayout";
+import { PortalDashboard }       from "./pages/portal/PortalDashboard";
+import { PortalServices }        from "./pages/portal/PortalServices";
+import { PortalServiceRequest }  from "./pages/portal/PortalServiceRequest";
+import { PortalServiceDetail }   from "./pages/portal/PortalServiceDetail";
+import { PortalSessions }        from "./pages/portal/PortalSessions";
+import { PortalDocuments }       from "./pages/portal/PortalDocuments";
+import { PortalOffers }          from "./pages/portal/PortalOffers";
+import { PortalApps }            from "./pages/portal/PortalApps";
+import { PortalResources }       from "./pages/portal/PortalResources";
+import { PortalSupport }         from "./pages/portal/PortalSupport";
+import { PortalSettings }        from "./pages/portal/PortalSettings";
 
 function Root() { return <Outlet />; }
 function Layout() { return <Outlet />; }
@@ -55,6 +72,42 @@ export const router = createBrowserRouter([
       { path: "contact", Component: ContactPage },
       { path: "help", Component: HelpCenterPage },
 
+      // ── Top-level legacy / direct routes ──
+      { path: "services", Component: ServicesPage },
+      { path: "business-advisor", Component: BusinessAdvisorPage },
+      { path: "docushare", Component: DocuSharePage },
+      { path: "document-nucleus/overview", Component: DocumentOverviewPage },
+      { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
+      { path: "document-nucleus/product/:id", Component: DocumentProductPage },
+      { path: "applications-legacy", Component: ApplicationsPage },
+      { path: "sign-in", Component: SignInPage },
+      { path: "dashboard", Component: DashboardPage },
+
+      // ── Member Portal ──
+      {
+        path: "portal",
+        Component: PortalLayout,
+        children: [
+          { path: "dashboard",  Component: PortalDashboard },
+          {
+            path: "services",
+            Component: Layout,
+            children: [
+              { index: true,          Component: PortalServices },
+              { path: "request",      Component: PortalServiceRequest },
+              { path: ":id",          Component: PortalServiceDetail },
+            ],
+          },
+          { path: "sessions",   Component: PortalSessions },
+          { path: "documents",  Component: PortalDocuments },
+          { path: "offers",     Component: PortalOffers },
+          { path: "apps",       Component: PortalApps },
+          { path: "resources",  Component: PortalResources },
+          { path: "support",    Component: PortalSupport },
+          { path: "settings",   Component: PortalSettings },
+        ],
+      },
+
       // ── On-Demand Services ──
       {
         path: "on-demand",
@@ -65,6 +118,7 @@ export const router = createBrowserRouter([
           { path: "services", Component: ServicesPage },
           { path: "documents", Component: DocuSharePage },
           { path: "decision-desk", Component: DecisionDeskPage },
+          { path: "the-fixer", Component: TheFixerPage },
         ],
       },
 
@@ -89,7 +143,7 @@ export const router = createBrowserRouter([
         Component: Layout,
         children: [
           { index: true, Component: MarketplacePage },
-          { path: "product/:id", Component: MarketplacePage }, // placeholder product detail
+          { path: "product/:id", Component: MarketplacePage },
         ],
       },
 
@@ -125,13 +179,7 @@ export const router = createBrowserRouter([
       // ── Business Offers ──
       { path: "offers", Component: OffersPage },
 
-      // ── Document Nucleus (legacy + new) ──
-      { path: "docushare", Component: DocuSharePage },
-      { path: "document-nucleus/overview", Component: DocumentOverviewPage },
-      { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
-      { path: "document-nucleus/product/:id", Component: DocumentProductPage },
-
-      // ── Legacy finance routes (keep for backward compat) ──
+      // ── Legacy finance routes ──
       {
         path: "finance",
         Component: Layout,
@@ -143,12 +191,6 @@ export const router = createBrowserRouter([
           { path: "credit-and-funding", Component: CreditFundingPage },
         ],
       },
-
-      // ── Legacy applications route ──
-      { path: "applications-legacy", Component: ApplicationsPage },
-
-      // ── Sign-in placeholder ──
-      { path: "sign-in", Component: ContactPage },
     ],
   },
 ]);

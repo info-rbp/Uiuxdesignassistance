@@ -14,18 +14,18 @@ function CashFlowCalc() {
       <p className="text-slate-500 text-sm mb-5">Estimate your monthly net cash position.</p>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Monthly Revenue (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Monthly Revenue ($)</label>
           <input type="number" value={monthly} onChange={(e) => setMonthly(e.target.value)} placeholder="e.g. 10000" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Monthly Costs (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Monthly Costs ($)</label>
           <input type="number" value={costs} onChange={(e) => setCosts(e.target.value)} placeholder="e.g. 7000" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
       </div>
       {result !== null && (
         <div className={`rounded-xl p-4 text-center ${result >= 0 ? "bg-emerald-50 border border-emerald-200" : "bg-red-50 border border-red-200"}`}>
           <div className={`text-2xl font-extrabold ${result >= 0 ? "text-emerald-700" : "text-red-700"}`}>
-            {result >= 0 ? "+" : ""}£{result.toLocaleString()}
+            {result >= 0 ? "+" : ""}${result.toLocaleString()}
           </div>
           <div className="text-xs font-semibold text-slate-500 mt-1">Estimated monthly net cash</div>
         </div>
@@ -51,7 +51,7 @@ function LoanRepaymentCalc() {
       <p className="text-slate-500 text-sm mb-5">Estimate your monthly loan repayment.</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Loan Amount (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Loan Amount ($)</label>
           <input type="number" value={loan} onChange={(e) => setLoan(e.target.value)} placeholder="e.g. 50000" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
         <div>
@@ -65,7 +65,7 @@ function LoanRepaymentCalc() {
       </div>
       {monthly !== null && (
         <div className="bg-sky-50 border border-sky-200 rounded-xl p-4 text-center">
-          <div className="text-2xl font-extrabold text-sky-700">£{monthly.toFixed(2)}</div>
+          <div className="text-2xl font-extrabold text-sky-700">${monthly.toFixed(2)}</div>
           <div className="text-xs font-semibold text-slate-500 mt-1">Estimated monthly repayment</div>
         </div>
       )}
@@ -87,15 +87,15 @@ function BreakEvenCalc() {
       <p className="text-slate-500 text-sm mb-5">Find out how many units you need to sell to break even.</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Fixed Costs (£/mo)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Fixed Costs ($/mo)</label>
           <input type="number" value={fixed} onChange={(e) => setFixed(e.target.value)} placeholder="e.g. 5000" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Price per Unit (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Price per Unit ($)</label>
           <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="e.g. 100" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Variable Cost/Unit (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Variable Cost/Unit ($)</label>
           <input type="number" value={variable} onChange={(e) => setVariable(e.target.value)} placeholder="e.g. 40" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
       </div>
@@ -122,11 +122,11 @@ function GrossMarginCalc() {
       <p className="text-slate-500 text-sm mb-5">Calculate your gross profit margin percentage.</p>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Revenue (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Revenue ($)</label>
           <input type="number" value={revenue} onChange={(e) => setRevenue(e.target.value)} placeholder="e.g. 100000" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
         <div>
-          <label className="block text-xs font-bold text-slate-600 mb-1.5">Cost of Goods Sold (£)</label>
+          <label className="block text-xs font-bold text-slate-600 mb-1.5">Cost of Goods Sold ($)</label>
           <input type="number" value={cogs} onChange={(e) => setCogs(e.target.value)} placeholder="e.g. 60000" className="w-full px-3 py-2.5 text-sm border border-slate-200 rounded-xl focus:outline-none focus:border-blue-400" />
         </div>
       </div>
@@ -149,7 +149,7 @@ export function FinanceCalculatorsPage() {
           <div className="flex items-center gap-2 text-slate-400 text-xs mb-6">
             <Link to="/" className="hover:text-white transition-colors">Home</Link>
             <span>/</span>
-            <Link to="/operations" className="hover:text-white transition-colors">Operations Center</Link>
+            <Link to="/operations" className="hover:text-white transition-colors">Operations Centre</Link>
             <span>/</span>
             <span className="text-white">Finance Calculators</span>
           </div>

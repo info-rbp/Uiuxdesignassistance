@@ -1,7 +1,7 @@
 
-  # UI/UX Design Assistance
+  # Remote Business Partner
 
-  This is a code bundle for UI/UX Design Assistance. The original project is available at https://www.figma.com/design/kD7hXNGAibAxGybLGVss3c/UI-UX-Design-Assistance.
+  This is a code bundle for Remote Business Partner. The original project is available at https://www.figma.com/design/kD7hXNGAibAxGybLGVss3c/Remote-Business-Partner.
 
   ## Running the code
 

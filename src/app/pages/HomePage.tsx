@@ -43,13 +43,13 @@ const platformSections = [
   },
   {
     icon: BookOpen, color: "bg-teal-100 text-teal-700", accent: "border-teal-200",
-    label: "Resource Center", href: "/resources",
+    label: "Resource Centre", href: "/resources",
     desc: "Practical guides, templates, checklists, calculators, and business knowledge.",
     links: ["Guides & Articles", "Templates", "Calculators"],
   },
   {
     icon: Settings2, color: "bg-sky-100 text-sky-700", accent: "border-sky-200",
-    label: "Operations Center", href: "/operations",
+    label: "Operations Centre", href: "/operations",
     desc: "Finance pathways, insurance guidance, connectivity offers, and operational tools.",
     links: ["Business Finance", "Insurance", "Calculators"],
   },
@@ -70,7 +70,7 @@ const howItWorks = [
 const stats = [
   { value: "500+", label: "Small businesses supported" },
   { value: "30+", label: "Business applications available" },
-  { value: "£2M+", label: "Funding facilitated" },
+  { value: "$2M+", label: "Funding facilitated" },
   { value: "96%", label: "Client satisfaction rate" },
 ];
 
@@ -135,10 +135,7 @@ export function HomePage() {
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent" />
               </div>
               {/* Floating stat cards */}
-              <div className="absolute -bottom-4 -left-6 bg-white text-slate-900 rounded-2xl shadow-xl p-4 border border-slate-100">
-                <div className="text-2xl font-extrabold">500+</div>
-                <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">Businesses Supported</div>
-              </div>
+              
               <div className="absolute -top-4 -right-4 bg-blue-700 text-white rounded-2xl shadow-xl p-4">
                 <div className="text-xs font-bold text-blue-200 uppercase tracking-wider mb-0.5">Platform</div>
                 <div className="text-sm font-extrabold">10 Core Sections</div>
@@ -239,29 +236,22 @@ export function HomePage() {
               </div>
             </div>
             <div className="space-y-4">
-              {/* UX flow diagram */}
-              <div className="bg-slate-900 rounded-2xl p-6 text-white">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Your Business Pathway</div>
-                <div className="space-y-2">
-                  {[
-                    { icon: Lightbulb, label: "Immediate advice needed?", action: "On-Demand Services →", color: "text-blue-400" },
-                    { icon: Users, label: "Ongoing operational support?", action: "Managed Services →", color: "text-emerald-400" },
-                    { icon: Layers, label: "Need business software?", action: "Business Applications →", color: "text-violet-400" },
-                    { icon: ShoppingBag, label: "Want a packaged solution?", action: "Business Marketplace →", color: "text-amber-400" },
-                    { icon: DollarSign, label: "Finance or insurance help?", action: "Operations Center →", color: "text-sky-400" },
-                    { icon: BookOpen, label: "Want to learn?", action: "Resource Center →", color: "text-teal-400" },
-                  ].map((item) => {
-                    const Icon = item.icon;
-                    return (
-                      <div key={item.label} className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
-                        <div className="flex items-center gap-3">
-                          <Icon className={`w-4 h-4 ${item.color} flex-shrink-0`} />
-                          <span className="text-sm text-slate-300">{item.label}</span>
-                        </div>
-                        <span className={`text-xs font-bold ${item.color}`}>{item.action}</span>
-                      </div>
-                    );
-                  })}
+              {/* Membership image */}
+              <div className="rounded-2xl overflow-hidden shadow-xl relative" style={{aspectRatio: "4/3"}}>
+                <img
+                  src="https://images.unsplash.com/photo-1637979911089-bf0d73f0b9c5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxidXNpbmVzcyUyMGFkdmlzb3J5JTIwbWVldGluZyUyMHRlYW0lMjBjb2xsYWJvcmF0aW9uJTIwb2ZmaWNlfGVufDF8fHx8MTc3Nzc5MTM4M3ww&ixlib=rb-4.1.0&q=80&w=1080"
+                  alt="RBP Membership — business advisory and community"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-5">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-600/80 backdrop-blur-sm rounded-full mb-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-blue-300 animate-pulse" />
+                    <span className="text-xs font-bold text-white uppercase tracking-wider">Membership Hub</span>
+                  </div>
+                  <p className="text-white text-sm font-semibold leading-snug">
+                    Advisory access, tools, and community — all in one membership.
+                  </p>
                 </div>
               </div>
             </div>
@@ -344,9 +334,9 @@ export function HomePage() {
                 </div>
                 <div className="hidden lg:grid grid-cols-2 gap-3">
                   {[
-                    { label: "Starter Plan", price: "From £29/mo", badge: "Most popular" },
-                    { label: "Growth Plan", price: "From £59/mo", badge: "Best value" },
-                    { label: "Pro Plan", price: "From £99/mo", badge: "Full access" },
+                    { label: "Starter Plan", price: "From $29/mo", badge: "Most popular" },
+                    { label: "Growth Plan", price: "From $59/mo", badge: "Best value" },
+                    { label: "Pro Plan", price: "From $99/mo", badge: "Full access" },
                     { label: "Enterprise", price: "Custom", badge: "Bespoke" },
                   ].map((plan) => (
                     <div key={plan.label} className="bg-white/10 border border-white/20 rounded-2xl p-5 backdrop-blur-sm">
