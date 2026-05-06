@@ -272,6 +272,8 @@ export const router = createBrowserRouter([
           { path: "connectivity", Component: ConnectivityPage },
           { path: "nbn-phone", Component: NbnPhonePage },
           { path: "connectivity/nbn-phone", Component: NbnPhonePage },
+          { path: "connectivity", Component: ConnectivityPage },
+          { path: "nbn-phone", Component: NbnPhonePage },
           { path: "coming-soon", Component: OperationsComingSoonPage },
         ],
       },

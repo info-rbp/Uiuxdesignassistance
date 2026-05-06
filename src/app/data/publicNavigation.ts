@@ -47,6 +47,8 @@ export const publicNavigation: MegaConfig[] = [
           { label: "Change Management",         href: "/on-demand/services#change-management" },
           { label: "AI Advisory",         href: "/on-demand/services#ai-advisory" },
           { label: "Accounting & Finance",href: "/on-demand/services#accounting-finance" },
+          { label: "AI Implementation",         href: "/on-demand/services#ai-implementation" },
+          { label: "Admin & Finance Consulting",href: "/on-demand/services#admin-finance-consulting" },
           { label: "Customised Solutions",      href: "/on-demand/services#customised-solutions" },
         ],
       },
@@ -102,6 +104,7 @@ export const publicNavigation: MegaConfig[] = [
           { label: "Business Finance",        href: "/operations/finance",     desc: "Finance education & referral pathways" },
           { label: "Business Insurance",      href: "/operations/insurance",   desc: "Insurance guidance & referrals" },
           { label: "Superloop Connectivity",  href: "/operations/connectivity/superloop",   desc: "White-labelled telecoms & connectivity" },
+          { label: "Superloop Connectivity",  href: "/operations/superloop",   desc: "White-labelled telecoms & connectivity" },
           { label: "Calculators",             href: "/operations/calculators", desc: "Cash flow & funding readiness tools" },
         ],
       },
@@ -126,6 +129,7 @@ export const publicNavigation: MegaConfig[] = [
   {
     key: "membership", label: "Membership",
     overview: { label: "Membership Overview", href: "/membership/overview" },
+    overview: { label: "Membership Overview", href: "/membership" },
     sections: [
       {
         heading: "Membership Options",
@@ -142,6 +146,14 @@ export const publicNavigation: MegaConfig[] = [
       },
     ],
     cta: { text: "Ready to become a member?", btnLabel: "Sign Up Now", href: "/membership/sign-up-now" },
+          { label: "Basic Membership",    href: "/membership#basic" },
+          { label: "Standard Membership", href: "/membership#standard" },
+          { label: "Premium Membership",  href: "/membership#premium" },
+          { label: "Sign Up Today",       href: "/sign-in" },
+        ],
+      },
+    ],
+    cta: { text: "Ready to become a member?", btnLabel: "Sign Up Today", href: "/sign-in" },
   },
   {
     key: "offers", label: "Offers",
