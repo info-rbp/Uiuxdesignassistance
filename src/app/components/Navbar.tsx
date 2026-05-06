@@ -1,5 +1,6 @@
+
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation } from "react-router-dom";
 import {
   Menu, X, Briefcase, ChevronDown, Search, LogIn, UserPlus, ArrowRight,
 } from "lucide-react";
@@ -20,248 +21,160 @@ interface MegaConfig  {
 
 const MENUS: MegaConfig[] = [
   {
-    key: "ondemand", label: "On-Demand Services",
-    overview: { label: "On-Demand Overview", href: "/on-demand" },
+    key: "about",
+    label: "About",
+    overview: { label: "About Us", href: "/about" },
     sections: [
       {
-        heading: "Core Services",
+        heading: "About",
         links: [
-          { label: "Business Advisor",      href: "/on-demand/business-advisor",  desc: "Strategic guidance for business owners" },
-          { label: "Decision Desk",          href: "/on-demand/decision-desk",     desc: "Submit an issue, get written guidance" },
-          { label: "The Fixer",             href: "/on-demand/the-fixer",         desc: "One specific problem. Fully resolved." },
-        ],
-      },
-      {
-        heading: "Document Nucleus",
-        links: [
-          { label: "Document Nucleus Overview",  href: "/document-nucleus/overview" },
-          { label: "Templates",                  href: "/document-nucleus/category/templates" },
-          { label: "Documentation Suites",       href: "/document-nucleus/category/documentation-suites" },
-          { label: "Toolkits",                   href: "/document-nucleus/category/toolkits" },
-          { label: "Process",                    href: "/document-nucleus/category/process" },
-        ],
-      },
-      {
-        heading: "On-Demand Services",
-        links: [
-          { label: "Operations Advisory",       href: "/on-demand/services#operations-advisory" },
-          { label: "Human Resource Advisory",   href: "/on-demand/services#human-resource-advisory" },
-          { label: "Management Consulting",     href: "/on-demand/services#management-consulting" },
-          { label: "Change Management",         href: "/on-demand/services#change-management" },
-          { label: "AI Implementation",         href: "/on-demand/services#ai-implementation" },
-          { label: "Admin & Finance Consulting",href: "/on-demand/services#admin-finance-consulting" },
-          { label: "Customised Solutions",      href: "/on-demand/services#customised-solutions" },
-        ],
-      },
-    ],
-    cta: { text: "Need help choosing the right service?", btnLabel: "Book a Discovery Call", href: "/contact?reason=discovery-call" },
-  },
-  {
-    key: "managed", label: "Managed Services",
-    overview: { label: "Our Managed Services", href: "/managed-services" },
-    sections: [
-      {
-        heading: "Service Areas",
-        links: [
-          { label: "Bid Management",       href: "/managed-services/bid-management",     desc: "Tender, bid & proposal management" },
-          { label: "Real Estate",          href: "/managed-services/real-estate",         desc: "Property operations & admin support" },
-          { label: "HR Services",          href: "/managed-services/hr-services",         desc: "People operations & HR admin support" },
-          { label: "Document Management",  href: "/managed-services#document-management" },
-          { label: "Business Sale Support",href: "/managed-services#business-sale-support" },
-          { label: "Custom Solutions",     href: "/managed-services#custom-solutions" },
-          { label: "Engagement Process",   href: "/managed-services#engagement-process" },
-        ],
-      },
-    ],
-    cta: { text: "Need ongoing business support?", btnLabel: "View Managed Services", href: "/managed-services" },
-  },
-  {
-    key: "applications", label: "Applications",
-    overview: { label: "Applications Overview", href: "/applications" },
-    sections: [
-      {
-        heading: "Application Categories",
-        links: [
-          { label: "Operations and Finance", href: "/applications#operations-finance" },
-          { label: "People and HR",          href: "/applications#people-hr" },
-          { label: "Sales and CRM",          href: "/applications#sales-crm" },
-          { label: "Documents",              href: "/applications#documents" },
-          { label: "Support Desk",           href: "/applications#support-desk" },
-          { label: "Learning",               href: "/applications#learning" },
-          { label: "Analytics",              href: "/applications#analytics" },
-          { label: "Payments and Billing",   href: "/applications#payments-billing" },
-        ],
-      },
-    ],
-    cta: { text: "Want an application configured for your business?", btnLabel: "Request App Setup", href: "/contact?reason=application-setup" },
-  },
-  {
-    key: "operations", label: "Operations",
-    overview: { label: "Operations Overview", href: "/operations" },
-    sections: [
-      {
-        heading: "Business Operations",
-        links: [
-          { label: "Business Finance",        href: "/operations/finance",     desc: "Finance education & referral pathways" },
-          { label: "Business Insurance",      href: "/operations/insurance",   desc: "Insurance guidance & referrals" },
-          { label: "Superloop Connectivity",  href: "/operations/superloop",   desc: "White-labelled telecoms & connectivity" },
-          { label: "Calculators",             href: "/operations/calculators", desc: "Cash flow & funding readiness tools" },
-        ],
-      },
-    ],
-    cta: { text: "Build stronger business foundations.", btnLabel: "Explore Operations", href: "/operations" },
-  },
-  {
-    key: "marketplace", label: "Marketplace",
-    overview: { label: "Marketplace Overview", href: "/marketplace" },
-    sections: [
-      {
-        heading: "Marketplace",
-        links: [
-          { label: "Marketplace",    href: "/marketplace" },
-          { label: "Buying Process", href: "/marketplace#buying-process" },
-          { label: "List With Us",   href: "/marketplace#list-with-us" },
-        ],
-      },
-    ],
-    cta: { text: "Want to list your product or service?", btnLabel: "List With Us", href: "/marketplace#list-with-us" },
-  },
-  {
-    key: "membership", label: "Membership",
-    overview: { label: "Membership Overview", href: "/membership" },
-    sections: [
-      {
-        heading: "Membership Options",
-        links: [
-          { label: "Basic Membership",    href: "/membership#basic" },
-          { label: "Standard Membership", href: "/membership#standard" },
-          { label: "Premium Membership",  href: "/membership#premium" },
-          { label: "Sign Up Today",       href: "/sign-in" },
-        ],
-      },
-    ],
-    cta: { text: "Ready to become a member?", btnLabel: "Sign Up Today", href: "/sign-in" },
-  },
-  {
-    key: "offers", label: "Offers",
-    overview: { label: "Offers Overview", href: "/offers" },
-    sections: [
-      {
-        heading: "Offer Types",
-        links: [
-          { label: "Exclusive Offers", href: "/offers#exclusive" },
-          { label: "Top Offers",       href: "/offers#top" },
-        ],
-      },
-      {
-        heading: "Offers By Category",
-        links: [
-          { label: "Operations",           href: "/offers?category=operations" },
-          { label: "Human Resources",      href: "/offers?category=human-resources" },
-          { label: "Admin and Finance",    href: "/offers?category=admin-finance" },
-          { label: "Sales and Marketing",  href: "/offers?category=sales-marketing" },
-          { label: "AI",                   href: "/offers?category=ai" },
-          { label: "Finance and Insurance",href: "/offers?category=finance-insurance" },
-        ],
-      },
-    ],
-    cta: { text: "Explore partner offers and member benefits.", btnLabel: "View Offers", href: "/offers" },
-  },
-  {
-    key: "resources", label: "Resources",
-    overview: { label: "Resources Overview", href: "/resources" },
-    sections: [
-      {
-        heading: "Resource Types",
-        links: [
-          { label: "Articles",    href: "/resources?type=articles" },
-          { label: "Guides",      href: "/resources?type=guides" },
-          { label: "Tools",       href: "/resources?type=tools" },
-          { label: "Downloads",   href: "/resources?type=downloads" },
-          { label: "Educational", href: "/resources?type=educational" },
-        ],
-      },
-    ],
-    cta: { text: "Learn, plan, and improve your business operations.", btnLabel: "Browse Resources", href: "/resources" },
-  },
-  {
-    key: "help", label: "Help Center",
-    overview: { label: "Support Center", href: "/help?section=support" },
-    sections: [
-      {
-        heading: "Frequently Asked Questions",
-        links: [
-          { label: "Our Platform",        href: "/help?section=faqs&category=our-platform" },
-          { label: "On-Demand Services",  href: "/help?section=faqs&category=on-demand-services" },
-          { label: "Managed Services",    href: "/help?section=faqs&category=managed-services" },
-          { label: "Applications",        href: "/help?section=faqs&category=applications" },
-          { label: "Operations",          href: "/help?section=faqs&category=operations" },
-          { label: "Marketplace",         href: "/help?section=faqs&category=marketplace" },
-          { label: "Membership",          href: "/help?section=faqs&category=membership" },
-          { label: "Offers",              href: "/help?section=faqs&category=offers" },
-          { label: "Resources",           href: "/help?section=faqs&category=resources" },
-          { label: "Other",               href: "/help?section=faqs&category=other" },
-        ],
-      },
-      {
-        heading: "Knowledge Base",
-        links: [
-          { label: "Our Platform",        href: "/help?section=knowledge-base&category=our-platform" },
-          { label: "On-Demand Services",  href: "/help?section=knowledge-base&category=on-demand-services" },
-          { label: "Managed Services",    href: "/help?section=knowledge-base&category=managed-services" },
-          { label: "Applications",        href: "/help?section=knowledge-base&category=applications" },
-          { label: "Operations",          href: "/help?section=knowledge-base&category=operations" },
-          { label: "Marketplace",         href: "/help?section=knowledge-base&category=marketplace" },
-          { label: "Membership",          href: "/help?section=knowledge-base&category=membership" },
-          { label: "Offers",              href: "/help?section=knowledge-base&category=offers" },
-          { label: "Resources",           href: "/help?section=knowledge-base&category=resources" },
-          { label: "Other",               href: "/help?section=knowledge-base&category=other" },
-        ],
-      },
-      {
-        heading: "Troubleshooting",
-        links: [
-          { label: "Our Platform",        href: "/help?section=troubleshooting&category=our-platform" },
-          { label: "On-Demand Services",  href: "/help?section=troubleshooting&category=on-demand-services" },
-          { label: "Managed Services",    href: "/help?section=troubleshooting&category=managed-services" },
-          { label: "Applications",        href: "/help?section=troubleshooting&category=applications" },
-          { label: "Operations",          href: "/help?section=troubleshooting&category=operations" },
-          { label: "Marketplace",         href: "/help?section=troubleshooting&category=marketplace" },
-          { label: "Membership",          href: "/help?section=troubleshooting&category=membership" },
-          { label: "Offers",              href: "/help?section=troubleshooting&category=offers" },
-          { label: "Resources",           href: "/help?section=troubleshooting&category=resources" },
-          { label: "Other",               href: "/help?section=troubleshooting&category=other" },
-        ],
-      },
-      {
-        heading: "Support Center",
-        links: [
-          { label: "Support Center", href: "/help?section=support" },
-        ],
-      },
-    ],
-    cta: { text: "Need direct help?", btnLabel: "Visit Support Center", href: "/help?section=support" },
-  },
-  {
-    key: "about", label: "About Us",
-    sections: [
-      {
-        heading: "Company",
-        links: [
-          { label: "About Us",     href: "/about",              desc: "Our story and mission" },
-          { label: "Our Purpose",  href: "/about#our-purpose" },
-          { label: "Our Platform", href: "/about#our-platform" },
+          { label: "What We Do", href: "/about/what-we-do", desc: "Our purpose, mission, and operating model" },
+          { label: "Our Process", href: "/about/our-process", desc: "How we deliver services and support" },
+          { label: "Work With Us", href: "/about/work-with-us", desc: "Join our team or partner with us" },
         ],
       },
       {
         heading: "Contact",
         links: [
-          { label: "Discovery Call", href: "/contact?reason=discovery-call" },
-          { label: "Contact Us",     href: "/contact" },
+          { label: "Contact Us", href: "/contact", desc: "General inquiries" },
+          { label: "Book a Discovery Call", href: "/contact?reason=discovery-call", desc: "Free, no-obligation chat" },
         ],
       },
     ],
-    cta: { text: "Want to talk through your business needs?", btnLabel: "Book a Discovery Call", href: "/contact?reason=discovery-call" },
+    cta: {
+      text: "Want to talk through your business needs?",
+      btnLabel: "Book a Discovery Call",
+      href: "/contact?reason=discovery-call",
+    },
+  },
+  {
+    key: "ondemand",
+    label: "On-Demand",
+    overview: { label: "On-Demand Overview", href: "/on-demand" },
+    sections: [
+      {
+        heading: "Core Services",
+        links: [
+          { label: "Business Advisor", href: "/on-demand/business-advisor", desc: "Strategic guidance for business owners" },
+          { label: "Decision Desk", href: "/on-demand/decision-desk", desc: "Submit an issue, get written guidance" },
+          { label: "The Fixer", href: "/on-demand/the-fixer", desc: "One specific problem. Fully resolved." },
+          { label: "Risk Advisor", href: "/on-demand/risk-advisor", desc: "Identify and mitigate business risks" },
+        ],
+      },
+      {
+        heading: "Specialised Services",
+        links: [
+          { label: "Operations Advisory", href: "/services?service=operations-advisory" },
+          { label: "HR Advisory", href: "/services?service=hr-advisory" },
+          { label: "Management Consulting", href: "/services?service=management-consulting" },
+          { label: "Change Management", href: "/services?service=change-management" },
+          { label: "AI Implementation", href: "/services?service=ai-implementation" },
+          { label: "Admin & Finance", href: "/services?service=admin-finance-consulting" },
+          { label: "Custom Solutions", href: "/services?service=custom-solutions" },
+        ],
+      },
+      {
+        heading: "Document Nucleus",
+        links: [
+          { label: "Overview", href: "/document-nucleus/overview" },
+          { label: "Templates", href: "/document-nucleus/category/templates" },
+          { label: "Documentation Suites", href: "/document-nucleus/category/documentation-suites" },
+          { label: "Toolkits", href: "/document-nucleus/category/toolkits" },
+          { label: "Process", href: "/document-nucleus/category/process" },
+        ],
+      },
+    ],
+    cta: {
+      text: "Need help choosing the right service?",
+      btnLabel: "Book a Discovery Call",
+      href: "/contact?reason=discovery-call",
+    },
+  },
+  {
+    key: "managed",
+    label: "Managed Services",
+    overview: { label: "Managed Services Overview", href: "/managed-services" },
+    sections: [
+      {
+        heading: "Core Offerings",
+        links: [
+          { label: "Bid Management", href: "/managed-services/bid-management", desc: "Tender, bid & proposal management" },
+          { label: "Real Estate", href: "/managed-services/real-estate", desc: "Property operations & admin support" },
+          { label: "HR Services", href: "/managed-services/hr-services", desc: "People operations & HR admin support" },
+        ],
+      },
+      {
+        heading: "Additional Services",
+        links: [
+          { label: "Document Management", href: "/services?service=document-management-as-a-service" },
+          { label: "Business Sale Support", href: "/services?service=business-sale-support" },
+          { label: "Custom Solutions", href: "/services?service=custom-managed-service" },
+          { label: "Engagement Process", href: "/about/our-process" },
+        ],
+      },
+    ],
+    cta: {
+      text: "Need ongoing business support?",
+      btnLabel: "Explore Managed Services",
+      href: "/managed-services",
+    },
+  },
+  {
+    key: "operations",
+    label: "Operations",
+    overview: { label: "Operations Overview", href: "/operations" },
+    sections: [
+      {
+        heading: "Finance & Insurance",
+        links: [
+          { label: "Finance Hub", href: "/operations/finance", desc: "Finance education & referral pathways" },
+          { label: "Insurance Hub", href: "/operations/insurance", desc: "Insurance guidance & referrals" },
+          { label: "Calculators", href: "/operations/calculators", desc: "Cash flow & funding readiness tools" },
+        ],
+      },
+      {
+        heading: "Connectivity",
+        links: [
+          { label: "Connectivity", href: "/operations/connectivity", desc: "Business-grade internet and phone" },
+          { label: "NBN & Phone", href: "/operations/nbn-and-phone", desc: "NBN plans and VoIP services" },
+          { label: "Coming Soon", href: "/operations/coming-soon", desc: "Explore our upcoming offerings" },
+        ],
+      },
+    ],
+    cta: {
+      text: "Build stronger business foundations.",
+      btnLabel: "Explore Operations",
+      href: "/operations",
+    },
+  },
+  {
+    key: "membership",
+    label: "Membership",
+    overview: { label: "Membership Overview", href: "/membership/overview" },
+    sections: [
+      {
+        heading: "Membership",
+        links: [
+          { label: "Overview", href: "/membership/overview", desc: "Benefits and features" },
+          { label: "Remote Business Partner", href: "/membership/remote-business-partner", desc: "Our premium membership" },
+          { label: "Inclusions", href: "/membership/inclusions", desc: "What\'s included in each tier" },
+          { label: "Pricing", href: "/membership/pricing", desc: "Membership tiers and pricing" },
+          { label: "Usage", href: "/membership/usage", desc: "How to use your membership" },
+          { label: "Payment Terms", href: "/membership/payment-terms", desc: "Payment options and terms" },
+        ],
+      },
+      {
+        heading: "Join",
+        links: [
+          { label: "Sign Up Now", href: "/membership/sign-up", desc: "Become a member today" },
+        ],
+      },
+    ],
+    cta: {
+      text: "Ready to unlock exclusive benefits?",
+      btnLabel: "Sign Up Now",
+      href: "/membership/sign-up",
+    },
   },
 ];
 
@@ -291,7 +204,7 @@ function MegaMenuPanel({ config, onClose }: { config: MegaConfig; onClose: () =>
               )}
 
               <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest px-1 pt-1 pb-1">
-                Contents
+                {config.label}
               </p>
               {config.sections.map((s) => (
                 <div key={s.heading} className="px-3 py-1.5 text-xs font-semibold text-slate-500 rounded-lg">
@@ -331,7 +244,7 @@ function MegaMenuPanel({ config, onClose }: { config: MegaConfig; onClose: () =>
                     ))}
                   </div>
                 </div>
-              ))}
+              ))}\
             </div>
           </div>
 
@@ -401,7 +314,7 @@ function MobileSection({
                 >
                   {link.label}
                 </Link>
-              ))}
+              ))}\
             </div>
           ))}
           {/* CTA */}
@@ -467,9 +380,7 @@ export function Navbar() {
   return (
     <header
       ref={headerRef}
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/95 backdrop-blur-lg shadow-lg" : "bg-white"
-      }`}
+      className={`sticky top-0 z-50 transition-all duration-300 ${\n        scrolled ? "bg-white/95 backdrop-blur-lg shadow-lg" : "bg-white"\n      }`}
     >
       {/* ── Tier 1: Utility bar ── */}
       <div className="border-b border-slate-100 bg-slate-50/70">
@@ -503,7 +414,7 @@ export function Navbar() {
                 <LogIn className="w-3 h-3" /> Sign In
               </Link>
               <Link
-                to="/sign-in"
+                to="/membership/sign-up"
                 className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-lg transition-all ml-1"
               >
                 <UserPlus className="w-3 h-3" /> Join Now
@@ -514,7 +425,7 @@ export function Navbar() {
                 className="lg:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors ml-1"
                 aria-label="Toggle menu"
               >
-                {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+                {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}\
               </button>
             </div>
           </div>
@@ -529,7 +440,7 @@ export function Navbar() {
             <input
               autoFocus
               type="text"
-              placeholder="Search services, applications, resources…"
+              placeholder="Search services, applications, resources…"\
               className="flex-1 text-sm text-slate-800 placeholder-slate-400 outline-none bg-transparent"
             />
             <button onClick={() => setSearchOpen(false)} className="text-slate-400 hover:text-slate-700">
@@ -547,19 +458,13 @@ export function Navbar() {
             {/* Mega menu triggers */}
             {MENUS.map((menu) => {
               const isOpen   = openDropdown === menu.key;
-              const isActive = menu.sections.flatMap((s) => s.links).some((l) =>
-                location.pathname.startsWith(l.href.split("?")[0].split("#")[0])
-              ) || (menu.overview && location.pathname.startsWith(menu.overview.href));
+              const isActive = location.pathname.startsWith(`/${menu.key}`);
 
               return (
                 <button
                   key={menu.key}
                   onClick={() => toggleDropdown(menu.key)}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
-                    isActive || isOpen
-                      ? "bg-blue-50 text-blue-700"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
-                  }`}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${\n                    isActive || isOpen\n                      ? "bg-blue-50 text-blue-700"\n                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"\n                  }`}\
                 >
                   {menu.label}
                   <ChevronDown className={`w-3.5 h-3.5 flex-shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
@@ -586,9 +491,7 @@ export function Navbar() {
           <Link
             to="/"
             onClick={closeMobile}
-            className={`flex items-center px-5 py-3.5 text-sm font-semibold transition-colors border-b border-slate-100 ${
-              location.pathname === "/" ? "text-blue-700 bg-blue-50" : "text-slate-700 hover:bg-slate-50"
-            }`}
+            className={`flex items-center px-5 py-3.5 text-sm font-semibold transition-colors border-b border-slate-100 ${\n              location.pathname === "/" ? "text-blue-700 bg-blue-50" : "text-slate-700 hover:bg-slate-50"\n            }`}\
           >
             Home
           </Link>
@@ -614,11 +517,11 @@ export function Navbar() {
               <LogIn className="w-4 h-4" /> Sign In
             </Link>
             <Link
-              to="/sign-in"
+              to="/membership/sign-up"
               onClick={closeMobile}
               className="flex items-center justify-center gap-2 py-3 text-sm font-bold bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors"
             >
-              <UserPlus className="w-4 h-4" /> Join Now — Explore Membership
+              <UserPlus className="w-4 h-4" /> Join Now
             </Link>
           </div>
         </div>

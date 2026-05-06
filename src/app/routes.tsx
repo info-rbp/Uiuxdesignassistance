@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, Outlet } from "react-router-dom";
 
 // Existing pages
@@ -25,6 +26,7 @@ import { HelpPage } from "./pages/HelpPage";
 // On-Demand sub-pages
 import { DecisionDeskPage } from "./pages/on-demand/DecisionDeskPage";
 import { TheFixerPage }     from "./pages/on-demand/TheFixerPage";
+import { RiskAdvisorPage } from "./pages/on-demand/RiskAdvisorPage";
 
 // Managed Services sub-pages
 import { BidManagementPage } from "./pages/managed-services/BidManagementPage";
@@ -38,7 +40,9 @@ import { FinancialPlanningPage } from "./pages/finance/FinancialPlanningPage";
 import { CreditFundingPage } from "./pages/finance/CreditFundingPage";
 import { FinancePage } from "./pages/FinancePage";
 import { FinanceCalculatorsPage } from "./pages/operations/FinanceCalculatorsPage";
-import { SuperloopPage } from "./pages/operations/SuperloopPage";
+import { ConnectivityPage } from "./pages/operations/ConnectivityPage";
+import { NbnPhonePage } from "./pages/operations/NbnPhonePage";
+import { OperationsComingSoonPage } from "./pages/operations/OperationsComingSoonPage";
 
 // ApplicationsPage (old)
 import ApplicationsPage from "./pages/ApplicationsPage";
@@ -78,6 +82,20 @@ import { AdminSiteContentPage } from "./pages/admin/AdminSiteContentPage";
 import { AdminSettingsPage } from "./pages/admin/AdminSettingsPage";
 import { SecurityTemplate, DisasterRecoveryTemplate, ComplianceTemplate } from "./templates";
 
+// About sub-pages
+import { WhatWeDoPage } from "./pages/about/WhatWeDoPage";
+import { OurProcessPage } from "./pages/about/OurProcessPage";
+import { WorkWithUsPage } from "./pages/about/WorkWithUsPage";
+
+// Membership sub-pages
+import { MembershipOverviewPage } from "./pages/membership/MembershipOverviewPage";
+import { RemoteBusinessPartnerMembershipPage } from "./pages/membership/RemoteBusinessPartnerMembershipPage";
+import { MembershipInclusionsPage } from "./pages/membership/MembershipInclusionsPage";
+import { MembershipPricingPage } from "./pages/membership/MembershipPricingPage";
+import { MembershipUsagePage } from "./pages/membership/MembershipUsagePage";
+import { MembershipPaymentTermsPage } from "./pages/membership/MembershipPaymentTermsPage";
+import { MembershipSignUpPage } from "./pages/membership/MembershipSignUpPage";
+
 function Root() { return <Outlet />; }
 function Layout() { return <Outlet />; }
 
@@ -87,7 +105,15 @@ export const router = createBrowserRouter([
     Component: Root,
     children: [
       { index: true, Component: HomePage },
-      { path: "about", Component: AboutPage },
+      { path: "about",
+        Component: Layout,
+        children: [
+          { index: true, Component: AboutPage },
+          { path: "what-we-do", Component: WhatWeDoPage },
+          { path: "our-process", Component: OurProcessPage },
+          { path: "work-with-us", Component: WorkWithUsPage },
+        ],
+      },
       { path: "contact", Component: ContactPage },
       { path: "help", Component: HelpPage },
 
@@ -228,11 +254,9 @@ export const router = createBrowserRouter([
         Component: Layout,
         children: [
           { index: true, Component: OnDemandPage },
-          { path: "business-advisor", Component: BusinessAdvisorPage },
-          { path: "services", Component: ServicesPage },
-          { path: "documents", Component: DocuSharePage },
           { path: "decision-desk", Component: DecisionDeskPage },
           { path: "the-fixer", Component: TheFixerPage },
+          { path: "risk-advisor", Component: RiskAdvisorPage },
         ],
       },
 
@@ -262,7 +286,20 @@ export const router = createBrowserRouter([
       },
 
       // ── Membership ──
-      { path: "membership", Component: MembershipPage },
+      {
+        path: "membership",
+        Component: Layout,
+        children: [
+          { index: true, Component: MembershipPage },
+          { path: "overview", Component: MembershipOverviewPage },
+          { path: "remote-business-partner", Component: RemoteBusinessPartnerMembershipPage },
+          { path: "inclusions", Component: MembershipInclusionsPage },
+          { path: "pricing", Component: MembershipPricingPage },
+          { path: "usage", Component: MembershipUsagePage },
+          { path: "payment-terms", Component: MembershipPaymentTermsPage },
+          { path: "sign-up", Component: MembershipSignUpPage },
+        ]
+      },
 
       // ── Resources ──
       { path: "resources", Component: ResourcesPage },
@@ -286,7 +323,9 @@ export const router = createBrowserRouter([
           },
           { path: "insurance", Component: BusinessInsurancePage },
           { path: "calculators", Component: FinanceCalculatorsPage },
-          { path: "superloop", Component: SuperloopPage },
+          { path: "connectivity", Component: ConnectivityPage },
+          { path: "nbn-and-phone", Component: NbnPhonePage },
+          { path: "coming-soon", Component: OperationsComingSoonPage },
         ],
       },
 
