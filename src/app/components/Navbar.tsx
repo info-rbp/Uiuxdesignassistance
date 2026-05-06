@@ -244,7 +244,7 @@ export function Navbar() {
                 <LogIn className="w-3 h-3" /> Sign In
               </Link>
               <Link
-                to="/sign-in"
+                to="/membership/sign-up-now"
                 className="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-white bg-blue-700 hover:bg-blue-800 px-3 py-1.5 rounded-lg transition-all ml-1"
               >
                 <UserPlus className="w-3 h-3" /> Join Now
@@ -355,7 +355,7 @@ export function Navbar() {
               <LogIn className="w-4 h-4" /> Sign In
             </Link>
             <Link
-              to="/sign-in"
+              to="/membership/sign-up-now"
               onClick={closeMobile}
               className="flex items-center justify-center gap-2 py-3 text-sm font-bold bg-blue-700 text-white rounded-xl hover:bg-blue-800 transition-colors"
             >

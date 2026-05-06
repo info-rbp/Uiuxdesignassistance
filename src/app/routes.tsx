@@ -4,7 +4,6 @@ import { createBrowserRouter, Outlet } from "react-router";
 import { HomePage } from "./pages/HomePage";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
-import { MembershipPage } from "./pages/MembershipPage";
 import { ResourcesPage } from "./pages/ResourcesPage";
 import { OffersPage } from "./pages/OffersPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
@@ -62,6 +61,15 @@ import { ThankYouPage } from "./pages/confirmation/ThankYouPage";
 import { ContactSuccessPage } from "./pages/confirmation/ContactSuccessPage";
 import { BookingConfirmationPage } from "./pages/confirmation/BookingConfirmationPage";
 import { MembershipConfirmationPage } from "./pages/confirmation/MembershipConfirmationPage";
+
+import { MembershipOverviewPage } from "./pages/membership/MembershipOverviewPage";
+import { RemoteBusinessPartnerMembershipPage } from "./pages/membership/RemoteBusinessPartnerMembershipPage";
+import { MembershipInclusionsPage } from "./pages/membership/MembershipInclusionsPage";
+import { MembershipPricingPage } from "./pages/membership/MembershipPricingPage";
+import { MembershipUsagePage } from "./pages/membership/MembershipUsagePage";
+import { MembershipPaymentTermsPage } from "./pages/membership/MembershipPaymentTermsPage";
+import { MembershipSignUpPage } from "./pages/membership/MembershipSignUpPage";
+import { MembershipFaqPage } from "./pages/membership/MembershipFaqPage";
 
 // ── Member Portal ──
 import { PortalLayout }          from "./pages/portal/PortalLayout";
@@ -211,7 +219,22 @@ export const router = createBrowserRouter([
       },
 
       // ── Membership ──
-      { path: "membership", Component: MembershipPage },
+      {
+        path: "membership",
+        Component: Layout,
+        children: [
+          { index: true, Component: MembershipOverviewPage },
+          { path: "overview", Component: MembershipOverviewPage },
+          { path: "remote-business-partner-membership", Component: RemoteBusinessPartnerMembershipPage },
+          { path: "inclusions", Component: MembershipInclusionsPage },
+          { path: "pricing", Component: MembershipPricingPage },
+          { path: "usage", Component: MembershipUsagePage },
+          { path: "payment-terms", Component: MembershipPaymentTermsPage },
+          { path: "sign-up-now", Component: MembershipSignUpPage },
+          { path: "frequently-asked-questions", Component: MembershipFaqPage },
+          { path: "confirmation", Component: MembershipConfirmationPage },
+        ],
+      },
 
       // ── Resources ──
       { path: "resources", Component: ResourcesPage },
