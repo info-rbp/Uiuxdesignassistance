@@ -91,8 +91,13 @@ import { PortalSettings }        from "./pages/portal/PortalSettings";
 import { AdminSignInPage } from "./pages/admin/AdminSignInPage";
 import { AdminLayout }     from "./pages/admin/AdminLayout";
 import { AdminDashboard }  from "./pages/admin/AdminDashboard";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { ScrollToHash } from "./components/ScrollToHash";
 
-function Root() { return <Outlet />; }
+function Root() { return <>
+  <ScrollToHash />
+  <Outlet />
+</>; }
 function Layout() { return <Outlet />; }
 
 export const router = createBrowserRouter([
@@ -106,6 +111,7 @@ export const router = createBrowserRouter([
       { path: "help", Component: HelpCenterPage },
       { path: "about/what-we-do", Component: WhatWeDoPage },
       { path: "about/process", Component: OurProcessPage },
+      { path: "about/our-process", Component: OurProcessPage },
       { path: "about/work-with-us", Component: WorkWithUsPage },
       { path: "legal", Component: LegalIndexPage },
       { path: "legal/privacy-policy", Component: PrivacyPolicyPage },
@@ -113,6 +119,9 @@ export const router = createBrowserRouter([
       { path: "legal/terms-of-engagement", Component: TermsOfEngagementPage },
       { path: "legal/payment-policy", Component: PaymentPolicyPage },
       { path: "legal/services-policy", Component: ServicesPolicyPage },
+      { path: "thank-you", Component: ThankYouPage },
+      { path: "contact/success", Component: ContactSuccessPage },
+      { path: "booking-confirmation", Component: BookingConfirmationPage },
       { path: "confirmation/thank-you", Component: ThankYouPage },
       { path: "confirmation/contact-success", Component: ContactSuccessPage },
       { path: "confirmation/booking-confirmation", Component: BookingConfirmationPage },
@@ -259,6 +268,10 @@ export const router = createBrowserRouter([
           { path: "insurance", Component: BusinessInsurancePage },
           { path: "calculators", Component: FinanceCalculatorsPage },
           { path: "superloop", Component: SuperloopPage },
+          { path: "connectivity/superloop", Component: SuperloopPage },
+          { path: "connectivity", Component: ConnectivityPage },
+          { path: "nbn-phone", Component: NbnPhonePage },
+          { path: "connectivity/nbn-phone", Component: NbnPhonePage },
           { path: "connectivity", Component: ConnectivityPage },
           { path: "nbn-phone", Component: NbnPhonePage },
           { path: "coming-soon", Component: OperationsComingSoonPage },
@@ -280,6 +293,8 @@ export const router = createBrowserRouter([
           { path: "credit-and-funding", Component: CreditFundingPage },
         ],
       },
+
+      { path: "*", Component: NotFoundPage },
     ],
   },
 ]);

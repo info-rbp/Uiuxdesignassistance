@@ -25,6 +25,7 @@ export const publicNavigation: MegaConfig[] = [
           { label: "Business Advisor",      href: "/on-demand/business-advisor",  desc: "Strategic guidance for business owners" },
           { label: "Decision Desk",          href: "/on-demand/decision-desk",     desc: "Submit an issue, get written guidance" },
           { label: "The Fixer",             href: "/on-demand/the-fixer",         desc: "One specific problem. Fully resolved." },
+          { label: "Risk Advisor",          href: "/on-demand/risk-advisor",      desc: "Risk-focused business guidance" },
         ],
       },
       {
@@ -44,6 +45,8 @@ export const publicNavigation: MegaConfig[] = [
           { label: "Human Resource Advisory",   href: "/on-demand/services#human-resource-advisory" },
           { label: "Management Consulting",     href: "/on-demand/services#management-consulting" },
           { label: "Change Management",         href: "/on-demand/services#change-management" },
+          { label: "AI Advisory",         href: "/on-demand/services#ai-advisory" },
+          { label: "Accounting & Finance",href: "/on-demand/services#accounting-finance" },
           { label: "AI Implementation",         href: "/on-demand/services#ai-implementation" },
           { label: "Admin & Finance Consulting",href: "/on-demand/services#admin-finance-consulting" },
           { label: "Customised Solutions",      href: "/on-demand/services#customised-solutions" },
@@ -100,6 +103,7 @@ export const publicNavigation: MegaConfig[] = [
         links: [
           { label: "Business Finance",        href: "/operations/finance",     desc: "Finance education & referral pathways" },
           { label: "Business Insurance",      href: "/operations/insurance",   desc: "Insurance guidance & referrals" },
+          { label: "Superloop Connectivity",  href: "/operations/connectivity/superloop",   desc: "White-labelled telecoms & connectivity" },
           { label: "Superloop Connectivity",  href: "/operations/superloop",   desc: "White-labelled telecoms & connectivity" },
           { label: "Calculators",             href: "/operations/calculators", desc: "Cash flow & funding readiness tools" },
         ],
