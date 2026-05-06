@@ -125,6 +125,7 @@ export const publicNavigation: MegaConfig[] = [
   {
     key: "membership", label: "Membership",
     overview: { label: "Membership Overview", href: "/membership/overview" },
+    overview: { label: "Membership Overview", href: "/membership" },
     sections: [
       {
         heading: "Membership Options",
@@ -141,6 +142,14 @@ export const publicNavigation: MegaConfig[] = [
       },
     ],
     cta: { text: "Ready to become a member?", btnLabel: "Sign Up Now", href: "/membership/sign-up-now" },
+          { label: "Basic Membership",    href: "/membership#basic" },
+          { label: "Standard Membership", href: "/membership#standard" },
+          { label: "Premium Membership",  href: "/membership#premium" },
+          { label: "Sign Up Today",       href: "/sign-in" },
+        ],
+      },
+    ],
+    cta: { text: "Ready to become a member?", btnLabel: "Sign Up Today", href: "/sign-in" },
   },
   {
     key: "offers", label: "Offers",
