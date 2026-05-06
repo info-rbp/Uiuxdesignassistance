@@ -4,7 +4,6 @@ import { createBrowserRouter, Outlet } from "react-router";
 import { HomePage } from "./pages/HomePage";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
-import { MembershipPage } from "./pages/MembershipPage";
 import { ResourcesPage } from "./pages/ResourcesPage";
 import { OffersPage } from "./pages/OffersPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
@@ -45,6 +44,33 @@ import { ApplicationsPage } from "./pages/ApplicationsPage";
 import { SignInPage } from "./pages/SignInPage";
 import { DashboardPage } from "./pages/DashboardPage";
 
+import { WhatWeDoPage } from "./pages/about/WhatWeDoPage";
+import { OurProcessPage } from "./pages/about/OurProcessPage";
+import { WorkWithUsPage } from "./pages/about/WorkWithUsPage";
+import { RiskAdvisorPage } from "./pages/on-demand/RiskAdvisorPage";
+import { ConnectivityPage } from "./pages/operations/ConnectivityPage";
+import { NbnPhonePage } from "./pages/operations/NbnPhonePage";
+import { OperationsComingSoonPage } from "./pages/operations/OperationsComingSoonPage";
+import { LegalIndexPage } from "./pages/legal/LegalIndexPage";
+import { PrivacyPolicyPage } from "./pages/legal/PrivacyPolicyPage";
+import { TermsOfUsePage } from "./pages/legal/TermsOfUsePage";
+import { TermsOfEngagementPage } from "./pages/legal/TermsOfEngagementPage";
+import { PaymentPolicyPage } from "./pages/legal/PaymentPolicyPage";
+import { ServicesPolicyPage } from "./pages/legal/ServicesPolicyPage";
+import { ThankYouPage } from "./pages/confirmation/ThankYouPage";
+import { ContactSuccessPage } from "./pages/confirmation/ContactSuccessPage";
+import { BookingConfirmationPage } from "./pages/confirmation/BookingConfirmationPage";
+import { MembershipConfirmationPage } from "./pages/confirmation/MembershipConfirmationPage";
+
+import { MembershipOverviewPage } from "./pages/membership/MembershipOverviewPage";
+import { RemoteBusinessPartnerMembershipPage } from "./pages/membership/RemoteBusinessPartnerMembershipPage";
+import { MembershipInclusionsPage } from "./pages/membership/MembershipInclusionsPage";
+import { MembershipPricingPage } from "./pages/membership/MembershipPricingPage";
+import { MembershipUsagePage } from "./pages/membership/MembershipUsagePage";
+import { MembershipPaymentTermsPage } from "./pages/membership/MembershipPaymentTermsPage";
+import { MembershipSignUpPage } from "./pages/membership/MembershipSignUpPage";
+import { MembershipFaqPage } from "./pages/membership/MembershipFaqPage";
+
 // ── Member Portal ──
 import { PortalLayout }          from "./pages/portal/PortalLayout";
 import { PortalDashboard }       from "./pages/portal/PortalDashboard";
@@ -65,8 +91,13 @@ import { PortalSettings }        from "./pages/portal/PortalSettings";
 import { AdminSignInPage } from "./pages/admin/AdminSignInPage";
 import { AdminLayout }     from "./pages/admin/AdminLayout";
 import { AdminDashboard }  from "./pages/admin/AdminDashboard";
+import { NotFoundPage } from "./pages/NotFoundPage";
+import { ScrollToHash } from "./components/ScrollToHash";
 
-function Root() { return <Outlet />; }
+function Root() { return <>
+  <ScrollToHash />
+  <Outlet />
+</>; }
 function Layout() { return <Outlet />; }
 
 export const router = createBrowserRouter([
@@ -78,6 +109,23 @@ export const router = createBrowserRouter([
       { path: "about", Component: AboutPage },
       { path: "contact", Component: ContactPage },
       { path: "help", Component: HelpCenterPage },
+      { path: "about/what-we-do", Component: WhatWeDoPage },
+      { path: "about/process", Component: OurProcessPage },
+      { path: "about/our-process", Component: OurProcessPage },
+      { path: "about/work-with-us", Component: WorkWithUsPage },
+      { path: "legal", Component: LegalIndexPage },
+      { path: "legal/privacy-policy", Component: PrivacyPolicyPage },
+      { path: "legal/terms-of-use", Component: TermsOfUsePage },
+      { path: "legal/terms-of-engagement", Component: TermsOfEngagementPage },
+      { path: "legal/payment-policy", Component: PaymentPolicyPage },
+      { path: "legal/services-policy", Component: ServicesPolicyPage },
+      { path: "thank-you", Component: ThankYouPage },
+      { path: "contact/success", Component: ContactSuccessPage },
+      { path: "booking-confirmation", Component: BookingConfirmationPage },
+      { path: "confirmation/thank-you", Component: ThankYouPage },
+      { path: "confirmation/contact-success", Component: ContactSuccessPage },
+      { path: "confirmation/booking-confirmation", Component: BookingConfirmationPage },
+      { path: "confirmation/membership-confirmation", Component: MembershipConfirmationPage },
 
       // ── Top-level legacy / direct routes ──
       { path: "services", Component: ServicesPage },
@@ -90,7 +138,6 @@ export const router = createBrowserRouter([
       { path: "sign-in", Component: SignInPage },
       { path: "dashboard", Component: DashboardPage },
 
-      // ── Member Portal ──
       {
         path: "portal",
         Component: PortalLayout,
@@ -151,6 +198,7 @@ export const router = createBrowserRouter([
           { path: "documents", Component: DocuSharePage },
           { path: "decision-desk", Component: DecisionDeskPage },
           { path: "the-fixer", Component: TheFixerPage },
+          { path: "risk-advisor", Component: RiskAdvisorPage },
         ],
       },
 
@@ -180,7 +228,22 @@ export const router = createBrowserRouter([
       },
 
       // ── Membership ──
-      { path: "membership", Component: MembershipPage },
+      {
+        path: "membership",
+        Component: Layout,
+        children: [
+          { index: true, Component: MembershipOverviewPage },
+          { path: "overview", Component: MembershipOverviewPage },
+          { path: "remote-business-partner-membership", Component: RemoteBusinessPartnerMembershipPage },
+          { path: "inclusions", Component: MembershipInclusionsPage },
+          { path: "pricing", Component: MembershipPricingPage },
+          { path: "usage", Component: MembershipUsagePage },
+          { path: "payment-terms", Component: MembershipPaymentTermsPage },
+          { path: "sign-up-now", Component: MembershipSignUpPage },
+          { path: "frequently-asked-questions", Component: MembershipFaqPage },
+          { path: "confirmation", Component: MembershipConfirmationPage },
+        ],
+      },
 
       // ── Resources ──
       { path: "resources", Component: ResourcesPage },
@@ -205,6 +268,11 @@ export const router = createBrowserRouter([
           { path: "insurance", Component: BusinessInsurancePage },
           { path: "calculators", Component: FinanceCalculatorsPage },
           { path: "superloop", Component: SuperloopPage },
+          { path: "connectivity/superloop", Component: SuperloopPage },
+          { path: "connectivity", Component: ConnectivityPage },
+          { path: "nbn-phone", Component: NbnPhonePage },
+          { path: "connectivity/nbn-phone", Component: NbnPhonePage },
+          { path: "coming-soon", Component: OperationsComingSoonPage },
         ],
       },
 
@@ -223,6 +291,8 @@ export const router = createBrowserRouter([
           { path: "credit-and-funding", Component: CreditFundingPage },
         ],
       },
+
+      { path: "*", Component: NotFoundPage },
     ],
   },
 ]);
