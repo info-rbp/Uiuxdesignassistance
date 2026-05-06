@@ -45,6 +45,24 @@ import { ApplicationsPage } from "./pages/ApplicationsPage";
 import { SignInPage } from "./pages/SignInPage";
 import { DashboardPage } from "./pages/DashboardPage";
 
+import { WhatWeDoPage } from "./pages/about/WhatWeDoPage";
+import { OurProcessPage } from "./pages/about/OurProcessPage";
+import { WorkWithUsPage } from "./pages/about/WorkWithUsPage";
+import { RiskAdvisorPage } from "./pages/on-demand/RiskAdvisorPage";
+import { ConnectivityPage } from "./pages/operations/ConnectivityPage";
+import { NbnPhonePage } from "./pages/operations/NbnPhonePage";
+import { OperationsComingSoonPage } from "./pages/operations/OperationsComingSoonPage";
+import { LegalIndexPage } from "./pages/legal/LegalIndexPage";
+import { PrivacyPolicyPage } from "./pages/legal/PrivacyPolicyPage";
+import { TermsOfUsePage } from "./pages/legal/TermsOfUsePage";
+import { TermsOfEngagementPage } from "./pages/legal/TermsOfEngagementPage";
+import { PaymentPolicyPage } from "./pages/legal/PaymentPolicyPage";
+import { ServicesPolicyPage } from "./pages/legal/ServicesPolicyPage";
+import { ThankYouPage } from "./pages/confirmation/ThankYouPage";
+import { ContactSuccessPage } from "./pages/confirmation/ContactSuccessPage";
+import { BookingConfirmationPage } from "./pages/confirmation/BookingConfirmationPage";
+import { MembershipConfirmationPage } from "./pages/confirmation/MembershipConfirmationPage";
+
 // ── Member Portal ──
 import { PortalLayout }          from "./pages/portal/PortalLayout";
 import { PortalDashboard }       from "./pages/portal/PortalDashboard";
@@ -78,6 +96,19 @@ export const router = createBrowserRouter([
       { path: "about", Component: AboutPage },
       { path: "contact", Component: ContactPage },
       { path: "help", Component: HelpCenterPage },
+      { path: "about/what-we-do", Component: WhatWeDoPage },
+      { path: "about/process", Component: OurProcessPage },
+      { path: "about/work-with-us", Component: WorkWithUsPage },
+      { path: "legal", Component: LegalIndexPage },
+      { path: "legal/privacy-policy", Component: PrivacyPolicyPage },
+      { path: "legal/terms-of-use", Component: TermsOfUsePage },
+      { path: "legal/terms-of-engagement", Component: TermsOfEngagementPage },
+      { path: "legal/payment-policy", Component: PaymentPolicyPage },
+      { path: "legal/services-policy", Component: ServicesPolicyPage },
+      { path: "confirmation/thank-you", Component: ThankYouPage },
+      { path: "confirmation/contact-success", Component: ContactSuccessPage },
+      { path: "confirmation/booking-confirmation", Component: BookingConfirmationPage },
+      { path: "confirmation/membership-confirmation", Component: MembershipConfirmationPage },
 
       // ── Top-level legacy / direct routes ──
       { path: "services", Component: ServicesPage },
@@ -90,7 +121,6 @@ export const router = createBrowserRouter([
       { path: "sign-in", Component: SignInPage },
       { path: "dashboard", Component: DashboardPage },
 
-      // ── Member Portal ──
       {
         path: "portal",
         Component: PortalLayout,
@@ -151,6 +181,7 @@ export const router = createBrowserRouter([
           { path: "documents", Component: DocuSharePage },
           { path: "decision-desk", Component: DecisionDeskPage },
           { path: "the-fixer", Component: TheFixerPage },
+          { path: "risk-advisor", Component: RiskAdvisorPage },
         ],
       },
 
@@ -205,6 +236,9 @@ export const router = createBrowserRouter([
           { path: "insurance", Component: BusinessInsurancePage },
           { path: "calculators", Component: FinanceCalculatorsPage },
           { path: "superloop", Component: SuperloopPage },
+          { path: "connectivity", Component: ConnectivityPage },
+          { path: "nbn-phone", Component: NbnPhonePage },
+          { path: "coming-soon", Component: OperationsComingSoonPage },
         ],
       },
 
