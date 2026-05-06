@@ -83,7 +83,6 @@ export function PortalOffers() {
       <PortalAdminReference
         portalRoute="/portal/offers"
         controlledBy={["Admin Offers"]}
-              status="Live"
       />
 
       {/* Header */}

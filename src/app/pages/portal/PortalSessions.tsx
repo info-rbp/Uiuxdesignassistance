@@ -28,7 +28,6 @@ export function PortalSessions() {
       <PortalAdminReference
         portalRoute="/portal/sessions"
         controlledBy={["Admin Dashboard > Discovery Calls", "Admin On-Demand Services > Business Advisor"]}
-              status="Live"
       />
 
       {/* Header */}

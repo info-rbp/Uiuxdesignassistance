@@ -37,7 +37,6 @@ export function PortalDocuments() {
       <PortalAdminReference
         portalRoute="/portal/documents"
         controlledBy={["Admin On-Demand Services > Document Nucleus"]}
-              status="Live"
       />
 
       {/* Header */}

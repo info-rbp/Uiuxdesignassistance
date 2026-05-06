@@ -36,7 +36,6 @@ export function PortalSettings() {
       <PortalAdminReference
         portalRoute="/portal/settings"
         controlledBy={["Admin Membership > Portal Access", "Admin Settings"]}
-              status="Live"
       />
 
       {/* Header */}

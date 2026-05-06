@@ -36,7 +36,6 @@ export function PortalResources() {
       <PortalAdminReference
         portalRoute="/portal/resources"
         controlledBy={["Admin Resources", "Admin Help Center > Resources"]}
-              status="Live"
       />
 
       {/* Header */}
