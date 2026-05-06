@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router";
+import { createBrowserRouter, Outlet } from "react-router-dom";
 
 // Existing pages
 import { HomePage } from "./pages/HomePage";
@@ -20,7 +20,7 @@ import { ManagedServicesPage } from "./pages/ManagedServicesPage";
 import { BusinessApplicationsPage } from "./pages/BusinessApplicationsPage";
 import { MarketplacePage } from "./pages/MarketplacePage";
 import { OperationsCenterPage } from "./pages/OperationsCenterPage";
-import { HelpCenterPage } from "./pages/HelpCenterPage";
+import { HelpPage } from "./pages/HelpPage";
 
 // On-Demand sub-pages
 import { DecisionDeskPage } from "./pages/on-demand/DecisionDeskPage";
@@ -41,7 +41,7 @@ import { FinanceCalculatorsPage } from "./pages/operations/FinanceCalculatorsPag
 import { SuperloopPage } from "./pages/operations/SuperloopPage";
 
 // ApplicationsPage (old)
-import { ApplicationsPage } from "./pages/ApplicationsPage";
+import ApplicationsPage from "./pages/ApplicationsPage";
 import { SignInPage } from "./pages/SignInPage";
 import { DashboardPage } from "./pages/DashboardPage";
 
@@ -76,6 +76,7 @@ import { AdminResourcesPage } from "./pages/admin/AdminResourcesPage";
 import { AdminHelpCenterPage } from "./pages/admin/AdminHelpCenterPage";
 import { AdminSiteContentPage } from "./pages/admin/AdminSiteContentPage";
 import { AdminSettingsPage } from "./pages/admin/AdminSettingsPage";
+import { SecurityTemplate, DisasterRecoveryTemplate, ComplianceTemplate } from "./templates";
 
 function Root() { return <Outlet />; }
 function Layout() { return <Outlet />; }
@@ -88,7 +89,7 @@ export const router = createBrowserRouter([
       { index: true, Component: HomePage },
       { path: "about", Component: AboutPage },
       { path: "contact", Component: ContactPage },
-      { path: "help", Component: HelpCenterPage },
+      { path: "help", Component: HelpPage },
 
       // ── Top-level legacy / direct routes ──
       { path: "services", Component: ServicesPage },
@@ -304,6 +305,9 @@ export const router = createBrowserRouter([
           { path: "credit-and-funding", Component: CreditFundingPage },
         ],
       },
+      { path: "security", Component: SecurityTemplate },
+      { path: "disaster-recovery", Component: DisasterRecoveryTemplate },
+      { path: "compliance", Component: ComplianceTemplate },
     ],
   },
 ]);

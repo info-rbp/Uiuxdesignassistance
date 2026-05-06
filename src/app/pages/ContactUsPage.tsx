@@ -1,13 +1,13 @@
 
 import React from 'react';
 
-const OffersPage = () => {
+const ContactUsPage = () => {
   return (
     <div>
-      <h1>Offers</h1>
+      <h1>Contact Us</h1>
       <p>This page is under construction.</p>
     </div>
   );
 };
 
-export default OffersPage;
+export default ContactUsPage;

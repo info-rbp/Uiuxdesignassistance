@@ -1,0 +1,22 @@
+
+export { default as WhatWeDoPage } from './WhatWeDoPage';
+export { default as AboutUsPage } from './AboutUsPage';
+export { default as ContactUsPage } from './ContactUsPage';
+export { default as OnDemandServicesPage } from './OnDemandServicesPage';
+export { default as ManagedServicesPage } from './ManagedServicesPage';
+export { default as ApplicationsPage } from './ApplicationsPage';
+export { default as OperationsPage } from './OperationsPage';
+export { default as MarketplacePage } from './MarketplacePage';
+export { default as MembershipPage } from './MembershipPage';
+export { default as OffersPage } from './OffersPage';
+export { default as ResourcesPage } from './ResourcesPage';
+export { default as HelpCenterPage } from './HelpCenterPage';
+export { default as SuccessPage } from './SuccessPage';
+export { default as StoriesPage } from './StoriesPage';
+export { default as AnnouncementsPage } from './AnnouncementsPage';
+export { default as CareersPage } from './CareersPage';
+export { default as PrivacyPolicyPage } from './PrivacyPolicyPage';
+export { default as TermsAndConditionsPage } from './TermsAndConditionsPage';
+export { default as SecurityPage } from './SecurityPage';
+export { default as DisasterRecoveryPage } from './DisasterRecoveryPage';
+export { default as CompliancePage } from './CompliancePage';

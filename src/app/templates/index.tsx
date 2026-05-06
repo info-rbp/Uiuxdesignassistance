@@ -1,0 +1,22 @@
+
+export { default as WhatWeDoTemplate } from './WhatWeDoTemplate';
+export { default as AboutUsTemplate } from './AboutUsTemplate';
+export { default as ContactUsTemplate } from './ContactUsTemplate';
+export { default as OnDemandServicesTemplate } from './OnDemandServicesTemplate';
+export { default as ManagedServicesTemplate } from './ManagedServicesTemplate';
+export { default as ApplicationsTemplate } from './ApplicationsTemplate';
+export { default as OperationsTemplate } from './OperationsTemplate';
+export { default as MarketplaceTemplate } from './MarketplaceTemplate';
+export { default as MembershipTemplate } from './MembershipTemplate';
+export { default as OffersTemplate } from './OffersTemplate';
+export { default as ResourcesTemplate } from './ResourcesTemplate';
+export { default as HelpCenterTemplate } from './HelpCenterTemplate';
+export { default as SuccessTemplate } from './SuccessTemplate';
+export { default as StoriesTemplate } from './StoriesTemplate';
+export { default as AnnouncementsTemplate } from './AnnouncementsTemplate';
+export { default as CareersTemplate } from './CareersTemplate';
+export { default as PrivacyPolicyTemplate } from './PrivacyPolicyTemplate';
+export { default as TermsAndConditionsTemplate } from './TermsAndConditionsTemplate';
+export { default as SecurityTemplate } from './SecurityTemplate';
+export { default as DisasterRecoveryTemplate } from './DisasterRecoveryTemplate';
+export { default as ComplianceTemplate } from './ComplianceTemplate';
