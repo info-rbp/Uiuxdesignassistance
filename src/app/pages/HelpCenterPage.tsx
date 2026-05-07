@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import {
+  helpArticles,
+  helpCategories as helpDataCategories,
+  helpSections,
+} from "../data/helpCenter";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { HelpCircle, Search, ChevronDown, ChevronUp, MessageCircle, ArrowRight, BookOpen, Zap, ShoppingBag, Layers, CreditCard, FileText } from "lucide-react";
@@ -65,25 +70,13 @@ const faqs: FaqSection[] = [
 ];
 
 
-const helpSectionLabels: Record<string, string> = {
-  faqs: "Frequently Asked Questions",
-  "knowledge-base": "Knowledge Base",
-  troubleshooting: "Troubleshooting",
-  support: "Support Center",
-};
+const helpSectionLabels = Object.fromEntries(
+  helpSections.map((section) => [section.id, section.label])
+);
 
-const helpCategoryLabels: Record<string, string> = {
-  "our-platform": "Our Platform",
-  "on-demand-services": "On-Demand Services",
-  "managed-services": "Managed Services",
-  applications: "Applications",
-  operations: "Operations",
-  marketplace: "Marketplace",
-  membership: "Membership",
-  offers: "Offers",
-  resources: "Resources",
-  other: "Other",
-};
+const helpCategoryLabels = Object.fromEntries(
+  helpDataCategories.map((category) => [category.id, category.label])
+);
 
 const helpCategoryToFaqSection: Record<string, string> = {
   "on-demand-services": "Documents & Deliverables",
@@ -131,6 +124,17 @@ export function HelpCenterPage() {
   useEffect(() => {
     setActiveSection(queryFaqSection);
   }, [queryFaqSection]);
+
+  const filteredHelpArticles = helpArticles.filter((article) => {
+    const matchesSection = !sectionParam || article.section === sectionParam;
+    const matchesCategory = !categoryParam || article.category === categoryParam;
+    const matchesSearch =
+      !search ||
+      article.question.toLowerCase().includes(search.toLowerCase()) ||
+      article.answer.toLowerCase().includes(search.toLowerCase());
+
+    return matchesSection && matchesCategory && matchesSearch;
+  });
 
   const filteredFaqs = faqs.map((section) => ({
     ...section,
@@ -226,6 +230,30 @@ export function HelpCenterPage() {
                   </div>
                 ))
               }
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Data-driven Help Articles */}
+      <section className="py-12 bg-white border-t border-slate-100">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-xl font-extrabold text-slate-900 mb-6">Structured Help Content</h2>
+          {filteredHelpArticles.length === 0 ? (
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-slate-500 text-sm">
+              No structured help articles match this view yet. Placeholder content will be expanded as the help centre is developed.
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {filteredHelpArticles.map((article) => (
+                <div key={article.id} className="bg-slate-50 border border-slate-200 rounded-2xl p-6">
+                  <div className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-2">
+                    {helpSectionLabels[article.section] || article.section} · {helpCategoryLabels[article.category] || article.category}
+                  </div>
+                  <h3 className="font-bold text-slate-900 mb-2">{article.question}</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed">{article.answer}</p>
+                </div>
+              ))}
             </div>
           )}
         </div>

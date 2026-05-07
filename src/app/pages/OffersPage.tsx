@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from "react-router";
+import { offerCategoryFilters, publicOffers } from "../data/offers";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -114,33 +115,9 @@ const partnerDeals = [
 ];
 
 
-const offerCategoryFilters = [
-  { id: "travel", label: "Travel" },
-  { id: "fitness-health", label: "Fitness & Health" },
-  { id: "home-garden", label: "Home & Garden" },
-  { id: "delivery", label: "Delivery" },
-  { id: "digital-tech", label: "Digital & Tech" },
-  { id: "finance-insurance", label: "Finance & Insurance" },
-  { id: "other", label: "Other" },
-  { id: "operations", label: "Operations" },
-  { id: "human-resources", label: "Human Resources" },
-  { id: "admin-finance", label: "Admin and Finance" },
-  { id: "sales-marketing", label: "Sales and Marketing" },
-  { id: "ai", label: "AI" },
-];
-
 const offerCategoryLabels = Object.fromEntries(
   offerCategoryFilters.map((category) => [category.id, category.label])
 );
-
-const offerCategoryMap: Record<string, string[]> = {
-  Xero: ["admin-finance", "finance-insurance", "operations"],
-  "Employment Hero": ["human-resources", "operations"],
-  LegalVision: ["other", "operations"],
-  "Microsoft 365": ["digital-tech", "operations"],
-  "Canva Pro": ["digital-tech", "sales-marketing"],
-  Shopify: ["digital-tech", "sales-marketing", "delivery"],
-};
 
 export function OffersPage() {
   const [searchParams] = useSearchParams();
@@ -148,8 +125,8 @@ export function OffersPage() {
   const selectedCategoryLabel = offerCategoryLabels[selectedCategory] ?? "";
 
   const filteredOffers = selectedCategory
-    ? offers.filter((offer) => offerCategoryMap[offer.partner]?.includes(selectedCategory))
-    : offers;
+    ? publicOffers.filter((offer) => offer.category === selectedCategory)
+    : publicOffers;
 
   return (
     <div className="bg-white min-h-screen">
@@ -217,7 +194,7 @@ export function OffersPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredOffers.map((offer) => (
               <div
-                key={offer.partner}
+                key={offer.id}
                 className={`rounded-2xl flex flex-col overflow-hidden ${
                   offer.highlight
                     ? "bg-blue-700 text-white shadow-2xl shadow-blue-200 ring-2 ring-blue-400"
@@ -234,7 +211,7 @@ export function OffersPage() {
                       offer.highlight ? "bg-white/20 text-white" : `${offer.categoryBg} ${offer.categoryText}`
                     }`}>
                       <Tag className="w-3 h-3" />
-                      {offer.category}
+                      {offerCategoryLabels[offer.category] || offer.category}
                     </span>
                     <span className={`inline-flex items-center gap-1 text-xs font-bold text-white px-2 py-1 rounded-md whitespace-nowrap ${offer.badgeColor}`}>
                       {offer.badge}

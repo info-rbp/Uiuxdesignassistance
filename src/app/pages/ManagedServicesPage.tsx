@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { managedServices } from "../data/managedServices";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -44,44 +45,13 @@ const process = [
   { step: "04", title: "Review & adapt", desc: "We review the arrangement regularly and adapt as your business evolves." },
 ];
 
-const managedAnchorSections = [
-  {
-    id: "document-management",
-    title: "Document Management",
-    description:
-      "Ongoing support to organise, maintain, update, and control business documentation, templates, registers, and procedures.",
-  },
-  {
-    id: "change-management",
-    title: "Change Management",
-    description:
-      "Managed support for businesses implementing new systems, internal processes, operational changes, or team transitions.",
-  },
-  {
-    id: "business-sale-support",
-    title: "Business Sale Support",
-    description:
-      "Practical operational support for business owners preparing information, documentation, and workflows for a potential sale.",
-  },
-  {
-    id: "franchise",
-    title: "Franchise",
-    description:
-      "Support for franchise documentation, process management, operating manuals, onboarding material, and franchise administration.",
-  },
-  {
-    id: "lms",
-    title: "LMS",
-    description:
-      "Managed learning system support for training content, onboarding pathways, staff education, and internal knowledge delivery.",
-  },
-  {
-    id: "custom-solutions",
-    title: "Custom Solutions",
-    description:
-      "Flexible retained support for businesses with specialised operational needs that do not fit a standard service category.",
-  },
-];
+const managedAnchorSections = managedServices
+  .filter((service) => service.type === "anchor")
+  .map((service) => ({
+    id: service.id,
+    title: service.title,
+    description: service.summary,
+  }));
 
 export function ManagedServicesPage() {
   return (

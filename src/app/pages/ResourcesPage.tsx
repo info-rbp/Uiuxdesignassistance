@@ -1,4 +1,9 @@
 import { Link, useSearchParams } from "react-router";
+import {
+  publicResources,
+  resourceCategoryFilters,
+  resourceTypeFilters,
+} from "../data/resources";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -68,33 +73,6 @@ const featured = [
 ];
 
 
-const resourceTypeFilters = [
-  { id: "articles", label: "Articles" },
-  { id: "guides", label: "Guides" },
-  { id: "tools", label: "Tools" },
-  { id: "downloads", label: "Downloads" },
-  { id: "educational", label: "Educational" },
-];
-
-const resourceCategoryFilters = [
-  { id: "strategy", label: "Strategy" },
-  { id: "finance", label: "Finance" },
-  { id: "sales-marketing", label: "Sales & Marketing" },
-  { id: "research-development", label: "Research & Development" },
-  { id: "information-technology", label: "Information Technology" },
-  { id: "customer-service", label: "Customer Service" },
-  { id: "human-resources", label: "Human Resources" },
-  { id: "design", label: "Design" },
-  { id: "communications", label: "Communications" },
-  { id: "governance", label: "Governance" },
-  { id: "production", label: "Production" },
-  { id: "sourcing", label: "Sourcing" },
-  { id: "quality-management", label: "Quality Management" },
-  { id: "distribution", label: "Distribution" },
-  { id: "operations", label: "Operations" },
-  { id: "other", label: "Other" },
-];
-
 const resourceTypeLabels = Object.fromEntries(
   resourceTypeFilters.map((type) => [type.id, type.label])
 );
@@ -103,24 +81,14 @@ const resourceCategoryLabels = Object.fromEntries(
   resourceCategoryFilters.map((category) => [category.id, category.label])
 );
 
-const resourceMeta: Record<string, { type: string; category: string }> = {
-  "The Small Business Operations Playbook": { type: "guides", category: "operations" },
-  "90-Day Business Planning Template": { type: "downloads", category: "strategy" },
-  "How a 5-Person Agency Grew Revenue by 3x": { type: "articles", category: "sales-marketing" },
-  "AI Tools for Small Business in 2024": { type: "educational", category: "information-technology" },
-  "HR Essentials: Your First Employee Handbook": { type: "guides", category: "human-resources" },
-  "UK SME Funding Landscape 2024": { type: "articles", category: "finance" },
-};
-
 export function ResourcesPage() {
   const [searchParams] = useSearchParams();
   const selectedType = searchParams.get("type") ?? "";
   const selectedCategory = searchParams.get("category") ?? "";
 
-  const filteredResources = featured.filter((resource) => {
-    const meta = resourceMeta[resource.title];
-    const matchesType = !selectedType || meta?.type === selectedType;
-    const matchesCategory = !selectedCategory || meta?.category === selectedCategory;
+  const filteredResources = publicResources.filter((resource) => {
+    const matchesType = !selectedType || resource.type === selectedType;
+    const matchesCategory = !selectedCategory || resource.category === selectedCategory;
     return matchesType && matchesCategory;
   });
 
@@ -252,34 +220,30 @@ export function ResourcesPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredResources.map((res) => {
-              const Icon = res.icon;
-              return (
-                <div
-                  key={res.title}
-                  className="bg-white border border-slate-100 rounded-2xl p-7 shadow-sm hover:shadow-md transition-all flex flex-col"
-                >
-                  <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg mb-5 w-fit text-xs font-bold ${res.tagColor}`}>
-                    <Icon className="w-3.5 h-3.5" />
-                    {res.tag}
-                  </div>
-                  <h3 className="font-bold text-slate-900 mb-3 leading-snug flex-grow">{res.title}</h3>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-5">{res.desc}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 text-slate-400">
-                      <Clock className="w-3.5 h-3.5" />
-                      <span className="text-xs font-semibold">{res.readTime}</span>
-                    </div>
-                    <Link
-                      to="/contact"
-                      className="text-blue-700 hover:text-blue-800 text-sm font-bold inline-flex items-center gap-1 transition-colors"
-                    >
-                      Access <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
+            {filteredResources.map((res) => (
+              <div
+                key={res.id}
+                className="bg-white border border-slate-100 rounded-2xl p-7 shadow-sm hover:shadow-md transition-all flex flex-col"
+              >
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg mb-5 w-fit text-xs font-bold bg-blue-100 text-blue-700">
+                  {resourceTypeLabels[res.type] || res.type}
                 </div>
-              );
-            })}
+                <h3 className="font-bold text-slate-900 mb-3 leading-snug flex-grow">{res.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-5">{res.summary}</p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5 text-slate-400">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span className="text-xs font-semibold">{res.readTime || "Resource"}</span>
+                  </div>
+                  <Link
+                    to={res.href}
+                    className="text-blue-700 hover:text-blue-800 text-sm font-bold inline-flex items-center gap-1 transition-colors"
+                  >
+                    Access <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
