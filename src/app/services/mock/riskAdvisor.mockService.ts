@@ -1,19 +1,62 @@
-import { mockRiskAssessments, mockRiskCategories, mockRiskQuestions } from "../../mock";
-import { createMockReference, mockFailure, mockGet, mockPost, requireFields } from "./mockClient";
+import {
+  getMockRiskScoreBand,
+  mockRiskAdvisorResultSummaries,
+  mockRiskAppetiteOptions,
+  mockRiskAssessments,
+  mockRiskCategories,
+  mockRiskControlMaturityOptions,
+  mockRiskQuestions,
+  mockRiskTimeline,
+} from "../../mock";
+import {
+  createMockReference,
+  mockFailure,
+  mockGet,
+  mockPost,
+  requireFields,
+} from "./mockClient";
 
 export interface MockRiskAssessmentPayload extends Record<string, unknown> {
   businessName?: string;
   industry?: string;
+  businessSize?: string;
   riskCategories?: string[];
   currentControls?: string;
+  controlMaturity?: string;
+  incidentHistory?: string;
+  complianceConcerns?: string;
   riskAppetite?: string;
+  priorityOutcome?: string;
 }
 
 export interface MockRiskAssessmentResult {
   reference: string;
   status: "outcome-ready";
   mockScore: number;
+  scoreBand: ReturnType<typeof getMockRiskScoreBand>;
   summaryHref: string;
+  timeline: typeof mockRiskTimeline;
+}
+
+function calculateMockRiskScore(payload: MockRiskAssessmentPayload): number {
+  const categoryCount = payload.riskCategories?.length ?? 0;
+  const maturity = payload.controlMaturity;
+  const appetite = payload.riskAppetite;
+
+  let score = 58 + categoryCount * 4;
+
+  if (maturity === "low") score += 18;
+  if (maturity === "developing") score += 10;
+  if (maturity === "managed") score -= 6;
+  if (maturity === "advanced") score -= 14;
+
+  if (appetite === "growth") score += 8;
+  if (appetite === "conservative") score -= 5;
+
+  if (String(payload.incidentHistory ?? "").length > 80) score += 5;
+  if (String(payload.complianceConcerns ?? "").length > 80) score += 5;
+
+  return Math.max(12, Math.min(96, score));
 }
 
 export function getMockRiskAdvisorSetup() {
@@ -23,6 +66,10 @@ export function getMockRiskAdvisorSetup() {
       categories: mockRiskCategories,
       questions: mockRiskQuestions,
       assessments: mockRiskAssessments,
+      controlMaturityOptions: mockRiskControlMaturityOptions,
+      riskAppetiteOptions: mockRiskAppetiteOptions,
+      resultSummaries: mockRiskAdvisorResultSummaries,
+      timeline: mockRiskTimeline,
     },
     "Mock Risk Advisor setup returned."
   );
@@ -32,8 +79,13 @@ export function submitMockRiskAssessment(payload: MockRiskAssessmentPayload) {
   const errors = requireFields(payload, [
     "businessName",
     "industry",
+    "businessSize",
     "currentControls",
+    "controlMaturity",
+    "incidentHistory",
+    "complianceConcerns",
     "riskAppetite",
+    "priorityOutcome",
   ]);
 
   if (!payload.riskCategories || payload.riskCategories.length === 0) {
@@ -57,12 +109,18 @@ export function submitMockRiskAssessment(payload: MockRiskAssessmentPayload) {
   return mockPost(
     "/mock/risk-advisor/assessment",
     payload,
-    () => ({
-      reference: createMockReference("RISK"),
-      status: "outcome-ready" as const,
-      mockScore: 72,
-      summaryHref: "/portal/services",
-    }),
+    () => {
+      const score = calculateMockRiskScore(payload);
+
+      return {
+        reference: createMockReference("RISK"),
+        status: "outcome-ready" as const,
+        mockScore: score,
+        scoreBand: getMockRiskScoreBand(score),
+        summaryHref: "/portal/services",
+        timeline: mockRiskTimeline,
+      };
+    },
     "Mock Risk Advisor assessment submitted."
   );
 }
