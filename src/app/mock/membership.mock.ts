@@ -75,3 +75,62 @@ export const mockMembershipSignupFields = [
   "accepted_terms",
   "marketing_consent",
 ];
+
+export const mockMembershipExtras = [
+  {
+    id: "extra-advisory-session",
+    title: "Extra advisory session",
+    description: "Add a mock strategy session for onboarding scenario testing.",
+    priceLabel: "$220 + GST once-off",
+  },
+  {
+    id: "extra-docushare-setup",
+    title: "DocuShare setup",
+    description: "Mock document workspace setup and starter template mapping.",
+    priceLabel: "$180 + GST once-off",
+  },
+  {
+    id: "extra-reporting-pack",
+    title: "Reporting pack",
+    description: "Mock dashboard briefing for cash flow and decision visibility.",
+    priceLabel: "$150 + GST once-off",
+  },
+];
+
+export const mockMembershipGoalOptions = [
+  "Improve operations",
+  "Increase revenue",
+  "Improve cash flow",
+  "Access finance",
+  "Improve documentation",
+  "Set up systems and processes",
+  "Manage staff or teams",
+  "Improve marketing and sales",
+  "Explore managed services",
+  "Get advisory support",
+  "Review business insurance",
+  "Improve reporting and decision-making",
+];
+
+export const mockMembershipManagedServiceOptions = [
+  {
+    id: "managed-hr",
+    title: "Managed HR",
+    description: "People, team setup, and operational support in mock mode.",
+  },
+  {
+    id: "managed-finance",
+    title: "Finance and insurance",
+    description: "Finance, lending, insurance, and planning interest capture.",
+  },
+  {
+    id: "managed-documents",
+    title: "Documents and systems",
+    description: "DocuShare, process documentation, and app setup interest.",
+  },
+  {
+    id: "managed-growth",
+    title: "Growth advisory",
+    description: "Sales, reporting, strategy, and adviser support interest.",
+  },
+];

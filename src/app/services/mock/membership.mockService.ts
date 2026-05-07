@@ -28,6 +28,23 @@ export interface MockMembershipSignupResult {
   timeline: typeof mockMembershipTimeline;
 }
 
+export interface MockMembershipOnboardingPayload extends Record<string, unknown> {
+  businessName?: string;
+  industry?: string;
+  businessSize?: string;
+  goals?: string[];
+  managedServiceInterests?: string[];
+  teamInvites?: string;
+}
+
+export interface MockMembershipOnboardingResult {
+  reference: string;
+  onboardingStatus: "complete";
+  membershipStatus: "active";
+  portalHref: string;
+  nextSteps: string[];
+}
+
 export function getMockMembershipPlans() {
   return mockGet(
     "/mock/membership/plans",
@@ -74,5 +91,44 @@ export function submitMockMembershipSignup(payload: MockMembershipSignupPayload)
       timeline: mockMembershipTimeline,
     }),
     "Mock membership sign-up submitted."
+  );
+}
+
+export function submitMockMembershipOnboarding(payload: MockMembershipOnboardingPayload) {
+  const errors = requireFields(payload, ["businessName", "industry", "businessSize"]);
+
+  if (!Array.isArray(payload.goals) || payload.goals.length === 0) {
+    errors.push({
+      field: "goals",
+      code: "required",
+      message: "At least one mock business priority is required.",
+    });
+  }
+
+  if (errors.length > 0) {
+    return Promise.resolve(
+      mockFailure<MockMembershipOnboardingResult>(
+        "/mock/membership/onboarding",
+        "Mock onboarding validation failed.",
+        errors
+      )
+    );
+  }
+
+  return mockPost(
+    "/mock/membership/onboarding",
+    payload,
+    () => ({
+      reference: createMockReference("ONB"),
+      onboardingStatus: "complete" as const,
+      membershipStatus: "active" as const,
+      portalHref: "/portal/dashboard",
+      nextSteps: [
+        "Portal access available",
+        "Mock adviser assignment queued",
+        "First strategy session placeholder ready",
+      ],
+    }),
+    "Mock membership onboarding completed."
   );
 }

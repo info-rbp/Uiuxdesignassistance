@@ -1,11 +1,36 @@
 import { Link } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
+import { PortalStatusCard } from "../../components/domain";
+import { membershipFlowStorageKey } from "../../features/membership/MembershipPurchaseOnboardingFlow";
 import {
   Zap, CalendarCheck, FileText, CheckCircle, Tag,
   Star, ArrowRight, ChevronRight, TrendingUp, Clock,
   Users, MessageSquare, AlertCircle, HeadphonesIcon,
   AppWindowIcon, Plus,
 } from "lucide-react";
+
+interface StoredMembershipDashboardState {
+  signupReference?: string;
+  onboardingReference?: string;
+  membershipStatus?: string;
+  onboardingStatus?: string;
+  businessName?: string;
+  selectedPlan?: string;
+}
+
+function readMembershipDashboardState(): StoredMembershipDashboardState | null {
+  const rawValue = window.sessionStorage.getItem(membershipFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as StoredMembershipDashboardState;
+  } catch {
+    return null;
+  }
+}
 
 const stats = [
   {
@@ -117,11 +142,24 @@ const healthMetrics = [
 const CONSULTANT_ASSIGNED = true;
 
 export function PortalDashboard() {
+  const membershipState = readMembershipDashboardState();
+
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
       <PortalAdminReference
         portalRoute="/portal/dashboard"
         controlledBy={["Admin Dashboard", "Admin Membership"]}
+      />
+
+      <PortalStatusCard
+        title={membershipState?.selectedPlan ?? "Remote Business Partner Membership"}
+        description={
+          membershipState
+            ? `${membershipState.businessName ?? "Your business"} has a mock ${membershipState.membershipStatus ?? "active"} membership. Onboarding is ${membershipState.onboardingStatus ?? "in progress"}.`
+            : "Preview membership card for the Phase 1 portal handoff. Complete the mock sign-up flow to populate session state."
+        }
+        status={membershipState?.onboardingStatus === "complete" ? "active" : "in-progress"}
+        href="/membership/confirmation"
       />
 
       {/* ── Welcome banner ── */}
