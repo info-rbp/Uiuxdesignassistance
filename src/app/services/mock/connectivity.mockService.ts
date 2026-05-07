@@ -1,5 +1,17 @@
-import { mockConnectivityOrders, mockConnectivityPlans } from "../../mock";
-import { createMockReference, mockFailure, mockGet, mockPost, requireFields } from "./mockClient";
+import {
+  mockConnectivityHardwareOptions,
+  mockConnectivityOrders,
+  mockConnectivityPlans,
+  mockConnectivityServiceFamilies,
+  mockConnectivityTimeline,
+} from "../../mock";
+import {
+  createMockReference,
+  mockFailure,
+  mockGet,
+  mockPost,
+  requireFields,
+} from "./mockClient";
 
 export interface MockServiceabilityPayload extends Record<string, unknown> {
   serviceAddress?: string;
@@ -8,28 +20,38 @@ export interface MockServiceabilityPayload extends Record<string, unknown> {
 export interface MockConnectivityOrderPayload extends Record<string, unknown> {
   serviceAddress?: string;
   selectedPlanId?: string;
+  selectedHardwareId?: string;
   contactName?: string;
   contactEmail?: string;
+  businessName?: string;
+  abn?: string;
   paymentMethodMock?: string;
+  acceptedTerms?: boolean;
 }
 
 export interface MockServiceabilityResult {
   serviceabilityStatus: "available" | "manual-review" | "not-available";
   availablePlans: typeof mockConnectivityPlans;
+  provisioningLabel: string;
 }
 
 export interface MockConnectivityOrderResult {
   reference: string;
   status: "submitted";
   orderHref: string;
+  portalHref: string;
+  timeline: typeof mockConnectivityTimeline;
 }
 
 export function getMockConnectivityPlans() {
   return mockGet(
     "/mock/connectivity/plans",
     {
+      families: mockConnectivityServiceFamilies,
       plans: mockConnectivityPlans,
+      hardwareOptions: mockConnectivityHardwareOptions,
       orders: mockConnectivityOrders,
+      timeline: mockConnectivityTimeline,
     },
     "Mock connectivity plans returned."
   );
@@ -54,6 +76,7 @@ export function checkMockServiceability(payload: MockServiceabilityPayload) {
     () => ({
       serviceabilityStatus: "available" as const,
       availablePlans: mockConnectivityPlans,
+      provisioningLabel: "14-day mock provisioning lead time",
     }),
     "Mock serviceability check completed."
   );
@@ -63,10 +86,20 @@ export function submitMockConnectivityOrder(payload: MockConnectivityOrderPayloa
   const errors = requireFields(payload, [
     "serviceAddress",
     "selectedPlanId",
+    "selectedHardwareId",
     "contactName",
     "contactEmail",
+    "businessName",
     "paymentMethodMock",
   ]);
+
+  if (!payload.acceptedTerms) {
+    errors.push({
+      field: "acceptedTerms",
+      code: "required",
+      message: "Terms must be accepted for this mock connectivity order.",
+    });
+  }
 
   if (errors.length > 0) {
     return Promise.resolve(
@@ -84,7 +117,9 @@ export function submitMockConnectivityOrder(payload: MockConnectivityOrderPayloa
     () => ({
       reference: createMockReference("NBN"),
       status: "submitted" as const,
-      orderHref: "/portal/services",
+      orderHref: "/operations/connectivity",
+      portalHref: "/portal/services",
+      timeline: mockConnectivityTimeline,
     }),
     "Mock connectivity order submitted."
   );
