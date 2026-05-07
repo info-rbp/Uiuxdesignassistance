@@ -17,7 +17,8 @@
     "audit:admin-applications-services-mock-crud": "node scripts/audit-admin-applications-services-mock-crud.mjs",
     "audit:admin-offers-mock-crud": "node scripts/audit-admin-offers-mock-crud.mjs",
     "audit:admin-marketplace-mock-crud": "node scripts/audit-admin-marketplace-mock-crud.mjs",
-    "audit:admin-membership-mock-crud": "node scripts/audit-admin-membership-mock-crud.mjs"
+    "audit:admin-membership-mock-crud": "node scripts/audit-admin-membership-mock-crud.mjs",
+    "audit:admin-legal-pages-mock-crud": "node scripts/audit-admin-legal-pages-mock-crud.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
