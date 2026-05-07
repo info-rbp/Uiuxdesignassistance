@@ -30,6 +30,11 @@ import {
 } from "../../data/marketplace";
 
 import {
+  membershipPages,
+  type MembershipPageItem,
+} from "../../data/membership";
+
+import {
   applicationCategories,
   type ApplicationCategory,
 } from "../../data/applications";
@@ -51,7 +56,12 @@ import { AdminFormShell } from "./AdminFormShell";
 import { AdminStatusBadge } from "./AdminStatusBadge";
 import { AdminTable, type AdminTableColumn } from "./AdminTable";
 
-type ContentStatus = "ready" | "placeholder" | "content-required" | "backend-later";
+type ContentStatus =
+  | "ready"
+  | "placeholder"
+  | "content-required"
+  | "backend-later"
+  | "legal-review-required";
 
 type ResourceDraft = Pick<
   PublicResource,
@@ -91,6 +101,35 @@ interface AdminMarketplaceRecord {
 type MarketplaceDraft = Pick<
   AdminMarketplaceRecord,
   "title" | "summary" | "href" | "status" | "listingType" | "supplierName" | "price" | "enquiryRequired"
+>;
+
+type MembershipPageType =
+  | "overview"
+  | "plan"
+  | "inclusions"
+  | "pricing"
+  | "usage"
+  | "payment"
+  | "signup"
+  | "faq";
+
+interface AdminMembershipRecord {
+  id: string;
+  title: string;
+  summary: string;
+  href: string;
+  status: ContentStatus;
+  pageType: MembershipPageType;
+  planName: string;
+  price: string;
+  billingPeriod: "monthly" | "quarterly" | "annual" | "custom" | "not-applicable";
+  requiresPayment: "yes" | "no";
+  memberVisibility: "public" | "members" | "admin";
+}
+
+type MembershipDraft = Pick<
+  AdminMembershipRecord,
+  "title" | "summary" | "href" | "status" | "pageType" | "planName" | "price" | "billingPeriod" | "requiresPayment" | "memberVisibility"
 >;
 
 type ApplicationDraft = Pick<
@@ -190,6 +229,52 @@ function createMarketplaceRecords(): AdminMarketplaceRecord[] {
     price: section.id.includes("process") || section.id.includes("list-with-us") ? "N/A" : "Enquire",
     enquiryRequired: section.id.includes("process") ? "no" : "yes",
   }));
+}
+
+function createMembershipDraft(): MembershipDraft {
+  return {
+    title: "",
+    summary: "",
+    href: "/membership",
+    status: "ready",
+    pageType: "overview",
+    planName: "",
+    price: "TBC",
+    billingPeriod: "not-applicable",
+    requiresPayment: "no",
+    memberVisibility: "public",
+  };
+}
+
+function inferMembershipPageType(page: MembershipPageItem): MembershipPageType {
+  if (page.id.includes("pricing")) return "pricing";
+  if (page.id.includes("payment")) return "payment";
+  if (page.id.includes("sign-up")) return "signup";
+  if (page.id.includes("faq") || page.id.includes("frequently")) return "faq";
+  if (page.id.includes("inclusions")) return "inclusions";
+  if (page.id.includes("usage")) return "usage";
+  if (page.id.includes("membership")) return "plan";
+  return "overview";
+}
+
+function createMembershipRecords(): AdminMembershipRecord[] {
+  return membershipPages.map((page) => {
+    const pageType = inferMembershipPageType(page);
+
+    return {
+      id: page.id,
+      title: page.title,
+      summary: page.summary,
+      href: page.href,
+      status: page.status,
+      pageType,
+      planName: pageType === "plan" || pageType === "pricing" ? "Remote Business Partner Membership" : "",
+      price: pageType === "pricing" ? "TBC" : pageType === "payment" ? "See payment terms" : "N/A",
+      billingPeriod: pageType === "pricing" ? "monthly" : "not-applicable",
+      requiresPayment: pageType === "pricing" || pageType === "payment" || pageType === "signup" ? "yes" : "no",
+      memberVisibility: pageType === "usage" || pageType === "inclusions" ? "members" : "public",
+    };
+  });
 }
 
 function createApplicationDraft(): ApplicationDraft {
@@ -612,6 +697,263 @@ function HelpCenterMockCrud() {
             </select>
           </Field>
         </div>
+      </AdminFormShell>
+    </section>
+  );
+}
+
+function MembershipMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<AdminMembershipRecord, MembershipDraft>({
+    initialRecords: createMembershipRecords(),
+    createDraft: createMembershipDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      summary: record.summary,
+      href: record.href,
+      status: record.status,
+      pageType: record.pageType,
+      planName: record.planName,
+      price: record.price,
+      billingPeriod: record.billingPeriod,
+      requiresPayment: record.requiresPayment,
+      memberVisibility: record.memberVisibility,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `membership-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || "/membership",
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+  });
+
+  const columns: AdminTableColumn<AdminMembershipRecord>[] = [
+    {
+      key: "title",
+      header: "Membership Content",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "pageType",
+      header: "Type",
+      render: (row) => <AdminStatusBadge label={row.pageType} status="ready" />,
+    },
+    {
+      key: "price",
+      header: "Price",
+      render: (row) => <span className="text-slate-600">{row.price}</span>,
+    },
+    {
+      key: "visibility",
+      header: "Visibility",
+      render: (row) => <AdminStatusBadge label={row.memberVisibility} status={row.memberVisibility} />,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit membership content"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete membership content"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Membership Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete membership content records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Membership Content" : "Create Membership Content"}
+        description="Local mock form for membership pages, plans, inclusions, pricing, usage, payment terms, and sign-up content."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Membership"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Membership Page"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short membership summary"
+            rows={4}
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Page Type">
+            <select
+              className={inputClass}
+              value={draft.pageType}
+              onChange={(event) =>
+                updateDraft({ pageType: event.target.value as MembershipPageType })
+              }
+            >
+              <option value="overview">Overview</option>
+              <option value="plan">Plan</option>
+              <option value="inclusions">Inclusions</option>
+              <option value="pricing">Pricing</option>
+              <option value="usage">Usage</option>
+              <option value="payment">Payment</option>
+              <option value="signup">Sign-up</option>
+              <option value="faq">FAQ</option>
+            </select>
+          </Field>
+
+          <Field label="Member Visibility">
+            <select
+              className={inputClass}
+              value={draft.memberVisibility}
+              onChange={(event) =>
+                updateDraft({ memberVisibility: event.target.value as MembershipDraft["memberVisibility"] })
+              }
+            >
+              <option value="public">Public</option>
+              <option value="members">Members</option>
+              <option value="admin">Admin</option>
+            </select>
+          </Field>
+        </div>
+
+        <Field label="Plan Name">
+          <input
+            className={inputClass}
+            value={draft.planName}
+            onChange={(event) => updateDraft({ planName: event.target.value })}
+            placeholder="Remote Business Partner Membership"
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Price / Display Price">
+            <input
+              className={inputClass}
+              value={draft.price}
+              onChange={(event) => updateDraft({ price: event.target.value })}
+              placeholder="TBC"
+            />
+          </Field>
+
+          <Field label="Billing Period">
+            <select
+              className={inputClass}
+              value={draft.billingPeriod}
+              onChange={(event) =>
+                updateDraft({ billingPeriod: event.target.value as MembershipDraft["billingPeriod"] })
+              }
+            >
+              <option value="not-applicable">Not applicable</option>
+              <option value="monthly">Monthly</option>
+              <option value="quarterly">Quarterly</option>
+              <option value="annual">Annual</option>
+              <option value="custom">Custom</option>
+            </select>
+          </Field>
+        </div>
+
+        <Field label="Requires Payment">
+          <select
+            className={inputClass}
+            value={draft.requiresPayment}
+            onChange={(event) =>
+              updateDraft({ requiresPayment: event.target.value as MembershipDraft["requiresPayment"] })
+            }
+          >
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+          </select>
+        </Field>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/membership/example"
+          />
+        </Field>
+
+        <Field label="Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as ContentStatus })}
+          >
+            <option value="ready">Ready</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="content-required">Content Required</option>
+            <option value="backend-later">Backend Later</option>
+            <option value="legal-review-required">Legal Review Required</option>
+          </select>
+        </Field>
       </AdminFormShell>
     </section>
   );
@@ -1425,6 +1767,10 @@ export function AdminMockCrudWorkspace() {
     return <MarketplaceMockCrud />;
   }
 
+  if (location.pathname.startsWith("/admin/membership")) {
+    return <MembershipMockCrud />;
+  }
+
   if (location.pathname.startsWith("/admin/help-center")) {
     return <HelpCenterMockCrud />;
   }
@@ -1449,7 +1795,7 @@ export function AdminMockCrudWorkspace() {
       <AdminEmptyState
         icon={HelpCircle}
         title="Mock CRUD not enabled for this section"
-        description="Resources, Help Center, Applications, Operations, Services, Offers, and Marketplace are enabled first. Membership and legal workflows come later, because chaos deserves a queue."
+        description="Resources, Help Center, Applications, Operations, Services, Offers, Marketplace, and Membership are enabled first. Legal workflows come later, because chaos deserves a queue."
       />
     </AdminFormShell>
   );
