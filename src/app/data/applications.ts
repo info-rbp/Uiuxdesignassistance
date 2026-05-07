@@ -7,16 +7,16 @@ export interface ApplicationCategory {
 }
 
 export const applicationCategories: ApplicationCategory[] = [
-  { id: "how-these-work", title: "How These Work", summary: "How public-facing applications are configured and supported.", href: "/applications#how-these-work", status: "content-required" },
-  { id: "operations-finance", title: "Operations and Finance", summary: "Applications for finance, operations, reporting, and business management.", href: "/applications#operations-finance", status: "content-required" },
-  { id: "people-hr", title: "People and HR", summary: "Applications for HR, onboarding, employees, payroll structure, and people operations.", href: "/applications#people-hr", status: "content-required" },
-  { id: "sales-crm", title: "Sales and CRM", summary: "Applications for sales pipelines, customers, and relationship management.", href: "/applications#sales-crm", status: "content-required" },
-  { id: "documents", title: "Documents", summary: "Applications for document control, files, templates, and knowledge management.", href: "/applications#documents", status: "content-required" },
-  { id: "support-desk", title: "Support Desk", summary: "Applications for tickets, customer requests, and service management.", href: "/applications#support-desk", status: "content-required" },
-  { id: "learning", title: "Learning", summary: "Applications for training, onboarding, learning pathways, and education.", href: "/applications#learning", status: "content-required" },
-  { id: "analytics", title: "Analytics", summary: "Applications for dashboards, reporting, insights, and performance visibility.", href: "/applications#analytics", status: "content-required" },
-  { id: "payments-billing", title: "Payments and Billing", summary: "Applications for invoicing, billing, payments, and financial workflows.", href: "/applications#payments-billing", status: "content-required" },
-  { id: "integrations", title: "Integrations", summary: "Connection points between systems, tools, and workflows.", href: "/applications#integrations", status: "content-required" },
-  { id: "fleet-management", title: "Fleet Management", summary: "Future application area for fleet, assets, vehicles, and maintenance workflows.", href: "/applications#fleet-management", status: "placeholder" },
-  { id: "business-watchlist", title: "Business Watchlist", summary: "Future risk and watchlist application concept.", href: "/applications#business-watchlist", status: "placeholder" },
+  { id: "how-these-work", title: "How These Work", summary: "Applications are configured around business workflows, user roles, operating needs, and future support requirements.", href: "/applications#how-these-work", status: "ready" },
+  { id: "operations-finance", title: "Operations and Finance", summary: "Application options for operations, reporting, accounting, inventory, process control, and management visibility.", href: "/applications#operations-finance", status: "ready" },
+  { id: "people-hr", title: "People and HR", summary: "Tools for employee records, onboarding, leave, payroll structure, policies, performance, and people operations.", href: "/applications#people-hr", status: "ready" },
+  { id: "sales-crm", title: "Sales and CRM", summary: "CRM and sales tools for lead tracking, contact management, opportunities, communications, and customer follow-up.", href: "/applications#sales-crm", status: "ready" },
+  { id: "documents", title: "Documents", summary: "Document management tools for files, templates, records, knowledge bases, version control, and internal documentation.", href: "/applications#documents", status: "ready" },
+  { id: "support-desk", title: "Support Desk", summary: "Support desk tools for tickets, requests, customer service workflows, issue tracking, and response management.", href: "/applications#support-desk", status: "ready" },
+  { id: "learning", title: "Learning", summary: "Learning tools for onboarding, training, internal education, course delivery, and staff development.", href: "/applications#learning", status: "ready" },
+  { id: "analytics", title: "Analytics", summary: "Dashboards and reporting tools for visibility across customers, finances, workflows, operations, and business performance.", href: "/applications#analytics", status: "ready" },
+  { id: "payments-billing", title: "Payments and Billing", summary: "Tools for invoicing, billing, payments, subscriptions, customer accounts, and financial workflows.", href: "/applications#payments-billing", status: "ready" },
+  { id: "integrations", title: "Integrations", summary: "Integration support for connecting business systems, reducing duplicate work, and improving information flow.", href: "/applications#integrations", status: "ready" },
+  { id: "fleet-management", title: "Fleet Management", summary: "Future application support for fleet, vehicle, asset, maintenance, allocation, and usage workflows.", href: "/applications#fleet-management", status: "placeholder" },
+  { id: "business-watchlist", title: "Business Watchlist", summary: "Future risk-focused application concept for supplier, customer, company, or operating watchlists.", href: "/applications#business-watchlist", status: "placeholder" },
 ];

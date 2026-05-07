@@ -36,19 +36,35 @@ export const helpCategories: HelpCategory[] = [
 
 export const helpArticles: HelpArticle[] = [
   {
-    id: "membership-placeholder-faq",
+    id: "membership-how-it-works",
     section: "faqs",
     category: "membership",
     question: "How does membership work?",
-    answer: "Membership content is currently being refined and will be updated before launch.",
-    status: "placeholder",
+    answer: "Membership is designed to provide access to business support, resources, offers, tools, and structured service pathways. Final inclusions and commercial terms should be reviewed before launch.",
+    status: "ready",
   },
   {
-    id: "applications-placeholder-knowledge-base",
+    id: "applications-configuration",
     section: "knowledge-base",
     category: "applications",
     question: "How are applications configured?",
-    answer: "Application setup content is currently a placeholder and will be expanded.",
-    status: "placeholder",
+    answer: "Applications are configured based on business needs, users, workflows, access requirements, and operating priorities. Setup requirements may vary depending on the application selected.",
+    status: "ready",
+  },
+  {
+    id: "operations-support",
+    section: "faqs",
+    category: "operations",
+    question: "What support is available under Operations?",
+    answer: "Operations includes business finance, insurance, connectivity, calculators, and future operational support pathways.",
+    status: "ready",
+  },
+  {
+    id: "support-contact",
+    section: "support",
+    category: "other",
+    question: "How do I contact support?",
+    answer: "Use the Contact page and select the most relevant enquiry type so the request can be routed correctly.",
+    status: "ready",
   },
 ];
