@@ -258,6 +258,8 @@ export const router = createBrowserRouter([
         children: [
           { index: true, Component: MarketplacePage },
           { path: "product/:id", Component: MarketplacePage },
+          { path: "enquiry/:id", Component: MarketplacePage },
+          { path: "listing/new", Component: MarketplacePage },
         ],
       },
 
