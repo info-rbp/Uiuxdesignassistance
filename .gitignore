@@ -1,2 +1,6 @@
 node_modules/
 .env
+
+# Local Firebase/Vite secrets
+.env.local
+.env.*.local

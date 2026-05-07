@@ -1,9 +1,9 @@
 import { Link, useSearchParams } from "react-router";
 import {
-  publicResources,
   resourceCategoryFilters,
   resourceTypeFilters,
 } from "../data/resources";
+import { usePublicBackendContent } from "../hooks/usePublicBackendContent";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -85,8 +85,9 @@ export function ResourcesPage() {
   const [searchParams] = useSearchParams();
   const selectedType = searchParams.get("type") ?? "";
   const selectedCategory = searchParams.get("category") ?? "";
+  const { resources } = usePublicBackendContent();
 
-  const filteredResources = publicResources.filter((resource) => {
+  const filteredResources = resources.filter((resource) => {
     const matchesType = !selectedType || resource.type === selectedType;
     const matchesCategory = !selectedCategory || resource.category === selectedCategory;
     return matchesType && matchesCategory;

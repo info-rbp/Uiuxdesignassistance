@@ -21,6 +21,7 @@ import {
 import {
   AdminPageHeader,
   AdminMockCrudWorkspace,
+  AdminBackendContentWorkspace,
   AdminRecordFormPreview,
   AdminStatCard,
   AdminStatusBadge,
@@ -239,6 +240,8 @@ export function AdminCrudPage() {
       </section>
 
       <AdminRecordFormPreview />
+
+      <AdminBackendContentWorkspace />
 
       <AdminMockCrudWorkspace />
 
