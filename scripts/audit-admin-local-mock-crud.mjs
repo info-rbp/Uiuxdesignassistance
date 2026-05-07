@@ -16,8 +16,7 @@ const componentMarkers = [
   "export function AdminMockCrudWorkspace",
   "ResourceMockCrud",
   "HelpCenterMockCrud",
-  "useState<PublicResource[]>",
-  "useState<HelpArticle[]>",
+  "useAdminLocalCrud",
   "saveRecord",
   "deleteRecord",
   "startEdit",
@@ -136,7 +135,7 @@ add("## Audit result");
 add("");
 
 if (failures === 0) {
-  add("✅ Audit passed. Admin local mock CRUD is structurally ready.");
+  add("✅ Audit passed. Admin local mock CRUD is structurally ready with hook-based local state.");
 } else {
   add(`❌ Audit found ${failures} issue(s). Fix these before continuing.`);
 }

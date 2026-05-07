@@ -1,4 +1,3 @@
-import { useMemo, useState } from "react";
 import { useLocation } from "react-router";
 import { Edit3, HelpCircle, Plus, Save, Trash2, X } from "lucide-react";
 
@@ -17,6 +16,8 @@ import {
   type HelpArticle,
   type HelpSectionId,
 } from "../../data/helpCenter";
+
+import { useAdminLocalCrud } from "../../hooks/useAdminLocalCrud";
 
 import { AdminEmptyState } from "./AdminEmptyState";
 import { AdminFormShell } from "./AdminFormShell";
@@ -93,23 +94,20 @@ function MockNotice() {
 }
 
 function ResourceMockCrud() {
-  const [records, setRecords] = useState<PublicResource[]>(publicResources);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<ResourceDraft>(createResourceDraft());
-
-  const editingRecord = useMemo(
-    () => records.find((record) => record.id === editingId) ?? null,
-    [records, editingId]
-  );
-
-  function resetForm() {
-    setEditingId(null);
-    setDraft(createResourceDraft());
-  }
-
-  function startEdit(record: PublicResource) {
-    setEditingId(record.id);
-    setDraft({
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<PublicResource, ResourceDraft>({
+    initialRecords: publicResources,
+    createDraft: createResourceDraft,
+    toDraft: (record) => ({
       title: record.title,
       summary: record.summary,
       type: record.type,
@@ -117,44 +115,15 @@ function ResourceMockCrud() {
       readTime: record.readTime ?? "",
       href: record.href,
       status: record.status,
-    });
-  }
-
-  function saveRecord() {
-    if (!draft.title.trim() || !draft.summary.trim()) return;
-
-    if (editingRecord) {
-      setRecords((current) =>
-        current.map((record) =>
-          record.id === editingRecord.id
-            ? {
-                ...record,
-                ...draft,
-                id: record.id,
-                href: draft.href || "/resources",
-              }
-            : record
-        )
-      );
-    } else {
-      const id = slugify(draft.title) || `resource-${Date.now()}`;
-      setRecords((current) => [
-        ...current,
-        {
-          id,
-          ...draft,
-          href: draft.href || "/resources",
-        },
-      ]);
-    }
-
-    resetForm();
-  }
-
-  function deleteRecord(id: string) {
-    setRecords((current) => current.filter((record) => record.id !== id));
-    if (editingId === id) resetForm();
-  }
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `resource-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || "/resources",
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+  });
 
   const columns: AdminTableColumn<PublicResource>[] = [
     {
@@ -232,7 +201,7 @@ function ResourceMockCrud() {
             </button>
             <button
               onClick={saveRecord}
-              disabled={!draft.title.trim() || !draft.summary.trim()}
+              disabled={!canSave}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
             >
               {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -247,7 +216,7 @@ function ResourceMockCrud() {
           <input
             className={inputClass}
             value={draft.title}
-            onChange={(event) => setDraft((current) => ({ ...current, title: event.target.value }))}
+            onChange={(event) => updateDraft({ title: event.target.value })}
             placeholder="Example Resource Title"
           />
         </Field>
@@ -256,7 +225,7 @@ function ResourceMockCrud() {
           <textarea
             className={inputClass}
             value={draft.summary}
-            onChange={(event) => setDraft((current) => ({ ...current, summary: event.target.value }))}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
             placeholder="Short resource summary"
             rows={4}
           />
@@ -267,9 +236,7 @@ function ResourceMockCrud() {
             <select
               className={inputClass}
               value={draft.type}
-              onChange={(event) =>
-                setDraft((current) => ({ ...current, type: event.target.value as ResourceType }))
-              }
+              onChange={(event) => updateDraft({ type: event.target.value as ResourceType })}
             >
               {resourceTypeFilters.map((type) => (
                 <option key={type.id} value={type.id}>
@@ -283,7 +250,7 @@ function ResourceMockCrud() {
             <select
               className={inputClass}
               value={draft.category}
-              onChange={(event) => setDraft((current) => ({ ...current, category: event.target.value }))}
+              onChange={(event) => updateDraft({ category: event.target.value })}
             >
               {resourceCategoryFilters.map((category) => (
                 <option key={category.id} value={category.id}>
@@ -298,7 +265,7 @@ function ResourceMockCrud() {
           <input
             className={inputClass}
             value={draft.readTime ?? ""}
-            onChange={(event) => setDraft((current) => ({ ...current, readTime: event.target.value }))}
+            onChange={(event) => updateDraft({ readTime: event.target.value })}
             placeholder="10 min read"
           />
         </Field>
@@ -308,63 +275,33 @@ function ResourceMockCrud() {
 }
 
 function HelpCenterMockCrud() {
-  const [records, setRecords] = useState<HelpArticle[]>(helpArticles);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [draft, setDraft] = useState<HelpDraft>(createHelpDraft());
-
-  const editingRecord = useMemo(
-    () => records.find((record) => record.id === editingId) ?? null,
-    [records, editingId]
-  );
-
-  function resetForm() {
-    setEditingId(null);
-    setDraft(createHelpDraft());
-  }
-
-  function startEdit(record: HelpArticle) {
-    setEditingId(record.id);
-    setDraft({
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<HelpArticle, HelpDraft>({
+    initialRecords: helpArticles,
+    createDraft: createHelpDraft,
+    toDraft: (record) => ({
       question: record.question,
       answer: record.answer,
       section: record.section,
       category: record.category,
       status: record.status,
-    });
-  }
-
-  function saveRecord() {
-    if (!draft.question.trim() || !draft.answer.trim()) return;
-
-    if (editingRecord) {
-      setRecords((current) =>
-        current.map((record) =>
-          record.id === editingRecord.id
-            ? {
-                ...record,
-                ...draft,
-              }
-            : record
-        )
-      );
-    } else {
-      const id = slugify(draft.question) || `help-${Date.now()}`;
-      setRecords((current) => [
-        ...current,
-        {
-          id,
-          ...draft,
-        },
-      ]);
-    }
-
-    resetForm();
-  }
-
-  function deleteRecord(id: string) {
-    setRecords((current) => current.filter((record) => record.id !== id));
-    if (editingId === id) resetForm();
-  }
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.question) || `help-${Date.now()}`),
+      ...currentDraft,
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(currentDraft.question.trim() && currentDraft.answer.trim()),
+  });
 
   const columns: AdminTableColumn<HelpArticle>[] = [
     {
@@ -442,7 +379,7 @@ function HelpCenterMockCrud() {
             </button>
             <button
               onClick={saveRecord}
-              disabled={!draft.question.trim() || !draft.answer.trim()}
+              disabled={!canSave}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
             >
               {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
@@ -457,7 +394,7 @@ function HelpCenterMockCrud() {
           <input
             className={inputClass}
             value={draft.question}
-            onChange={(event) => setDraft((current) => ({ ...current, question: event.target.value }))}
+            onChange={(event) => updateDraft({ question: event.target.value })}
             placeholder="Example help question?"
           />
         </Field>
@@ -466,7 +403,7 @@ function HelpCenterMockCrud() {
           <textarea
             className={inputClass}
             value={draft.answer}
-            onChange={(event) => setDraft((current) => ({ ...current, answer: event.target.value }))}
+            onChange={(event) => updateDraft({ answer: event.target.value })}
             placeholder="Answer content"
             rows={4}
           />
@@ -477,9 +414,7 @@ function HelpCenterMockCrud() {
             <select
               className={inputClass}
               value={draft.section}
-              onChange={(event) =>
-                setDraft((current) => ({ ...current, section: event.target.value as HelpSectionId }))
-              }
+              onChange={(event) => updateDraft({ section: event.target.value as HelpSectionId })}
             >
               {helpSections.map((section) => (
                 <option key={section.id} value={section.id}>
@@ -493,7 +428,7 @@ function HelpCenterMockCrud() {
             <select
               className={inputClass}
               value={draft.category}
-              onChange={(event) => setDraft((current) => ({ ...current, category: event.target.value }))}
+              onChange={(event) => updateDraft({ category: event.target.value })}
             >
               {helpCategories.map((category) => (
                 <option key={category.id} value={category.id}>
