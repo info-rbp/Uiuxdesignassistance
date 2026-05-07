@@ -6,7 +6,8 @@
   "scripts": {
     "build": "vite build",
     "dev": "vite",
-    "audit:public-content": "node scripts/audit-public-content.mjs"
+    "audit:public-content": "node scripts/audit-public-content.mjs",
+    "audit:admin-content-model": "node scripts/audit-admin-content-model.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
