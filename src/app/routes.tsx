@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router";
+import { createBrowserRouter, Navigate, Outlet } from "react-router";
 
 import { ScrollToHash } from "./components/ScrollToHash";
 
@@ -321,6 +321,7 @@ export const router = createBrowserRouter([
         path: "portal",
         Component: PortalLayout,
         children: [
+          { index: true, element: <Navigate to="/portal/dashboard" replace /> },
           { path: "dashboard", Component: PortalDashboard },
           {
             path: "services",

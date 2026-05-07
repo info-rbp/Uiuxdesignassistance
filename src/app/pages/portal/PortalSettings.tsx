@@ -1,21 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
+import { OrderSummaryCard } from "../../components/domain";
+import { ConfirmationPanel } from "../../components/flow";
+import { mockPortalSettingsProfile } from "../../mock";
 import { User, Mail, Lock, Bell, Shield, CreditCard, LogOut, CheckCircle, ChevronRight } from "lucide-react";
 
 const tabs = ["Profile", "Security", "Notifications", "Membership", "Billing"] as const;
 type Tab = typeof tabs[number];
 
-const USER = {
-  firstName: "Remote",
-  lastName: "Business Partner",
-  email: "info@remotebusinesspartner.com.au",
-  phone: "+61 2 0000 0000",
-  business: "Remote Business Partner Pty Ltd",
-  abn: "12 345 678 901",
-  plan: "Growth Partner Programme",
-  renewalDate: "1 July 2026",
-};
+const USER = mockPortalSettingsProfile;
 
 export function PortalSettings() {
   const navigate = useNavigate();
@@ -41,8 +35,17 @@ export function PortalSettings() {
       {/* Header */}
       <div>
         <h2 className="text-xl font-extrabold text-slate-900 mb-1">Settings</h2>
-        <p className="text-sm text-slate-500">Manage your account, preferences, and membership details.</p>
+        <p className="text-sm text-slate-500">Manage mock profile, business details, preferences, and membership summary state.</p>
       </div>
+
+      {saved ? (
+        <ConfirmationPanel
+          title="Settings saved locally"
+          message="This confirmation is frontend-only. No account, billing, password, or notification preference changes are persisted."
+          reference="SETTINGS-MOCK-001"
+          statusLabel="Mock save confirmation"
+        />
+      ) : null}
 
       {/* Tab bar */}
       <div className="flex items-center gap-1 bg-slate-100 rounded-xl p-1 w-full sm:w-auto sm:inline-flex overflow-x-auto">
@@ -192,6 +195,15 @@ export function PortalSettings() {
               </div>
             </div>
           </div>
+          <OrderSummaryCard
+            title="Membership Account Summary"
+            lines={[
+              { label: "Status", value: USER.membershipStatus },
+              { label: "Plan", value: USER.plan },
+              { label: "Renewal", value: USER.renewalDate },
+              { label: "Account mode", value: "Mock only" },
+            ]}
+          />
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100">
               <h3 className="text-sm font-extrabold text-slate-900">Plan Inclusions</h3>
