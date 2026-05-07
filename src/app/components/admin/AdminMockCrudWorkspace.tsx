@@ -35,6 +35,12 @@ import {
 } from "../../data/membership";
 
 import {
+  legalPages,
+  type LegalPage,
+  type LegalPageStatus,
+} from "../../data/legalPages";
+
+import {
   applicationCategories,
   type ApplicationCategory,
 } from "../../data/applications";
@@ -130,6 +136,35 @@ interface AdminMembershipRecord {
 type MembershipDraft = Pick<
   AdminMembershipRecord,
   "title" | "summary" | "href" | "status" | "pageType" | "planName" | "price" | "billingPeriod" | "requiresPayment" | "memberVisibility"
+>;
+
+type LegalPolicyType =
+  | "privacy-policy"
+  | "terms-of-use"
+  | "terms-of-engagement"
+  | "payment-policy"
+  | "services-policy"
+  | "other";
+
+type LegalApprovalStatus = "draft" | "review" | "approved" | "published";
+
+interface AdminLegalRecord {
+  id: string;
+  title: string;
+  summary: string;
+  href: string;
+  status: LegalPageStatus;
+  policyType: LegalPolicyType;
+  effectiveDate: string;
+  version: string;
+  approvalStatus: LegalApprovalStatus;
+  approvedBy: string;
+  approvedAt: string;
+}
+
+type LegalDraft = Pick<
+  AdminLegalRecord,
+  "title" | "summary" | "href" | "status" | "policyType" | "effectiveDate" | "version" | "approvalStatus" | "approvedBy" | "approvedAt"
 >;
 
 type ApplicationDraft = Pick<
@@ -275,6 +310,46 @@ function createMembershipRecords(): AdminMembershipRecord[] {
       memberVisibility: pageType === "usage" || pageType === "inclusions" ? "members" : "public",
     };
   });
+}
+
+function createLegalDraft(): LegalDraft {
+  return {
+    title: "",
+    summary: "",
+    href: "/legal",
+    status: "legal-review-required",
+    policyType: "other",
+    effectiveDate: "",
+    version: "1.0",
+    approvalStatus: "draft",
+    approvedBy: "",
+    approvedAt: "",
+  };
+}
+
+function inferLegalPolicyType(page: LegalPage): LegalPolicyType {
+  if (page.id === "privacy-policy") return "privacy-policy";
+  if (page.id === "terms-of-use") return "terms-of-use";
+  if (page.id === "terms-of-engagement") return "terms-of-engagement";
+  if (page.id === "payment-policy") return "payment-policy";
+  if (page.id === "services-policy") return "services-policy";
+  return "other";
+}
+
+function createLegalRecords(): AdminLegalRecord[] {
+  return legalPages.map((page) => ({
+    id: page.id,
+    title: page.title,
+    summary: page.summary,
+    href: page.href,
+    status: page.status,
+    policyType: inferLegalPolicyType(page),
+    effectiveDate: "",
+    version: "1.0",
+    approvalStatus: "review",
+    approvedBy: "",
+    approvedAt: "",
+  }));
 }
 
 function createApplicationDraft(): ApplicationDraft {
@@ -697,6 +772,255 @@ function HelpCenterMockCrud() {
             </select>
           </Field>
         </div>
+      </AdminFormShell>
+    </section>
+  );
+}
+
+function LegalPagesMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<AdminLegalRecord, LegalDraft>({
+    initialRecords: createLegalRecords(),
+    createDraft: createLegalDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      summary: record.summary,
+      href: record.href,
+      status: record.status,
+      policyType: record.policyType,
+      effectiveDate: record.effectiveDate,
+      version: record.version,
+      approvalStatus: record.approvalStatus,
+      approvedBy: record.approvedBy,
+      approvedAt: record.approvedAt,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `legal-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || "/legal",
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(
+        currentDraft.title.trim() &&
+          currentDraft.summary.trim() &&
+          currentDraft.version.trim()
+      ),
+  });
+
+  const columns: AdminTableColumn<AdminLegalRecord>[] = [
+    {
+      key: "title",
+      header: "Legal Page",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "policyType",
+      header: "Policy Type",
+      render: (row) => <AdminStatusBadge label={row.policyType} status="review" />,
+    },
+    {
+      key: "version",
+      header: "Version",
+      render: (row) => <span className="text-slate-600">{row.version}</span>,
+    },
+    {
+      key: "approvalStatus",
+      header: "Approval",
+      render: (row) => <AdminStatusBadge label={row.approvalStatus} status={row.approvalStatus} />,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit legal page"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete legal page"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Legal Page Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete legal page records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Legal Page" : "Create Legal Page"}
+        description="Local mock form for legal pages, policy versioning, effective dates, and approval tracking. Real legal controls come later."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Legal Page"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Legal Page"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short legal page summary"
+            rows={4}
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Policy Type">
+            <select
+              className={inputClass}
+              value={draft.policyType}
+              onChange={(event) =>
+                updateDraft({ policyType: event.target.value as LegalPolicyType })
+              }
+            >
+              <option value="privacy-policy">Privacy Policy</option>
+              <option value="terms-of-use">Terms of Use</option>
+              <option value="terms-of-engagement">Terms of Engagement</option>
+              <option value="payment-policy">Payment Policy</option>
+              <option value="services-policy">Services Policy</option>
+              <option value="other">Other</option>
+            </select>
+          </Field>
+
+          <Field label="Approval Status">
+            <select
+              className={inputClass}
+              value={draft.approvalStatus}
+              onChange={(event) =>
+                updateDraft({ approvalStatus: event.target.value as LegalApprovalStatus })
+              }
+            >
+              <option value="draft">Draft</option>
+              <option value="review">Review</option>
+              <option value="approved">Approved</option>
+              <option value="published">Published</option>
+            </select>
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Version">
+            <input
+              className={inputClass}
+              value={draft.version}
+              onChange={(event) => updateDraft({ version: event.target.value })}
+              placeholder="1.0"
+            />
+          </Field>
+
+          <Field label="Effective Date">
+            <input
+              className={inputClass}
+              value={draft.effectiveDate}
+              onChange={(event) => updateDraft({ effectiveDate: event.target.value })}
+              placeholder="YYYY-MM-DD"
+            />
+          </Field>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Approved By">
+            <input
+              className={inputClass}
+              value={draft.approvedBy}
+              onChange={(event) => updateDraft({ approvedBy: event.target.value })}
+              placeholder="Approver name"
+            />
+          </Field>
+
+          <Field label="Approved At">
+            <input
+              className={inputClass}
+              value={draft.approvedAt}
+              onChange={(event) => updateDraft({ approvedAt: event.target.value })}
+              placeholder="YYYY-MM-DD"
+            />
+          </Field>
+        </div>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/legal/example"
+          />
+        </Field>
+
+        <Field label="Page Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as LegalPageStatus })}
+          >
+            <option value="legal-review-required">Legal Review Required</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="ready">Ready</option>
+          </select>
+        </Field>
       </AdminFormShell>
     </section>
   );
@@ -1771,6 +2095,13 @@ export function AdminMockCrudWorkspace() {
     return <MembershipMockCrud />;
   }
 
+  if (
+    location.pathname.startsWith("/admin/site-content/legal") ||
+    location.pathname.startsWith("/admin/legal")
+  ) {
+    return <LegalPagesMockCrud />;
+  }
+
   if (location.pathname.startsWith("/admin/help-center")) {
     return <HelpCenterMockCrud />;
   }
@@ -1795,7 +2126,7 @@ export function AdminMockCrudWorkspace() {
       <AdminEmptyState
         icon={HelpCircle}
         title="Mock CRUD not enabled for this section"
-        description="Resources, Help Center, Applications, Operations, Services, Offers, Marketplace, and Membership are enabled first. Legal workflows come later, because chaos deserves a queue."
+        description="Resources, Help Center, Applications, Operations, Services, Offers, Marketplace, Membership, and Legal Pages are enabled for local mock CRUD. Backend persistence comes later, because chaos deserves a queue."
       />
     </AdminFormShell>
   );
