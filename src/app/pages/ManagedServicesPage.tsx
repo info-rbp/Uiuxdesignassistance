@@ -44,6 +44,45 @@ const process = [
   { step: "04", title: "Review & adapt", desc: "We review the arrangement regularly and adapt as your business evolves." },
 ];
 
+const managedAnchorSections = [
+  {
+    id: "document-management",
+    title: "Document Management",
+    description:
+      "Ongoing support to organise, maintain, update, and control business documentation, templates, registers, and procedures.",
+  },
+  {
+    id: "change-management",
+    title: "Change Management",
+    description:
+      "Managed support for businesses implementing new systems, internal processes, operational changes, or team transitions.",
+  },
+  {
+    id: "business-sale-support",
+    title: "Business Sale Support",
+    description:
+      "Practical operational support for business owners preparing information, documentation, and workflows for a potential sale.",
+  },
+  {
+    id: "franchise",
+    title: "Franchise",
+    description:
+      "Support for franchise documentation, process management, operating manuals, onboarding material, and franchise administration.",
+  },
+  {
+    id: "lms",
+    title: "LMS",
+    description:
+      "Managed learning system support for training content, onboarding pathways, staff education, and internal knowledge delivery.",
+  },
+  {
+    id: "custom-solutions",
+    title: "Custom Solutions",
+    description:
+      "Flexible retained support for businesses with specialised operational needs that do not fit a standard service category.",
+  },
+];
+
 export function ManagedServicesPage() {
   return (
     <div className="bg-white min-h-screen">
@@ -105,6 +144,43 @@ export function ManagedServicesPage() {
         </div>
       </section>
 
+
+      {/* Managed service anchor sections */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="inline-block text-xs font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full mb-4">
+              Additional Managed Service Areas
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+              Flexible retained support areas
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              These sections support the public navigation links and provide clear page destinations for each managed service area.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {managedAnchorSections.map((item) => (
+              <div
+                key={item.id}
+                id={item.id}
+                className="bg-slate-50 border border-slate-200 rounded-2xl p-7 scroll-mt-32"
+              >
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-5">{item.description}</p>
+                <Link
+                  to={`/contact?reason=${item.id}`}
+                  className="inline-flex items-center gap-2 text-blue-700 font-bold text-sm hover:text-blue-800"
+                >
+                  Enquire about {item.title} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Benefits */}
       <section className="py-16 bg-slate-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -126,7 +202,7 @@ export function ManagedServicesPage() {
       </section>
 
       {/* Process */}
-      <section className="py-20">
+      <section id="engagement-process" className="py-20 scroll-mt-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <h2 className="text-2xl font-extrabold text-slate-900 mb-2">How managed services work</h2>

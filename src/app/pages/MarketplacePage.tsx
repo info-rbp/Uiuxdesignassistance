@@ -33,6 +33,39 @@ const products: Product[] = [
   { id: "bid-starter", name: "Bid Management Starter", category: "Managed Services Starter", price: "$499/mo", forWho: "Businesses pursuing contracts", desc: "A starter bid management service — opportunity identification, bid preparation, and submission support.", includes: ["Opportunity monitoring (2 portals)", "Bid/no-bid assessments", "1 full bid per month", "Compliance checklist", "Post-submission debrief"], delivery: "Ongoing service", timeline: "Starts within 5 days" },
 ];
 
+const marketplaceAnchorSections = [
+  {
+    id: "rbp-products",
+    title: "RBP Products",
+    description:
+      "Packaged Remote Business Partner products, templates, application setup packages, documents, and business-in-a-box bundles.",
+  },
+  {
+    id: "rbp-assets",
+    title: "RBP Assets",
+    description:
+      "Remote Business Partner-owned assets and resources that may be made available for business use, purchase, or deployment.",
+  },
+  {
+    id: "third-party-products-assets",
+    title: "Third Party Products & Assets",
+    description:
+      "Marketplace listings from approved third parties, including products, services, resources, and business assets.",
+  },
+  {
+    id: "buying-process",
+    title: "Buying Process",
+    description:
+      "A clear buying pathway covering enquiry, confirmation, payment or approval, delivery, and follow-up support.",
+  },
+  {
+    id: "list-with-us",
+    title: "List With Us",
+    description:
+      "A pathway for approved suppliers, partners, and businesses to list products, services, or assets on the marketplace.",
+  },
+];
+
 export function MarketplacePage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -113,6 +146,43 @@ export function MarketplacePage() {
                     View Package <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Marketplace anchor sections */}
+      <section id="overview" className="py-16 bg-white scroll-mt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="inline-block text-xs font-bold text-amber-700 uppercase tracking-widest bg-amber-50 px-3 py-1 rounded-full mb-4">
+              Marketplace Structure
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+              Marketplace categories and actions
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              These sections support the public navigation links and clarify how the marketplace is organised.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {marketplaceAnchorSections.map((item) => (
+              <div
+                key={item.id}
+                id={item.id}
+                className="bg-slate-50 border border-slate-200 rounded-2xl p-7 scroll-mt-32"
+              >
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-5">{item.description}</p>
+                <Link
+                  to={item.id === "list-with-us" ? "/contact?reason=list-with-us" : "/marketplace"}
+                  className="inline-flex items-center gap-2 text-amber-700 font-bold text-sm hover:text-amber-800"
+                >
+                  {item.id === "list-with-us" ? "Start a listing enquiry" : "Explore marketplace"} <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             ))}
           </div>

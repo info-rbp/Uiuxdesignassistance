@@ -49,6 +49,81 @@ const statusColors: Record<Status, string> = {
   "Setup Required": "bg-blue-100 text-blue-700",
 };
 
+const applicationAnchorSections = [
+  {
+    id: "how-these-work",
+    title: "How These Work",
+    description:
+      "Applications can be configured, branded, and supported for your business so your team can work from a more connected operating system.",
+  },
+  {
+    id: "integrations",
+    title: "Integrations",
+    description:
+      "Connect applications, workflows, customer data, documents, finance systems, and operational tools where integration is available.",
+  },
+  {
+    id: "operations-finance",
+    title: "Operations and Finance",
+    description:
+      "Applications for business operations, accounting, reporting, inventory, finance workflows, and management visibility.",
+  },
+  {
+    id: "people-hr",
+    title: "People and HR",
+    description:
+      "Applications for employee records, onboarding, leave, payroll structure, performance, learning, and people operations.",
+  },
+  {
+    id: "sales-crm",
+    title: "Sales and CRM",
+    description:
+      "Applications for leads, contacts, opportunities, pipelines, customer communication, and sales process management.",
+  },
+  {
+    id: "documents",
+    title: "Documents",
+    description:
+      "Applications and tools for business documents, document control, knowledge bases, internal files, and document workflows.",
+  },
+  {
+    id: "support-desk",
+    title: "Support Desk",
+    description:
+      "Applications for tickets, customer support, service workflows, knowledge base content, and issue resolution.",
+  },
+  {
+    id: "learning",
+    title: "Learning",
+    description:
+      "Learning management tools for internal training, onboarding pathways, courses, assessments, and education delivery.",
+  },
+  {
+    id: "analytics",
+    title: "Analytics",
+    description:
+      "Reporting and analytics tools to help businesses understand performance, trends, operations, customers, and workflow health.",
+  },
+  {
+    id: "payments-billing",
+    title: "Payments and Billing",
+    description:
+      "Applications and integrations for invoicing, payments, subscriptions, ecommerce, and billing workflows.",
+  },
+  {
+    id: "fleet-management",
+    title: "Fleet Management",
+    description:
+      "Future application support for vehicle, asset, maintenance, allocation, usage, and fleet administration workflows.",
+  },
+  {
+    id: "business-watchlist",
+    title: "Business Watchlist",
+    description:
+      "A future risk-focused application concept for managing business watchlists, supplier concerns, and company risk records.",
+  },
+];
+
 export function BusinessApplicationsPage() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
@@ -142,6 +217,43 @@ export function BusinessApplicationsPage() {
           </div>
         </div>
       </div>
+
+
+      {/* Application anchor sections */}
+      <section id="overview" className="py-16 bg-slate-50 scroll-mt-32">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="inline-block text-xs font-bold text-violet-700 uppercase tracking-widest bg-white px-3 py-1 rounded-full mb-4">
+              Application Areas
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
+              Explore application categories
+            </h2>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              These sections support the public navigation links and provide clear destinations for each application area.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {applicationAnchorSections.map((item) => (
+              <div
+                key={item.id}
+                id={item.id}
+                className="bg-white border border-slate-200 rounded-2xl p-7 shadow-sm scroll-mt-32"
+              >
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-5">{item.description}</p>
+                <Link
+                  to={`/contact?reason=${item.id}`}
+                  className="inline-flex items-center gap-2 text-violet-700 font-bold text-sm hover:text-violet-800"
+                >
+                  Discuss {item.title} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* App grid */}
       <section className="py-12 lg:py-16">

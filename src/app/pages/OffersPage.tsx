@@ -125,13 +125,13 @@ export function OffersPage() {
         breadcrumb="Offers"
         image={heroImage}
         bullets={["Vendor-negotiated discounts", "Member-only packages", "Regularly updated deals"]}
-        ctaPrimary={{ label: "View Packages", href: "#packages" }}
+        ctaPrimary={{ label: "View Offers", href: "#exclusive" }}
         ctaSecondary={{ label: "Talk to Us", href: "/contact" }}
         stat={{ value: "30%", label: "Avg. Cost Savings", sublabel: "For our members" }}
       />
 
       {/* Featured Partner Offers */}
-      <section className="py-20 lg:py-28" id="packages">
+      <section id="exclusive" className="py-20 lg:py-28 scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full mb-4">
@@ -245,7 +245,7 @@ export function OffersPage() {
       </section>
 
       {/* Partner Deals */}
-      <section className="py-16 bg-slate-50">
+      <section id="top" className="py-16 bg-slate-50 scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <span className="inline-block text-xs font-bold text-orange-700 uppercase tracking-widest bg-orange-50 px-3 py-1 rounded-full mb-4">
