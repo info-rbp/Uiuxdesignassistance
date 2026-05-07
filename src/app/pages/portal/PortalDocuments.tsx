@@ -1,30 +1,64 @@
-import { FileText, Download, Eye, Search, Filter, Clock, CheckCircle, AlertCircle } from "lucide-react";
+import { FileText, Download, Eye, Search, Filter, Clock, CheckCircle, AlertCircle, UploadCloud } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
-
-const documents = [
-  { name: "Business Health Assessment Report",   category: "Advisory",  date: "28 Apr 2026", size: "1.2 MB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
-  { name: "Q2 Strategy Action Plan",             category: "Advisory",  date: "2 May 2026",  size: "840 KB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
-  { name: "Cash Flow Forecast Template",         category: "Finance",   date: "25 Apr 2026", size: "2.1 MB", status: "In Progress",    statusColor: "bg-amber-50 text-amber-700" },
-  { name: "Employment Contract Template",        category: "HR",        date: "10 Apr 2026", size: "560 KB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
-  { name: "Staff Onboarding Checklist",          category: "HR",        date: "10 Apr 2026", size: "320 KB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
-  { name: "Tender Submission — VIC Gov",         category: "Bids",      date: "5 Apr 2026",  size: "4.7 MB", status: "Awaiting Review",statusColor: "bg-blue-50 text-blue-700" },
-  { name: "Business Insurance Summary",          category: "Finance",   date: "18 Mar 2026", size: "1.8 MB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
-  { name: "Annual Budget Framework 2026",        category: "Finance",   date: "1 Mar 2026",  size: "3.4 MB", status: "Ready",          statusColor: "bg-emerald-50 text-emerald-700" },
-];
-
-const categories = ["All", "Advisory", "Finance", "HR", "Bids"];
+import {
+  docuShareFlowStorageKey,
+  type DocuShareStoredState,
+} from "../../features/docushare";
+import { mockPortalDocumentActivity } from "../../mock";
 
 const categoryIcon: Record<string, string> = {
   Advisory: "bg-blue-50 text-blue-700",
   Finance:  "bg-violet-50 text-violet-700",
   HR:       "bg-emerald-50 text-emerald-700",
   Bids:     "bg-amber-50 text-amber-700",
+  Membership: "bg-blue-50 text-blue-700",
+  "Decision Desk": "bg-amber-50 text-amber-700",
+  DocuShare: "bg-blue-50 text-blue-700",
 };
+
+const statusColor: Record<string, string> = {
+  active: "bg-emerald-50 text-emerald-700",
+  ready: "bg-emerald-50 text-emerald-700",
+  "outcome-ready": "bg-emerald-50 text-emerald-700",
+  "in-progress": "bg-amber-50 text-amber-700",
+  "in-review": "bg-blue-50 text-blue-700",
+  submitted: "bg-blue-50 text-blue-700",
+};
+
+function readDocuShareDocumentState(): DocuShareStoredState | null {
+  const rawValue = window.sessionStorage.getItem(docuShareFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DocuShareStoredState;
+  } catch {
+    return null;
+  }
+}
 
 export function PortalDocuments() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const docuShareState = readDocuShareDocumentState();
+  const documents = docuShareState
+    ? [
+        {
+          id: "portal-docushare-current",
+          name: `${docuShareState.documentType} brief placeholder`,
+          category: "DocuShare",
+          date: "Just now",
+          size: "Mock file",
+          status: docuShareState.status,
+        },
+        ...mockPortalDocumentActivity,
+      ]
+    : mockPortalDocumentActivity;
+  const categories = ["All", ...Array.from(new Set(documents.map((document) => document.category)))];
 
   const filtered = documents.filter((d) => {
     const matchCat = activeCategory === "All" || d.category === activeCategory;
@@ -42,15 +76,40 @@ export function PortalDocuments() {
       {/* Header */}
       <div>
         <h2 className="text-xl font-extrabold text-slate-900 mb-1">Documents</h2>
-        <p className="text-sm text-slate-500">Access, download, and manage all your RBP advisory documents.</p>
+        <p className="text-sm text-slate-500">Access mock document activity, file placeholders, and document-related CTAs.</p>
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <Link
+          to="/document-nucleus/brief"
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800"
+        >
+          Create a mock DocuShare brief
+        </Link>
+        <Link
+          to="/document-nucleus/overview"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+        >
+          View document options
+        </Link>
+      </div>
+
+      <div className="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 flex items-start gap-3">
+        <UploadCloud className="w-5 h-5 text-blue-700 flex-shrink-0 mt-0.5" />
+        <div>
+          <div className="text-xs font-extrabold text-blue-900">Uploads are simulated only</div>
+          <p className="text-[11px] text-blue-700 leading-relaxed">
+            This portal shows mock file placeholders from the shared mock data. No real upload, storage, or permission-backed download is implemented.
+          </p>
+        </div>
       </div>
 
       {/* Stats strip */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Total",            value: documents.length.toString(),                                         icon: FileText,    color: "bg-slate-50 text-slate-700 border-slate-100" },
-          { label: "Awaiting Review",  value: documents.filter(d => d.status === "Awaiting Review").length.toString(), icon: AlertCircle, color: "bg-blue-50 text-blue-700 border-blue-100" },
-          { label: "Ready to Download",value: documents.filter(d => d.status === "Ready").length.toString(),      icon: CheckCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-100" },
+          { label: "Total", value: documents.length.toString(), icon: FileText, color: "bg-slate-50 text-slate-700 border-slate-100" },
+          { label: "Awaiting Review", value: documents.filter(d => d.status === "in-review" || d.status === "submitted").length.toString(), icon: AlertCircle, color: "bg-blue-50 text-blue-700 border-blue-100" },
+          { label: "Ready Placeholder", value: documents.filter(d => d.status === "active" || d.status === "ready" || d.status === "outcome-ready").length.toString(), icon: CheckCircle, color: "bg-emerald-50 text-emerald-700 border-emerald-100" },
         ].map((s) => (
           <div key={s.label} className={`rounded-2xl border p-4 flex items-center gap-3 ${s.color}`}>
             <s.icon className="w-5 h-5 flex-shrink-0" />
@@ -119,13 +178,13 @@ export function PortalDocuments() {
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <span className={`text-[10px] font-bold px-2 py-1 rounded-lg hidden sm:inline-block ${doc.statusColor}`}>
-                    {doc.status}
+                    <span className={`text-[10px] font-bold px-2 py-1 rounded-lg hidden sm:inline-block capitalize ${statusColor[doc.status] ?? "bg-slate-100 text-slate-600"}`}>
+                    {doc.status.replace(/-/g, " ")}
                   </span>
-                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Preview">
+                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Mock preview only">
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Download">
+                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="No real download in Phase 1">
                     <Download className="w-4 h-4" />
                   </button>
                 </div>

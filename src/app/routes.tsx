@@ -1,4 +1,4 @@
-import { createBrowserRouter, Outlet } from "react-router";
+import { createBrowserRouter, Navigate, Outlet } from "react-router";
 
 import { ScrollToHash } from "./components/ScrollToHash";
 
@@ -33,6 +33,7 @@ import { RiskAdvisorPage } from "./pages/on-demand/RiskAdvisorPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
 import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
 import { DocumentProductPage } from "./pages/DocumentProductPage";
+import { DocuShareOnboardingPage } from "./pages/DocuShareOnboardingPage";
 
 // ── Managed Services pages ────────────────────────────────────────────────────
 
@@ -163,6 +164,7 @@ export const router = createBrowserRouter([
       // ── Document Nucleus ───────────────────────────────────────────────────
 
       { path: "document-nucleus/overview", Component: DocumentOverviewPage },
+      { path: "document-nucleus/brief", Component: DocuShareOnboardingPage },
       { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
       { path: "document-nucleus/product/:id", Component: DocumentProductPage },
 
@@ -256,6 +258,8 @@ export const router = createBrowserRouter([
         children: [
           { index: true, Component: MarketplacePage },
           { path: "product/:id", Component: MarketplacePage },
+          { path: "enquiry/:id", Component: MarketplacePage },
+          { path: "listing/new", Component: MarketplacePage },
         ],
       },
 
@@ -321,6 +325,7 @@ export const router = createBrowserRouter([
         path: "portal",
         Component: PortalLayout,
         children: [
+          { index: true, element: <Navigate to="/portal/dashboard" replace /> },
           { path: "dashboard", Component: PortalDashboard },
           {
             path: "services",
@@ -353,6 +358,14 @@ export const router = createBrowserRouter([
               { path: "dashboard", Component: AdminDashboard },
 
               // Admin dashboard utility routes.
+              { path: "content", Component: AdminCrudPage },
+              { path: "requests", Component: AdminCrudPage },
+              { path: "requests/decision-desk", Component: AdminCrudPage },
+              { path: "requests/docushare", Component: AdminCrudPage },
+              { path: "requests/connectivity", Component: AdminCrudPage },
+              { path: "requests/risk-advisor", Component: AdminCrudPage },
+              { path: "requests/fixer", Component: AdminCrudPage },
+              { path: "audit-review", Component: AdminCrudPage },
               { path: "tasks", Component: AdminCrudPage },
               { path: "discovery-calls", Component: AdminCrudPage },
               { path: "other", Component: AdminCrudPage },

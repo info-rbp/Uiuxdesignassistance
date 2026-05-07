@@ -89,7 +89,7 @@ export function BusinessApplicationsPage() {
                 ))}
               </div>
               <div className="flex flex-wrap gap-3">
-                <Link to="/contact" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-bold px-7 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
+                <Link to="/contact?reason=application-setup" className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-500 text-white font-bold px-7 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
                   Request a Setup <ArrowRight className="w-4 h-4" />
                 </Link>
                 <Link to="/marketplace" className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-7 py-4 rounded-xl transition-all">
@@ -170,7 +170,7 @@ export function BusinessApplicationsPage() {
                 className="bg-white border border-slate-200 rounded-2xl p-7 shadow-sm scroll-mt-32"
               >
                 <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-slate-600 text-sm leading-relaxed mb-5">{item.description}</p>
+                <p className="text-slate-600 text-sm leading-relaxed mb-5">{item.summary}</p>
                 <Link
                   to={`/contact?reason=${item.id}`}
                   className="inline-flex items-center gap-2 text-violet-700 font-bold text-sm hover:text-violet-800"
@@ -219,7 +219,7 @@ export function BusinessApplicationsPage() {
                       )}
                     </div>
                     <Link
-                      to="/contact"
+                      to="/contact?reason=application-setup"
                       className="inline-flex items-center justify-center gap-2 w-full bg-violet-700 hover:bg-violet-800 text-white font-bold text-sm py-2.5 px-4 rounded-xl transition-all"
                     >
                       {app.status === "Available" ? "Request Setup" : app.status === "Setup Required" ? "Enquire" : "Join Waitlist"}
@@ -239,7 +239,7 @@ export function BusinessApplicationsPage() {
           <h2 className="text-2xl font-extrabold text-slate-900 mb-3">Not sure which application is right for you?</h2>
           <p className="text-slate-600 mb-6">Speak to our team and we'll help you identify the right tools for your business needs and budget.</p>
           <div className="flex flex-wrap gap-3 justify-center">
-            <Link to="/contact" className="inline-flex items-center gap-2 bg-violet-700 hover:bg-violet-800 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
+            <Link to="/contact?reason=application-setup" className="inline-flex items-center gap-2 bg-violet-700 hover:bg-violet-800 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
               Talk to Our Team <ArrowRight className="w-4 h-4" />
             </Link>
             <Link to="/marketplace" className="inline-flex items-center gap-2 border border-slate-200 hover:border-slate-300 text-slate-700 font-bold px-7 py-3.5 rounded-xl transition-all hover:bg-white">

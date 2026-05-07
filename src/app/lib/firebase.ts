@@ -1,51 +1,20 @@
-import { initializeApp, type FirebaseApp } from "firebase/app";
-import { getFirestore, type Firestore } from "firebase/firestore";
+/**
+ * Phase 1 backend boundary placeholder.
+ *
+ * Phase 1 is frontend-only and must not initialise Firebase, Firestore,
+ * Storage, Auth, Frappe, payment providers, uploads, or real backend services.
+ *
+ * This module intentionally preserves the previous helper names so any legacy
+ * callers continue to receive safe null/false responses until Phase 2 backend
+ * contracts are approved.
+ */
 
-const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-};
-
-export const isFirebaseConfigured = Boolean(
-  firebaseConfig.apiKey &&
-    firebaseConfig.authDomain &&
-    firebaseConfig.projectId &&
-    firebaseConfig.appId
-);
-
-let firebaseApp: FirebaseApp | null = null;
-let firestoreDb: Firestore | null = null;
+export const isFirebaseConfigured = false;
 
 export function getFirebaseApp() {
-  if (!isFirebaseConfigured) {
-    return null;
-  }
-
-  if (!firebaseApp) {
-    firebaseApp = initializeApp(firebaseConfig);
-  }
-
-  return firebaseApp;
+  return null;
 }
 
 export function getFirestoreDb() {
-  if (!isFirebaseConfigured) {
-    return null;
-  }
-
-  if (!firestoreDb) {
-    const app = getFirebaseApp();
-
-    if (!app) {
-      return null;
-    }
-
-    firestoreDb = getFirestore(app);
-  }
-
-  return firestoreDb;
+  return null;
 }

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useParams } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
-import { documentById, categoryMeta, allDocuments } from "../data/documentData";
+import { documentById, categoryMeta, allDocuments, type DocumentItem } from "../data/documentData";
+import { mockDocuShareDocumentGroups, mockDocumentProducts } from "../mock";
 import {
   ArrowRight,
   FileText,
@@ -46,14 +47,56 @@ const processSteps = [
   { step: "05", title: "Final delivery", desc: "Your finalised document is delivered and securely stored in your Document Nucleus account." },
 ];
 
+function mockProductToDocument(product: (typeof mockDocumentProducts)[number]): DocumentItem {
+  const group = mockDocuShareDocumentGroups.find((item) => item.id === product.category);
+
+  return {
+    id: product.id,
+    name: product.title,
+    type: group?.title ?? "DocuShare",
+    format: "Mock brief",
+    deliveryTime: "Simulated status only",
+    complexity: product.category === "documentation-suites" ? "Complex" : "Standard",
+    popular: product.id === "template-policy-001" || product.id === "suite-operations-001",
+    category: product.category,
+    description: product.description,
+    tags: [product.category, "DocuShare", "Phase 1 mock"],
+    price: product.priceLabel,
+    fullDescription:
+      "This Phase 1 mock Document Nucleus product exists so the DocuShare onboarding flow can be reviewed end to end. It can be used to prefill the mock brief route, but it does not create a real order, document, upload, payment or delivery workflow.",
+    whatsIncluded: [
+      "Mock document brief context",
+      "Document group and product preselection",
+      "Purpose, audience and tailored questions",
+      "Mock supporting upload placeholder",
+      "Simulated portal status handoff",
+    ],
+    useCases: ["Frontend QA", "Brief review", "Portal status demonstration"],
+    faqs: [
+      {
+        q: "Will this create a real document?",
+        a: "No. Phase 1 only submits a simulated mock brief for UI review.",
+      },
+      {
+        q: "Are files uploaded?",
+        a: "No. The upload area only represents the intended frontend experience.",
+      },
+      {
+        q: "Is payment processed?",
+        a: "No. Payment and checkout flows are not part of this mock product route.",
+      },
+    ],
+  };
+}
+
 export function DocumentProductPage() {
   const { id = "a1" } = useParams<{ id: string }>();
-  const doc = documentById[id];
+  const mockProduct = mockDocumentProducts.find((product) => product.id === id);
+  const doc = documentById[id] ?? (mockProduct ? mockProductToDocument(mockProduct) : undefined);
 
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [activeTab, setActiveTab] = useState<TabId>("description");
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [added, setAdded] = useState(false);
 
   if (!doc) {
     return (
@@ -72,17 +115,27 @@ export function DocumentProductPage() {
     );
   }
 
-  const meta = categoryMeta[doc.category];
+  const mockGroup = mockDocuShareDocumentGroups.find((group) => group.id === doc.category);
+  const meta =
+    categoryMeta[doc.category] ??
+    (mockGroup
+      ? {
+          id: mockGroup.title.slice(0, 1),
+          title: mockGroup.title,
+          desc: mockGroup.description,
+          color: mockGroup.color,
+          lightBg: mockGroup.lightBg,
+          accent: mockGroup.accent,
+          tag: mockGroup.tag,
+          tagColor: mockGroup.tagColor,
+        }
+      : categoryMeta.a);
   const formats = doc.format.split(" / ");
   const currentFormat = selectedFormat || formats[0];
+  const briefHref = `/document-nucleus/brief?category=${doc.category}&product=${doc.id}`;
 
   // Related docs — same category, excluding current
   const related = allDocuments[doc.category]?.filter((d) => d.id !== doc.id).slice(0, 4) ?? [];
-
-  const handleAddToOrder = () => {
-    setAdded(true);
-    setTimeout(() => setAdded(false), 2500);
-  };
 
   return (
     <div className="bg-white min-h-screen">
@@ -231,31 +284,19 @@ export function DocumentProductPage() {
 
             {/* CTA buttons */}
             <div className="flex flex-col gap-3 mb-6">
-              <button
-                onClick={handleAddToOrder}
-                className={`inline-flex items-center justify-center gap-2 w-full py-4 px-6 rounded-xl font-extrabold text-base transition-all shadow-lg ${
-                  added
-                    ? "bg-emerald-600 shadow-emerald-200"
-                    : `${meta.color} hover:opacity-90 shadow-blue-200`
-                } text-white`}
-              >
-                {added ? (
-                  <>
-                    <CheckCircle className="w-5 h-5" /> Added to your order
-                  </>
-                ) : (
-                  <>
-                    Add to Order — {doc.price}
-                    <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </button>
               <Link
-                to="/contact"
+                to={briefHref}
+                className={`inline-flex items-center justify-center gap-2 w-full py-4 px-6 rounded-xl font-extrabold text-base transition-all shadow-lg ${meta.color} text-white hover:opacity-90 shadow-blue-200`}
+              >
+                Continue to mock brief
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/document-nucleus/brief"
                 className="inline-flex items-center justify-center gap-2 w-full py-4 px-6 rounded-xl font-bold text-base border-2 border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all"
               >
                 <MessageCircle className="w-4 h-4" />
-                Enquire about this document
+                Start a different document brief
               </Link>
             </div>
 
@@ -469,7 +510,7 @@ export function DocumentProductPage() {
                       to={`/document-nucleus/product/${rel.id}`}
                       className={`inline-flex items-center justify-center gap-2 w-full text-sm font-bold py-2.5 px-4 rounded-xl transition-all ${meta.color} text-white hover:opacity-90`}
                     >
-                      Learn More & Buy
+                      View document options
                       <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -487,12 +528,12 @@ export function DocumentProductPage() {
             <div className="font-extrabold text-slate-900 truncate">{doc.name}</div>
             <div className="text-slate-500 text-xs">{doc.price} · {doc.deliveryTime}</div>
           </div>
-          <button
-            onClick={handleAddToOrder}
+          <Link
+            to={briefHref}
             className={`inline-flex items-center gap-2 ${meta.color} text-white font-bold py-3 px-5 rounded-xl text-sm transition-all hover:opacity-90 flex-shrink-0`}
           >
-            {added ? <><CheckCircle className="w-4 h-4" /> Added</> : <>Add to Order <ArrowRight className="w-3.5 h-3.5" /></>}
-          </button>
+            Start brief <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       </div>
 

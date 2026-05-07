@@ -78,13 +78,13 @@ export function AboutPage() {
         breadcrumb="About Us"
         image={teamImage}
         bullets={["Experienced senior consultants", "Committed to your growth", "Transparent & accountable"]}
-        ctaPrimary={{ label: "Work With Us", href: "/contact" }}
-        ctaSecondary={{ label: "Our Services", href: "/services" }}
+        ctaPrimary={{ label: "Work With Us", href: "/contact?reason=discovery-call" }}
+        ctaSecondary={{ label: "Our Services", href: "/on-demand/services" }}
         stat={{ value: "10+", label: "Years Combined Experience", sublabel: "Across advisory verticals" }}
       />
 
       {/* Mission */}
-      <section className="py-20 lg:py-28">
+      <section id="our-purpose" className="py-20 lg:py-28 scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
             <div>
@@ -101,7 +101,7 @@ export function AboutPage() {
                 We work with founders, directors, and operators who are ambitious about growth but recognize they need a trusted, knowledgeable partner to help them structure, optimize, and scale their businesses smartly.
               </p>
               <Link
-                to="/contact"
+                to="/contact?reason=discovery-call"
                 className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl transition-all"
               >
                 Work With Us <ArrowRight className="w-4 h-4" />
@@ -115,7 +115,7 @@ export function AboutPage() {
       </section>
 
       {/* Values */}
-      <section className="py-16 bg-slate-50">
+      <section id="our-platform" className="py-16 bg-slate-50 scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-block text-xs font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full mb-4">

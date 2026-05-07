@@ -2,12 +2,21 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
 import {
+  decisionDeskFlowStorageKey,
+  type DecisionDeskStoredState,
+} from "../../features/decision-desk";
+import {
+  docuShareFlowStorageKey,
+  type DocuShareStoredState,
+} from "../../features/docushare";
+import { mockPortalServiceRequests } from "../../mock";
+import {
   Zap, ArrowRight, ChevronRight, CheckCircle, Clock,
   AlertCircle, Plus, FileText, Tag, Calculator, BarChart2,
-  Users,
+  Wifi, ShieldAlert, Wrench,
 } from "lucide-react";
 
-export type ServiceStatus = "Active" | "In Progress" | "Requested" | "Completed" | "Available";
+export type ServiceStatus = "Active" | "In Progress" | "Requested" | "Outcome Ready" | "Completed" | "Available";
 
 export interface Service {
   id: string;
@@ -21,29 +30,35 @@ export interface Service {
   icon: React.ElementType;
 }
 
+function statusLabel(status: string): ServiceStatus {
+  if (status === "in-review" || status === "in-progress") return "In Progress";
+  if (status === "submitted" || status === "pending") return "Requested";
+  if (status === "outcome-ready") return "Outcome Ready";
+  if (status === "assigned" || status === "active") return "Active";
+  if (status === "closed") return "Completed";
+  return "Available";
+}
+
+const sourceIcon = {
+  "Decision Desk": Zap,
+  DocuShare: FileText,
+  Connectivity: Wifi,
+  "Risk Advisor": ShieldAlert,
+  "The Fixer": Wrench,
+};
+
 export const SERVICES: Service[] = [
-  {
-    id: "decision-desk",
-    title: "Decision Desk",
-    category: "On-Demand Service",
-    status: "In Progress",
-    description: "A focused advisory request for a key business decision.",
-    lastUpdated: "3 May 2026",
-    nextAction: "Review consultant questions",
-    buttonLabel: "View Request",
-    icon: Zap,
-  },
-  {
-    id: "hr-services",
-    title: "HR Services",
-    category: "Managed Service",
-    status: "Requested",
-    description: "Managed HR support for policies, onboarding and compliance.",
-    lastUpdated: "30 Apr 2026",
-    nextAction: "Awaiting review",
-    buttonLabel: "View Status",
-    icon: Users,
-  },
+  ...mockPortalServiceRequests.map((request) => ({
+    id: request.id,
+    title: request.source,
+    category: request.category,
+    status: statusLabel(request.status),
+    description: request.description,
+    lastUpdated: request.lastUpdated,
+    nextAction: request.nextAction,
+    buttonLabel: request.ctaLabel,
+    icon: sourceIcon[request.source],
+  })),
   {
     id: "business-health-snapshot",
     title: "Business Health Snapshot",
@@ -79,23 +94,52 @@ export const SERVICES: Service[] = [
   },
 ];
 
+function readDecisionDeskServiceState(): DecisionDeskStoredState | null {
+  const rawValue = window.sessionStorage.getItem(decisionDeskFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DecisionDeskStoredState;
+  } catch {
+    return null;
+  }
+}
+
+function readDocuShareServiceState(): DocuShareStoredState | null {
+  const rawValue = window.sessionStorage.getItem(docuShareFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DocuShareStoredState;
+  } catch {
+    return null;
+  }
+}
+
 const STATUS_CONFIG: Record<ServiceStatus, { color: string; dot: string }> = {
   Active:      { color: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500" },
   "In Progress": { color: "bg-amber-50 text-amber-700",   dot: "bg-amber-500" },
   Requested:   { color: "bg-blue-50 text-blue-700",       dot: "bg-blue-500" },
+  "Outcome Ready": { color: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500" },
   Completed:   { color: "bg-slate-100 text-slate-600",    dot: "bg-slate-400" },
   Available:   { color: "bg-violet-50 text-violet-700",   dot: "bg-violet-500" },
 };
 
 const STATUS_TABS: Array<ServiceStatus | "All"> = [
-  "All", "Active", "Requested", "In Progress", "Completed", "Available",
+  "All", "Active", "Requested", "In Progress", "Outcome Ready", "Completed", "Available",
 ];
 
 const SUMMARY_COUNTS: Array<{ label: string; key: ServiceStatus | null; color: string }> = [
   { label: "Active",           key: "Active",      color: "text-emerald-700 bg-emerald-50 border-emerald-100" },
   { label: "In Progress",      key: "In Progress", color: "text-amber-700 bg-amber-50 border-amber-100" },
   { label: "Pending Requests", key: "Requested",   color: "text-blue-700 bg-blue-50 border-blue-100" },
-  { label: "Completed",        key: "Completed",   color: "text-slate-600 bg-slate-50 border-slate-200" },
+  { label: "Outcome Ready",    key: "Outcome Ready", color: "text-emerald-700 bg-emerald-50 border-emerald-100" },
 ];
 
 function getButtonStyle(status: ServiceStatus) {
@@ -107,11 +151,50 @@ function getButtonStyle(status: ServiceStatus) {
 
 export function PortalServices() {
   const [activeFilter, setActiveFilter] = useState<ServiceStatus | "All">("All");
+  const decisionDeskState = readDecisionDeskServiceState();
+  const docuShareState = readDocuShareServiceState();
+  const services = [
+    ...(decisionDeskState
+      ? [
+        {
+          id: "decision-desk",
+          title: "Decision Desk",
+          category: decisionDeskState.category,
+          status: statusLabel(decisionDeskState.status),
+          description: `${decisionDeskState.reference}: ${decisionDeskState.title}. This is a Phase 1 mock submission with no real advisor assigned.`,
+          lastUpdated: "Just now",
+          nextAction: "View mock status timeline",
+          buttonLabel: "Open Decision Desk",
+          icon: Zap,
+        },
+      ]
+      : []),
+    ...(docuShareState
+      ? [
+          {
+            id: "docushare-brief",
+            title: "DocuShare",
+            category: docuShareState.documentGroup,
+            status: statusLabel(docuShareState.status),
+            description: `${docuShareState.reference}: ${docuShareState.documentType} brief for ${docuShareState.businessName}. No real document is being produced.`,
+            lastUpdated: "Just now",
+            nextAction: "View simulated document status",
+            buttonLabel: "Open documents",
+            icon: FileText,
+          },
+        ]
+      : []),
+    ...SERVICES.filter(
+      (service) =>
+        (!decisionDeskState || service.id !== "decision-desk") &&
+        (!docuShareState || service.id !== "docushare-brief")
+    ),
+  ];
 
   const filtered =
     activeFilter === "All"
-      ? SERVICES
-      : SERVICES.filter((s) => s.status === activeFilter);
+      ? services
+      : services.filter((s) => s.status === activeFilter);
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
@@ -136,6 +219,25 @@ export function PortalServices() {
         </Link>
       </div>
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
+        {[
+          { label: "Start Decision Desk", href: "/on-demand/decision-desk" },
+          { label: "Start DocuShare", href: "/document-nucleus/brief" },
+          { label: "Order Connectivity", href: "/operations/connectivity" },
+          { label: "Run Risk Advisor", href: "/on-demand/risk-advisor" },
+          { label: "Request The Fixer", href: "/on-demand/the-fixer" },
+        ].map((cta) => (
+          <Link
+            key={cta.href}
+            to={cta.href}
+            className="inline-flex items-center justify-between gap-2 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-xs font-bold text-slate-700 hover:bg-slate-50"
+          >
+            {cta.label}
+            <ArrowRight className="w-3.5 h-3.5 text-blue-700" />
+          </Link>
+        ))}
+      </div>
+
       {/* ── Status summary ── */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {SUMMARY_COUNTS.map((s) => (
@@ -147,7 +249,7 @@ export function PortalServices() {
             }`}
           >
             <div className="text-2xl font-extrabold mb-0.5">
-              {SERVICES.filter((sv) => sv.status === s.key).length}
+              {services.filter((sv) => sv.status === s.key).length}
             </div>
             <div className="text-xs font-semibold">{s.label}</div>
           </button>
@@ -169,7 +271,7 @@ export function PortalServices() {
             {tab}
             {tab !== "All" && (
               <span className={`ml-1.5 text-[10px] ${activeFilter === tab ? "text-blue-200" : "text-slate-400"}`}>
-                {SERVICES.filter((s) => s.status === tab).length}
+                {services.filter((s) => s.status === tab).length}
               </span>
             )}
           </button>

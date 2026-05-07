@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { categoryMeta, allDocuments } from "../data/documentData";
+import { mockDocuShareDocumentGroups, mockDocumentProducts } from "../mock";
 import {
   Search,
   SlidersHorizontal,
@@ -29,10 +30,62 @@ const allTypes = ["All Types", "Planning", "Marketing", "Legal", "Operations", "
 const allComplexities = ["All Levels", "Simple", "Standard", "Complex"];
 const sortOptions = ["Featured", "A–Z", "Z–A", "Quickest Delivery", "Complexity: Low–High"];
 
+type CategoryDocumentCard = {
+  id: string;
+  name: string;
+  type: string;
+  format: string;
+  deliveryTime: string;
+  complexity: string;
+  popular: boolean;
+  description: string;
+  tags: string[];
+  category: string;
+};
+
+function mockProductToDocument(product: (typeof mockDocumentProducts)[number]): CategoryDocumentCard {
+  return {
+    id: product.id,
+    name: product.title,
+    type: product.category === "documentation-suites" ? "Suite" : "Template",
+    format: "Mock brief",
+    deliveryTime: "Simulated",
+    complexity: product.category === "documentation-suites" ? "Complex" : "Standard",
+    popular: product.id === "template-policy-001" || product.id === "suite-operations-001",
+    description: product.description,
+    tags: [product.category, "Mock DocuShare"],
+    category: product.category,
+  };
+}
+
 export function DocumentCategoryPage() {
   const { id = "a" } = useParams<{ id: string }>();
-  const meta = categoryMeta[id.toLowerCase()] ?? categoryMeta["a"];
-  const docs = allDocuments[id.toLowerCase()] ?? [];
+  const categoryId = id.toLowerCase();
+  const legacyMeta = categoryMeta[categoryId];
+  const mockGroup = mockDocuShareDocumentGroups.find((group) => group.id === categoryId);
+  const meta = legacyMeta
+    ? {
+        ...legacyMeta,
+        description: legacyMeta.desc,
+      }
+    : mockGroup
+      ? {
+          id: mockGroup.title.slice(0, 1),
+          title: mockGroup.title,
+          desc: mockGroup.description,
+          description: mockGroup.description,
+          color: mockGroup.color,
+          lightBg: mockGroup.lightBg,
+          accent: mockGroup.accent,
+          tag: mockGroup.tag,
+          tagColor: mockGroup.tagColor,
+        }
+      : null;
+  const docs: CategoryDocumentCard[] = legacyMeta
+    ? allDocuments[categoryId] ?? []
+    : mockDocumentProducts
+        .filter((product) => product.category === categoryId)
+        .map(mockProductToDocument);
 
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("All Types");
@@ -84,6 +137,30 @@ export function DocumentCategoryPage() {
     Complex: "bg-red-100 text-red-700",
   };
 
+  if (!meta) {
+    return (
+      <div className="bg-white min-h-screen">
+        <Navbar />
+        <div className="max-w-7xl mx-auto px-4 py-32 text-center">
+          <FileText className="w-16 h-16 text-slate-200 mx-auto mb-6" />
+          <h1 className="text-2xl font-extrabold text-slate-900 mb-3">Document category not found</h1>
+          <p className="text-slate-500 mb-8">
+            This mock category is not available. Choose a Document Nucleus group or start a new brief.
+          </p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link to="/document-nucleus/overview" className="inline-flex items-center gap-2 bg-blue-700 text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-800 transition-all">
+              View document options <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link to="/document-nucleus/brief" className="inline-flex items-center gap-2 border border-slate-200 text-slate-700 font-bold px-6 py-3 rounded-xl hover:bg-slate-50 transition-all">
+              Start a document brief
+            </Link>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -109,7 +186,7 @@ export function DocumentCategoryPage() {
                 <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${meta.tagColor}`}>{meta.tag}</span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">{meta.title}</h1>
-              <p className="text-white/70 max-w-xl leading-relaxed text-sm">{meta.desc}</p>
+              <p className="text-white/70 max-w-xl leading-relaxed text-sm">{meta.description}</p>
             </div>
             <div className="flex gap-3 flex-wrap">
               <Link
@@ -119,10 +196,10 @@ export function DocumentCategoryPage() {
                 ← All Categories
               </Link>
               <Link
-                to="/contact"
+                to={`/document-nucleus/brief?category=${categoryId}`}
                 className="inline-flex items-center gap-2 bg-white text-slate-900 font-bold text-sm px-5 py-2.5 rounded-xl transition-all hover:bg-white/90"
               >
-                Request a Document
+                Start a document brief
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -338,7 +415,7 @@ export function DocumentCategoryPage() {
                     to={`/document-nucleus/product/${doc.id}`}
                     className={`inline-flex items-center justify-center gap-2 w-full text-sm font-bold py-2.5 px-4 rounded-xl transition-all ${meta.color} text-white hover:opacity-90`}
                   >
-                    Learn More & Buy
+                    View document options
                     <ArrowRight className="w-3.5 h-3.5" />
                   </Link>
                 </div>
@@ -378,7 +455,7 @@ export function DocumentCategoryPage() {
                     <Clock className="w-3.5 h-3.5" /> {doc.deliveryTime}
                   </span>
                   <Link
-                    to="/contact"
+                    to={`/document-nucleus/brief?category=${categoryId}&product=${doc.id}`}
                     className={`inline-flex items-center gap-2 text-sm font-bold py-2 px-4 rounded-xl transition-all ${meta.color} text-white hover:opacity-90 whitespace-nowrap`}
                   >
                     Request <ArrowRight className="w-3.5 h-3.5" />
@@ -400,10 +477,10 @@ export function DocumentCategoryPage() {
               <p className="text-slate-500 text-sm">Get in touch and we'll scope a custom document to your exact requirements.</p>
             </div>
             <Link
-              to="/contact"
+              to={`/document-nucleus/brief?category=${categoryId}`}
               className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-7 py-3.5 rounded-xl transition-all shadow-lg shadow-blue-200 whitespace-nowrap"
             >
-              Custom Document Request
+              Create a mock DocuShare brief
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

@@ -93,10 +93,21 @@ export function PageHero({
             {(ctaPrimary || ctaSecondary) && (
               <div className="flex flex-col sm:flex-row gap-3">
                 {ctaPrimary && (
-                  null
+                  <Link
+                    to={ctaPrimary.href}
+                    className="inline-flex items-center justify-center gap-2 bg-blue-700 hover:bg-blue-800 text-white px-7 py-3.5 rounded-xl font-bold transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-100"
+                  >
+                    {ctaPrimary.label}
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
                 )}
                 {ctaSecondary && (
-                  null
+                  <Link
+                    to={ctaSecondary.href}
+                    className="inline-flex items-center justify-center gap-2 border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 bg-white px-7 py-3.5 rounded-xl font-bold transition-all hover:bg-slate-50"
+                  >
+                    {ctaSecondary.label}
+                  </Link>
                 )}
               </div>
             )}
