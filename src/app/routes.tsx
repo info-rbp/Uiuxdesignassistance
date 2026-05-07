@@ -1,66 +1,70 @@
 import { createBrowserRouter, Outlet } from "react-router";
 
-// Existing pages
+import { ScrollToHash } from "./components/ScrollToHash";
+
+// ── Core public pages ─────────────────────────────────────────────────────────
+
 import { HomePage } from "./pages/HomePage";
 import { AboutPage } from "./pages/AboutPage";
 import { ContactPage } from "./pages/ContactPage";
-import { ResourcesPage } from "./pages/ResourcesPage";
-import { OffersPage } from "./pages/OffersPage";
-import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
-import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
-import { DocumentProductPage } from "./pages/DocumentProductPage";
-import { BusinessAdvisorPage } from "./pages/BusinessAdvisorPage";
-import { ServicesPage } from "./pages/ServicesPage";
-import { DocuSharePage } from "./pages/DocuSharePage";
-
-// New hub pages
-import { OnDemandPage } from "./pages/OnDemandPage";
-import { ManagedServicesPage } from "./pages/ManagedServicesPage";
-import { BusinessApplicationsPage } from "./pages/BusinessApplicationsPage";
-import { MarketplacePage } from "./pages/MarketplacePage";
-import { OperationsCenterPage } from "./pages/OperationsCenterPage";
 import { HelpCenterPage } from "./pages/HelpCenterPage";
-
-// On-Demand sub-pages
-import { DecisionDeskPage } from "./pages/on-demand/DecisionDeskPage";
-import { TheFixerPage }     from "./pages/on-demand/TheFixerPage";
-
-// Managed Services sub-pages
-import { BidManagementPage } from "./pages/managed-services/BidManagementPage";
-import { RealEstatePage } from "./pages/managed-services/RealEstatePage";
-import { HRServicesPage } from "./pages/managed-services/HRServicesPage";
-
-// Operations sub-pages
-import { BusinessLendingPage } from "./pages/finance/BusinessLendingPage";
-import { BusinessInsurancePage } from "./pages/finance/BusinessInsurancePage";
-import { FinancialPlanningPage } from "./pages/finance/FinancialPlanningPage";
-import { CreditFundingPage } from "./pages/finance/CreditFundingPage";
-import { FinancePage } from "./pages/FinancePage";
-import { FinanceCalculatorsPage } from "./pages/operations/FinanceCalculatorsPage";
-import { SuperloopPage } from "./pages/operations/SuperloopPage";
-
-// ApplicationsPage (old)
-import { ApplicationsPage } from "./pages/ApplicationsPage";
 import { SignInPage } from "./pages/SignInPage";
 import { DashboardPage } from "./pages/DashboardPage";
+import { NotFoundPage } from "./pages/NotFoundPage";
+
+// ── About pages ───────────────────────────────────────────────────────────────
 
 import { WhatWeDoPage } from "./pages/about/WhatWeDoPage";
 import { OurProcessPage } from "./pages/about/OurProcessPage";
 import { WorkWithUsPage } from "./pages/about/WorkWithUsPage";
+
+// ── On-Demand pages ───────────────────────────────────────────────────────────
+
+import { OnDemandPage } from "./pages/OnDemandPage";
+import { BusinessAdvisorPage } from "./pages/BusinessAdvisorPage";
+import { ServicesPage } from "./pages/ServicesPage";
+import { DocuSharePage } from "./pages/DocuSharePage";
+import { DecisionDeskPage } from "./pages/on-demand/DecisionDeskPage";
+import { TheFixerPage } from "./pages/on-demand/TheFixerPage";
 import { RiskAdvisorPage } from "./pages/on-demand/RiskAdvisorPage";
+
+// ── Document Nucleus pages ────────────────────────────────────────────────────
+
+import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
+import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
+import { DocumentProductPage } from "./pages/DocumentProductPage";
+
+// ── Managed Services pages ────────────────────────────────────────────────────
+
+import { ManagedServicesPage } from "./pages/ManagedServicesPage";
+import { BidManagementPage } from "./pages/managed-services/BidManagementPage";
+import { RealEstatePage } from "./pages/managed-services/RealEstatePage";
+import { HRServicesPage } from "./pages/managed-services/HRServicesPage";
+
+// ── Applications pages ────────────────────────────────────────────────────────
+
+import { ApplicationsPage } from "./pages/ApplicationsPage";
+import { BusinessApplicationsPage } from "./pages/BusinessApplicationsPage";
+
+// ── Operations pages ──────────────────────────────────────────────────────────
+
+import { OperationsCenterPage } from "./pages/OperationsCenterPage";
+import { FinancePage } from "./pages/FinancePage";
+import { BusinessLendingPage } from "./pages/finance/BusinessLendingPage";
+import { BusinessInsurancePage } from "./pages/finance/BusinessInsurancePage";
+import { FinancialPlanningPage } from "./pages/finance/FinancialPlanningPage";
+import { CreditFundingPage } from "./pages/finance/CreditFundingPage";
+import { FinanceCalculatorsPage } from "./pages/operations/FinanceCalculatorsPage";
 import { ConnectivityPage } from "./pages/operations/ConnectivityPage";
 import { NbnPhonePage } from "./pages/operations/NbnPhonePage";
+import { SuperloopPage } from "./pages/operations/SuperloopPage";
 import { OperationsComingSoonPage } from "./pages/operations/OperationsComingSoonPage";
-import { LegalIndexPage } from "./pages/legal/LegalIndexPage";
-import { PrivacyPolicyPage } from "./pages/legal/PrivacyPolicyPage";
-import { TermsOfUsePage } from "./pages/legal/TermsOfUsePage";
-import { TermsOfEngagementPage } from "./pages/legal/TermsOfEngagementPage";
-import { PaymentPolicyPage } from "./pages/legal/PaymentPolicyPage";
-import { ServicesPolicyPage } from "./pages/legal/ServicesPolicyPage";
-import { ThankYouPage } from "./pages/confirmation/ThankYouPage";
-import { ContactSuccessPage } from "./pages/confirmation/ContactSuccessPage";
-import { BookingConfirmationPage } from "./pages/confirmation/BookingConfirmationPage";
-import { MembershipConfirmationPage } from "./pages/confirmation/MembershipConfirmationPage";
+
+// ── Marketplace pages ─────────────────────────────────────────────────────────
+
+import { MarketplacePage } from "./pages/MarketplacePage";
+
+// ── Membership pages ──────────────────────────────────────────────────────────
 
 import { MembershipOverviewPage } from "./pages/membership/MembershipOverviewPage";
 import { RemoteBusinessPartnerMembershipPage } from "./pages/membership/RemoteBusinessPartnerMembershipPage";
@@ -70,124 +74,99 @@ import { MembershipUsagePage } from "./pages/membership/MembershipUsagePage";
 import { MembershipPaymentTermsPage } from "./pages/membership/MembershipPaymentTermsPage";
 import { MembershipSignUpPage } from "./pages/membership/MembershipSignUpPage";
 import { MembershipFaqPage } from "./pages/membership/MembershipFaqPage";
+import { MembershipConfirmationPage } from "./pages/confirmation/MembershipConfirmationPage";
 
-// ── Member Portal ──
-import { PortalLayout }          from "./pages/portal/PortalLayout";
-import { PortalDashboard }       from "./pages/portal/PortalDashboard";
-import { PortalServices }        from "./pages/portal/PortalServices";
-import { PortalServiceRequest }  from "./pages/portal/PortalServiceRequest";
-import { PortalServiceDetail }   from "./pages/portal/PortalServiceDetail";
-import { PortalSessions }        from "./pages/portal/PortalSessions";
-import { PortalDocuments }       from "./pages/portal/PortalDocuments";
-import { PortalOffers }          from "./pages/portal/PortalOffers";
-import { PortalApps }            from "./pages/portal/PortalApps";
-import { PortalResources }       from "./pages/portal/PortalResources";
-import { PortalSupport }         from "./pages/portal/PortalSupport";
-import { PortalSettings }        from "./pages/portal/PortalSettings";
+// ── Offers and Resources pages ────────────────────────────────────────────────
 
-// ── Admin ──
-// admin/signin sits outside the AdminLayout (no sidebar)
-// admin/* routes are wrapped by the pathless AdminLayout
+import { OffersPage } from "./pages/OffersPage";
+import { ResourcesPage } from "./pages/ResourcesPage";
+
+// ── Legal pages ───────────────────────────────────────────────────────────────
+
+import { LegalIndexPage } from "./pages/legal/LegalIndexPage";
+import { PrivacyPolicyPage } from "./pages/legal/PrivacyPolicyPage";
+import { TermsOfUsePage } from "./pages/legal/TermsOfUsePage";
+import { TermsOfEngagementPage } from "./pages/legal/TermsOfEngagementPage";
+import { PaymentPolicyPage } from "./pages/legal/PaymentPolicyPage";
+import { ServicesPolicyPage } from "./pages/legal/ServicesPolicyPage";
+
+// ── Confirmation pages ────────────────────────────────────────────────────────
+
+import { ThankYouPage } from "./pages/confirmation/ThankYouPage";
+import { ContactSuccessPage } from "./pages/confirmation/ContactSuccessPage";
+import { BookingConfirmationPage } from "./pages/confirmation/BookingConfirmationPage";
+
+// ── Member Portal ─────────────────────────────────────────────────────────────
+
+import { PortalLayout } from "./pages/portal/PortalLayout";
+import { PortalDashboard } from "./pages/portal/PortalDashboard";
+import { PortalServices } from "./pages/portal/PortalServices";
+import { PortalServiceRequest } from "./pages/portal/PortalServiceRequest";
+import { PortalServiceDetail } from "./pages/portal/PortalServiceDetail";
+import { PortalSessions } from "./pages/portal/PortalSessions";
+import { PortalDocuments } from "./pages/portal/PortalDocuments";
+import { PortalOffers } from "./pages/portal/PortalOffers";
+import { PortalApps } from "./pages/portal/PortalApps";
+import { PortalResources } from "./pages/portal/PortalResources";
+import { PortalSupport } from "./pages/portal/PortalSupport";
+import { PortalSettings } from "./pages/portal/PortalSettings";
+
+// ── Admin Portal ──────────────────────────────────────────────────────────────
+
 import { AdminSignInPage } from "./pages/admin/AdminSignInPage";
-import { AdminLayout }     from "./pages/admin/AdminLayout";
-import { AdminDashboard }  from "./pages/admin/AdminDashboard";
-import { NotFoundPage } from "./pages/NotFoundPage";
-import { ScrollToHash } from "./components/ScrollToHash";
+import { AdminLayout } from "./pages/admin/AdminLayout";
+import { AdminDashboard } from "./pages/admin/AdminDashboard";
 
-function Root() { return <>
-  <ScrollToHash />
-  <Outlet />
-</>; }
-function Layout() { return <Outlet />; }
+function Root() {
+  return (
+    <>
+      <ScrollToHash />
+      <Outlet />
+    </>
+  );
+}
+
+function Layout() {
+  return <Outlet />;
+}
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: Root,
     children: [
+      // ── Public core ─────────────────────────────────────────────────────────
+
       { index: true, Component: HomePage },
       { path: "about", Component: AboutPage },
       { path: "contact", Component: ContactPage },
-      { path: "help", Component: HelpCenterPage },
-      { path: "about/what-we-do", Component: WhatWeDoPage },
-      { path: "about/process", Component: OurProcessPage },
-      { path: "about/our-process", Component: OurProcessPage },
-      { path: "about/work-with-us", Component: WorkWithUsPage },
-      { path: "legal", Component: LegalIndexPage },
-      { path: "legal/privacy-policy", Component: PrivacyPolicyPage },
-      { path: "legal/terms-of-use", Component: TermsOfUsePage },
-      { path: "legal/terms-of-engagement", Component: TermsOfEngagementPage },
-      { path: "legal/payment-policy", Component: PaymentPolicyPage },
-      { path: "legal/services-policy", Component: ServicesPolicyPage },
-      { path: "thank-you", Component: ThankYouPage },
       { path: "contact/success", Component: ContactSuccessPage },
-      { path: "booking-confirmation", Component: BookingConfirmationPage },
-      { path: "confirmation/thank-you", Component: ThankYouPage },
-      { path: "confirmation/contact-success", Component: ContactSuccessPage },
-      { path: "confirmation/booking-confirmation", Component: BookingConfirmationPage },
-      { path: "confirmation/membership-confirmation", Component: MembershipConfirmationPage },
-
-      // ── Top-level legacy / direct routes ──
-      { path: "services", Component: ServicesPage },
-      { path: "business-advisor", Component: BusinessAdvisorPage },
-      { path: "docushare", Component: DocuSharePage },
-      { path: "document-nucleus/overview", Component: DocumentOverviewPage },
-      { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
-      { path: "document-nucleus/product/:id", Component: DocumentProductPage },
-      { path: "applications-legacy", Component: ApplicationsPage },
+      { path: "help", Component: HelpCenterPage },
       { path: "sign-in", Component: SignInPage },
       { path: "dashboard", Component: DashboardPage },
 
-      {
-        path: "portal",
-        Component: PortalLayout,
-        children: [
-          { path: "dashboard",  Component: PortalDashboard },
-          {
-            path: "services",
-            Component: Layout,
-            children: [
-              { index: true,          Component: PortalServices },
-              { path: "request",      Component: PortalServiceRequest },
-              { path: ":id",          Component: PortalServiceDetail },
-            ],
-          },
-          { path: "sessions",   Component: PortalSessions },
-          { path: "documents",  Component: PortalDocuments },
-          { path: "offers",     Component: PortalOffers },
-          { path: "apps",       Component: PortalApps },
-          { path: "resources",  Component: PortalResources },
-          { path: "support",    Component: PortalSupport },
-          { path: "settings",   Component: PortalSettings },
-        ],
-      },
+      // ── About ───────────────────────────────────────────────────────────────
 
-      // ── Admin ──
-      // admin/signin sits outside the AdminLayout (no sidebar)
-      // admin/* routes are wrapped by the pathless AdminLayout
-      {
-        path: "admin",
-        children: [
-          { path: "signin", Component: AdminSignInPage },
-          {
-            Component: AdminLayout,
-            children: [
-              { path: "dashboard",    Component: AdminDashboard },
-              { path: "members",      Component: AdminDashboard },
-              { path: "services",     Component: AdminDashboard },
-              { path: "applications", Component: AdminDashboard },
-              { path: "sessions",     Component: AdminDashboard },
-              { path: "documents",    Component: AdminDashboard },
-              { path: "offers",       Component: AdminDashboard },
-              { path: "the-fixer",    Component: AdminDashboard },
-              { path: "settings",     Component: AdminDashboard },
-              { path: "*",            Component: AdminDashboard },
-            ],
-          },
-        ],
-      },
+      { path: "about/what-we-do", Component: WhatWeDoPage },
+      { path: "about/our-process", Component: OurProcessPage },
+      { path: "about/process", Component: OurProcessPage },
+      { path: "about/work-with-us", Component: WorkWithUsPage },
 
-      // ── On-Demand Services ──
+      // ── Legacy / direct public routes ──────────────────────────────────────
+
+      { path: "services", Component: ServicesPage },
+      { path: "business-advisor", Component: BusinessAdvisorPage },
+      { path: "docushare", Component: DocuSharePage },
+      { path: "applications-legacy", Component: ApplicationsPage },
+
+      // ── Document Nucleus ───────────────────────────────────────────────────
+
+      { path: "document-nucleus/overview", Component: DocumentOverviewPage },
+      { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
+      { path: "document-nucleus/product/:id", Component: DocumentProductPage },
+
+      // ── On-Demand Services ─────────────────────────────────────────────────
+
       {
         path: "on-demand",
         Component: Layout,
@@ -202,7 +181,8 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // ── Managed Services ──
+      // ── Managed Services ───────────────────────────────────────────────────
+
       {
         path: "managed-services",
         Component: Layout,
@@ -214,46 +194,18 @@ export const router = createBrowserRouter([
         ],
       },
 
-      // ── Business Applications ──
+      // ── Applications ───────────────────────────────────────────────────────
+
       { path: "applications", Component: BusinessApplicationsPage },
 
-      // ── Business Marketplace ──
-      {
-        path: "marketplace",
-        Component: Layout,
-        children: [
-          { index: true, Component: MarketplacePage },
-          { path: "product/:id", Component: MarketplacePage },
-        ],
-      },
+      // ── Operations ─────────────────────────────────────────────────────────
 
-      // ── Membership ──
-      {
-        path: "membership",
-        Component: Layout,
-        children: [
-          { index: true, Component: MembershipOverviewPage },
-          { path: "overview", Component: MembershipOverviewPage },
-          { path: "remote-business-partner-membership", Component: RemoteBusinessPartnerMembershipPage },
-          { path: "inclusions", Component: MembershipInclusionsPage },
-          { path: "pricing", Component: MembershipPricingPage },
-          { path: "usage", Component: MembershipUsagePage },
-          { path: "payment-terms", Component: MembershipPaymentTermsPage },
-          { path: "sign-up-now", Component: MembershipSignUpPage },
-          { path: "frequently-asked-questions", Component: MembershipFaqPage },
-          { path: "confirmation", Component: MembershipConfirmationPage },
-        ],
-      },
-
-      // ── Resources ──
-      { path: "resources", Component: ResourcesPage },
-
-      // ── Operations Center ──
       {
         path: "operations",
         Component: Layout,
         children: [
           { index: true, Component: OperationsCenterPage },
+
           {
             path: "finance",
             Component: Layout,
@@ -265,23 +217,24 @@ export const router = createBrowserRouter([
               { path: "credit-and-funding", Component: CreditFundingPage },
             ],
           },
+
           { path: "insurance", Component: BusinessInsurancePage },
           { path: "calculators", Component: FinanceCalculatorsPage },
+
+          // Compatibility route retained for existing links.
           { path: "superloop", Component: SuperloopPage },
+
+          // Preferred connectivity routes.
+          { path: "connectivity", Component: ConnectivityPage },
           { path: "connectivity/superloop", Component: SuperloopPage },
-          { path: "connectivity", Component: ConnectivityPage },
-          { path: "nbn-phone", Component: NbnPhonePage },
           { path: "connectivity/nbn-phone", Component: NbnPhonePage },
-          { path: "connectivity", Component: ConnectivityPage },
-          { path: "nbn-phone", Component: NbnPhonePage },
+
           { path: "coming-soon", Component: OperationsComingSoonPage },
         ],
       },
 
-      // ── Business Offers ──
-      { path: "offers", Component: OffersPage },
+      // ── Legacy finance routes ──────────────────────────────────────────────
 
-      // ── Legacy finance routes ──
       {
         path: "finance",
         Component: Layout,
@@ -293,6 +246,125 @@ export const router = createBrowserRouter([
           { path: "credit-and-funding", Component: CreditFundingPage },
         ],
       },
+
+      // ── Marketplace ────────────────────────────────────────────────────────
+
+      {
+        path: "marketplace",
+        Component: Layout,
+        children: [
+          { index: true, Component: MarketplacePage },
+          { path: "product/:id", Component: MarketplacePage },
+        ],
+      },
+
+      // ── Membership ─────────────────────────────────────────────────────────
+
+      {
+        path: "membership",
+        Component: Layout,
+        children: [
+          { index: true, Component: MembershipOverviewPage },
+          { path: "overview", Component: MembershipOverviewPage },
+          {
+            path: "remote-business-partner-membership",
+            Component: RemoteBusinessPartnerMembershipPage,
+          },
+          { path: "inclusions", Component: MembershipInclusionsPage },
+          { path: "pricing", Component: MembershipPricingPage },
+          { path: "usage", Component: MembershipUsagePage },
+          { path: "payment-terms", Component: MembershipPaymentTermsPage },
+          { path: "sign-up-now", Component: MembershipSignUpPage },
+          { path: "frequently-asked-questions", Component: MembershipFaqPage },
+          { path: "confirmation", Component: MembershipConfirmationPage },
+        ],
+      },
+
+      // ── Offers and Resources ───────────────────────────────────────────────
+
+      { path: "offers", Component: OffersPage },
+      { path: "resources", Component: ResourcesPage },
+
+      // ── Legal ──────────────────────────────────────────────────────────────
+
+      {
+        path: "legal",
+        Component: Layout,
+        children: [
+          { index: true, Component: LegalIndexPage },
+          { path: "privacy-policy", Component: PrivacyPolicyPage },
+          { path: "terms-of-use", Component: TermsOfUsePage },
+          { path: "terms-of-engagement", Component: TermsOfEngagementPage },
+          { path: "payment-policy", Component: PaymentPolicyPage },
+          { path: "services-policy", Component: ServicesPolicyPage },
+        ],
+      },
+
+      // ── Confirmation / success pages ───────────────────────────────────────
+
+      { path: "thank-you", Component: ThankYouPage },
+      { path: "booking-confirmation", Component: BookingConfirmationPage },
+
+      // Optional compatibility confirmation routes.
+      { path: "confirmation/thank-you", Component: ThankYouPage },
+      { path: "confirmation/contact-success", Component: ContactSuccessPage },
+      { path: "confirmation/booking-confirmation", Component: BookingConfirmationPage },
+      {
+        path: "confirmation/membership-confirmation",
+        Component: MembershipConfirmationPage,
+      },
+
+      // ── Member Portal ──────────────────────────────────────────────────────
+
+      {
+        path: "portal",
+        Component: PortalLayout,
+        children: [
+          { path: "dashboard", Component: PortalDashboard },
+          {
+            path: "services",
+            Component: Layout,
+            children: [
+              { index: true, Component: PortalServices },
+              { path: "request", Component: PortalServiceRequest },
+              { path: ":id", Component: PortalServiceDetail },
+            ],
+          },
+          { path: "sessions", Component: PortalSessions },
+          { path: "documents", Component: PortalDocuments },
+          { path: "offers", Component: PortalOffers },
+          { path: "apps", Component: PortalApps },
+          { path: "resources", Component: PortalResources },
+          { path: "support", Component: PortalSupport },
+          { path: "settings", Component: PortalSettings },
+        ],
+      },
+
+      // ── Admin Portal ───────────────────────────────────────────────────────
+
+      {
+        path: "admin",
+        children: [
+          { path: "signin", Component: AdminSignInPage },
+          {
+            Component: AdminLayout,
+            children: [
+              { path: "dashboard", Component: AdminDashboard },
+              { path: "members", Component: AdminDashboard },
+              { path: "services", Component: AdminDashboard },
+              { path: "applications", Component: AdminDashboard },
+              { path: "sessions", Component: AdminDashboard },
+              { path: "documents", Component: AdminDashboard },
+              { path: "offers", Component: AdminDashboard },
+              { path: "the-fixer", Component: AdminDashboard },
+              { path: "settings", Component: AdminDashboard },
+              { path: "*", Component: AdminDashboard },
+            ],
+          },
+        ],
+      },
+
+      // ── Public fallback ────────────────────────────────────────────────────
 
       { path: "*", Component: NotFoundPage },
     ],
