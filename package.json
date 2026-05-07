@@ -14,7 +14,8 @@
     "audit:admin-record-form-scaffold": "node scripts/audit-admin-record-form-scaffold.mjs",
     "audit:admin-local-mock-crud": "node scripts/audit-admin-local-mock-crud.mjs",
     "audit:admin-local-crud-foundation": "node scripts/audit-admin-local-crud-foundation.mjs",
-    "audit:admin-applications-services-mock-crud": "node scripts/audit-admin-applications-services-mock-crud.mjs"
+    "audit:admin-applications-services-mock-crud": "node scripts/audit-admin-applications-services-mock-crud.mjs",
+    "audit:admin-offers-mock-crud": "node scripts/audit-admin-offers-mock-crud.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

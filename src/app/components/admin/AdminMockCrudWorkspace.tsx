@@ -18,6 +18,13 @@ import {
 } from "../../data/helpCenter";
 
 import {
+  offerCategoryFilters,
+  publicOffers,
+  type OfferCategory,
+  type PublicOffer,
+} from "../../data/offers";
+
+import {
   applicationCategories,
   type ApplicationCategory,
 } from "../../data/applications";
@@ -49,6 +56,11 @@ type ResourceDraft = Pick<
 type HelpDraft = Pick<
   HelpArticle,
   "question" | "answer" | "section" | "category" | "status"
+>;
+
+type OfferDraft = Pick<
+  PublicOffer,
+  "title" | "partner" | "summary" | "category" | "offerType" | "href" | "status"
 >;
 
 type ApplicationDraft = Pick<
@@ -99,6 +111,18 @@ function createHelpDraft(): HelpDraft {
     answer: "",
     section: "faqs",
     category: "other",
+    status: "ready",
+  };
+}
+
+function createOfferDraft(): OfferDraft {
+  return {
+    title: "",
+    partner: "",
+    summary: "",
+    category: "operations",
+    offerType: "standard",
+    href: "/offers",
     status: "ready",
   };
 }
@@ -528,6 +552,218 @@ function HelpCenterMockCrud() {
   );
 }
 
+function OfferMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<PublicOffer, OfferDraft>({
+    initialRecords: publicOffers,
+    createDraft: createOfferDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      partner: record.partner,
+      summary: record.summary,
+      category: record.category,
+      offerType: record.offerType,
+      href: record.href,
+      status: record.status,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `offer-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || "/offers",
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(
+        currentDraft.title.trim() &&
+          currentDraft.partner.trim() &&
+          currentDraft.summary.trim()
+      ),
+  });
+
+  const columns: AdminTableColumn<PublicOffer>[] = [
+    {
+      key: "title",
+      header: "Offer",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "partner",
+      header: "Partner",
+      render: (row) => <span className="text-slate-600">{row.partner}</span>,
+    },
+    {
+      key: "category",
+      header: "Category",
+      render: (row) => <AdminStatusBadge label={row.category} status="ready" />,
+    },
+    {
+      key: "offerType",
+      header: "Type",
+      render: (row) => <AdminStatusBadge label={row.offerType} status={row.offerType} />,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit offer"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete offer"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Offer Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete offer records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Offer" : "Create Offer"}
+        description="Local mock form for partner offers, categories, and offer visibility. Redemption tracking and commercial approval come later."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Offer"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Offer Title"
+          />
+        </Field>
+
+        <Field label="Partner">
+          <input
+            className={inputClass}
+            value={draft.partner}
+            onChange={(event) => updateDraft({ partner: event.target.value })}
+            placeholder="Example Partner"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short offer summary"
+            rows={4}
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Category">
+            <select
+              className={inputClass}
+              value={draft.category}
+              onChange={(event) => updateDraft({ category: event.target.value as OfferCategory })}
+            >
+              {offerCategoryFilters.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.label}
+                </option>
+              ))}
+            </select>
+          </Field>
+
+          <Field label="Offer Type">
+            <select
+              className={inputClass}
+              value={draft.offerType}
+              onChange={(event) =>
+                updateDraft({ offerType: event.target.value as OfferDraft["offerType"] })
+              }
+            >
+              <option value="exclusive">Exclusive</option>
+              <option value="top">Top</option>
+              <option value="standard">Standard</option>
+            </select>
+          </Field>
+        </div>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/offers"
+          />
+        </Field>
+
+        <Field label="Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as ContentStatus })}
+          >
+            <option value="ready">Ready</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="content-required">Content Required</option>
+            <option value="backend-later">Backend Later</option>
+          </select>
+        </Field>
+      </AdminFormShell>
+    </section>
+  );
+}
+
 function ApplicationMockCrud() {
   const {
     records,
@@ -892,6 +1128,10 @@ export function AdminMockCrudWorkspace() {
     return <ResourceMockCrud />;
   }
 
+  if (location.pathname.startsWith("/admin/offers")) {
+    return <OfferMockCrud />;
+  }
+
   if (location.pathname.startsWith("/admin/help-center")) {
     return <HelpCenterMockCrud />;
   }
@@ -916,7 +1156,7 @@ export function AdminMockCrudWorkspace() {
       <AdminEmptyState
         icon={HelpCircle}
         title="Mock CRUD not enabled for this section"
-        description="Resources, Help Center, Applications, and Services are enabled first because they are lower-risk content areas. Commercial, membership, marketplace, and legal workflows come later, because chaos deserves a queue."
+        description="Resources, Help Center, Applications, Operations, Services, and Offers are enabled first. Marketplace, membership, and legal workflows come later, because chaos deserves a queue."
       />
     </AdminFormShell>
   );
