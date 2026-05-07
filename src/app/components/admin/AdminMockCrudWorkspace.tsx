@@ -32,6 +32,11 @@ import {
   type ManagedService,
 } from "../../data/managedServices";
 
+import {
+  operationAreas,
+  type OperationArea,
+} from "../../data/operations";
+
 import { useAdminLocalCrud } from "../../hooks/useAdminLocalCrud";
 
 import { AdminEmptyState } from "./AdminEmptyState";
@@ -53,6 +58,11 @@ type HelpDraft = Pick<
 
 type ApplicationDraft = Pick<
   ApplicationCategory,
+  "title" | "summary" | "href" | "status"
+>;
+
+type OperationDraft = Pick<
+  OperationArea,
   "title" | "summary" | "href" | "status"
 >;
 
@@ -108,6 +118,15 @@ function createApplicationDraft(): ApplicationDraft {
     title: "",
     summary: "",
     href: "/applications",
+    status: "ready",
+  };
+}
+
+function createOperationDraft(): OperationDraft {
+  return {
+    title: "",
+    summary: "",
+    href: "/operations",
     status: "ready",
   };
 }
@@ -684,6 +703,162 @@ function ApplicationMockCrud() {
   );
 }
 
+function OperationMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<OperationArea, OperationDraft>({
+    initialRecords: operationAreas,
+    createDraft: createOperationDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      summary: record.summary,
+      href: record.href,
+      status: record.status,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `operation-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || `/operations/${slugify(currentDraft.title)}`,
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+  });
+
+  const columns: AdminTableColumn<OperationArea>[] = [
+    {
+      key: "title",
+      header: "Operation Area",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "href",
+      header: "Public Link",
+      render: (row) => <span className="text-slate-600">{row.href}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit operation"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete operation"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Operation Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete operations records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Operation" : "Create Operation"}
+        description="Local mock form for finance, insurance, connectivity, calculator, and operations pathway records."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Operation"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Operation Area"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short operations summary"
+            rows={4}
+          />
+        </Field>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/operations/example"
+          />
+        </Field>
+
+        <Field label="Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as ContentStatus })}
+          >
+            <option value="ready">Ready</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="content-required">Content Required</option>
+            <option value="backend-later">Backend Later</option>
+          </select>
+        </Field>
+      </AdminFormShell>
+    </section>
+  );
+}
+
 function ServiceMockCrud() {
   const {
     records,
@@ -900,6 +1075,10 @@ export function AdminMockCrudWorkspace() {
     return <ApplicationMockCrud />;
   }
 
+  if (location.pathname.startsWith("/admin/operations")) {
+    return <OperationMockCrud />;
+  }
+
   if (
     location.pathname.startsWith("/admin/services") ||
     location.pathname.startsWith("/admin/on-demand") ||
@@ -916,7 +1095,7 @@ export function AdminMockCrudWorkspace() {
       <AdminEmptyState
         icon={HelpCircle}
         title="Mock CRUD not enabled for this section"
-        description="Resources, Help Center, Applications, and Services are enabled first because they are lower-risk content areas. Commercial, membership, marketplace, and legal workflows come later, because chaos deserves a queue."
+        description="Resources, Help Center, Applications, Operations, and Services are enabled first because they are lower-risk content areas. Commercial, membership, marketplace, and legal workflows come later, because chaos deserves a queue."
       />
     </AdminFormShell>
   );
