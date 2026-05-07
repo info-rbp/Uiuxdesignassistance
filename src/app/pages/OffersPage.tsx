@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -113,7 +113,44 @@ const partnerDeals = [
   { partner: "Legal Document Services", deal: "First contract free", category: "Legal" },
 ];
 
+
+const offerCategoryFilters = [
+  { id: "travel", label: "Travel" },
+  { id: "fitness-health", label: "Fitness & Health" },
+  { id: "home-garden", label: "Home & Garden" },
+  { id: "delivery", label: "Delivery" },
+  { id: "digital-tech", label: "Digital & Tech" },
+  { id: "finance-insurance", label: "Finance & Insurance" },
+  { id: "other", label: "Other" },
+  { id: "operations", label: "Operations" },
+  { id: "human-resources", label: "Human Resources" },
+  { id: "admin-finance", label: "Admin and Finance" },
+  { id: "sales-marketing", label: "Sales and Marketing" },
+  { id: "ai", label: "AI" },
+];
+
+const offerCategoryLabels = Object.fromEntries(
+  offerCategoryFilters.map((category) => [category.id, category.label])
+);
+
+const offerCategoryMap: Record<string, string[]> = {
+  Xero: ["admin-finance", "finance-insurance", "operations"],
+  "Employment Hero": ["human-resources", "operations"],
+  LegalVision: ["other", "operations"],
+  "Microsoft 365": ["digital-tech", "operations"],
+  "Canva Pro": ["digital-tech", "sales-marketing"],
+  Shopify: ["digital-tech", "sales-marketing", "delivery"],
+};
+
 export function OffersPage() {
+  const [searchParams] = useSearchParams();
+  const selectedCategory = searchParams.get("category") ?? "";
+  const selectedCategoryLabel = offerCategoryLabels[selectedCategory] ?? "";
+
+  const filteredOffers = selectedCategory
+    ? offers.filter((offer) => offerCategoryMap[offer.partner]?.includes(selectedCategory))
+    : offers;
+
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -144,10 +181,41 @@ export function OffersPage() {
             <p className="text-slate-600 max-w-xl mx-auto">
               Exclusive deals negotiated with our trusted partners — available to all active RBP clients and members.
             </p>
+
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <Link
+                to="/offers"
+                className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                  !selectedCategory ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                }`}
+              >
+                All Offers
+              </Link>
+              {offerCategoryFilters.map((category) => (
+                <Link
+                  key={category.id}
+                  to={`/offers?category=${category.id}`}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                    selectedCategory === category.id ? "bg-blue-700 text-white" : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                  }`}
+                >
+                  {category.label}
+                </Link>
+              ))}
+            </div>
+
+            {selectedCategory && (
+              <div className="mt-5 bg-blue-50 border border-blue-100 rounded-2xl p-4 max-w-2xl mx-auto">
+                <p className="text-sm text-slate-700">
+                  Showing offers for <strong>{selectedCategoryLabel || selectedCategory}</strong>.
+                  {filteredOffers.length === 0 && " No current offers are listed in this category yet."}
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {offers.map((offer) => (
+            {filteredOffers.map((offer) => (
               <div
                 key={offer.partner}
                 className={`rounded-2xl flex flex-col overflow-hidden ${

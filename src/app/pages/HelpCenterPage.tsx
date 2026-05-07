@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { HelpCircle, Search, ChevronDown, ChevronUp, MessageCircle, ArrowRight, BookOpen, Zap, ShoppingBag, Layers, CreditCard, FileText } from "lucide-react";
@@ -64,6 +64,35 @@ const faqs: FaqSection[] = [
   },
 ];
 
+
+const helpSectionLabels: Record<string, string> = {
+  faqs: "Frequently Asked Questions",
+  "knowledge-base": "Knowledge Base",
+  troubleshooting: "Troubleshooting",
+  support: "Support Center",
+};
+
+const helpCategoryLabels: Record<string, string> = {
+  "our-platform": "Our Platform",
+  "on-demand-services": "On-Demand Services",
+  "managed-services": "Managed Services",
+  applications: "Applications",
+  operations: "Operations",
+  marketplace: "Marketplace",
+  membership: "Membership",
+  offers: "Offers",
+  resources: "Resources",
+  other: "Other",
+};
+
+const helpCategoryToFaqSection: Record<string, string> = {
+  "on-demand-services": "Documents & Deliverables",
+  applications: "Applications",
+  marketplace: "Marketplace",
+  membership: "Membership",
+  resources: "Resources",
+};
+
 function FaqAccordion({ items }: { items: FaqItem[] }) {
   const [open, setOpen] = useState<number | null>(null);
   return (
@@ -89,8 +118,19 @@ function FaqAccordion({ items }: { items: FaqItem[] }) {
 }
 
 export function HelpCenterPage() {
+  const [searchParams] = useSearchParams();
+  const sectionParam = searchParams.get("section") ?? "faqs";
+  const categoryParam = searchParams.get("category") ?? "";
+  const querySectionLabel = helpSectionLabels[sectionParam] ?? "Help Center";
+  const queryCategoryLabel = helpCategoryLabels[categoryParam] ?? "";
+  const queryFaqSection = helpCategoryToFaqSection[categoryParam] ?? null;
+
   const [search, setSearch] = useState("");
-  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(queryFaqSection);
+
+  useEffect(() => {
+    setActiveSection(queryFaqSection);
+  }, [queryFaqSection]);
 
   const filteredFaqs = faqs.map((section) => ({
     ...section,
@@ -120,6 +160,22 @@ export function HelpCenterPage() {
               onChange={(e) => setSearch(e.target.value)}
               className="w-full pl-12 pr-5 py-4 rounded-2xl text-slate-900 text-sm focus:outline-none focus:ring-4 focus:ring-blue-400/30 shadow-xl"
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Query-aware help state */}
+      <section className="bg-blue-50 border-b border-blue-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
+          <div className="bg-white border border-blue-100 rounded-2xl p-5">
+            <div className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-1">
+              Current help view
+            </div>
+            <p className="text-sm text-slate-700">
+              Showing <strong>{querySectionLabel}</strong>
+              {queryCategoryLabel && <> for <strong>{queryCategoryLabel}</strong></>}.
+              {sectionParam === "support" && " Use the support option below if your issue is not covered by the FAQs."}
+            </p>
           </div>
         </div>
       </section>
