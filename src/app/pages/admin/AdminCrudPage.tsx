@@ -20,6 +20,7 @@ import {
 
 import {
   AdminPageHeader,
+  AdminMockCrudWorkspace,
   AdminRecordFormPreview,
   AdminStatCard,
   AdminStatusBadge,
@@ -238,6 +239,8 @@ export function AdminCrudPage() {
       </section>
 
       <AdminRecordFormPreview />
+
+      <AdminMockCrudWorkspace />
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
