@@ -1,6 +1,6 @@
 # Public Content Readiness Audit
 
-Generated: 2026-05-07T05:45:59.149Z
+Generated: 2026-05-07T09:18:42.800Z
 
 ## Required foundation files
 ✅ src/app/data/publicSitemap.ts
@@ -19,12 +19,12 @@ Generated: 2026-05-07T05:45:59.149Z
 ✅ src/app/routes.tsx
 
 ## Page wiring checks
-✅ src/app/pages/ResourcesPage.tsx is wired to static data
-✅ src/app/pages/OffersPage.tsx is wired to static data
-✅ src/app/pages/HelpCenterPage.tsx is wired to static data
-✅ src/app/pages/BusinessApplicationsPage.tsx is wired to static data
-✅ src/app/pages/ServicesPage.tsx is wired to static data
-✅ src/app/pages/ManagedServicesPage.tsx is wired to static data
+✅ src/app/pages/ResourcesPage.tsx is wired to public content data
+✅ src/app/pages/OffersPage.tsx is wired to public content data
+✅ src/app/pages/HelpCenterPage.tsx is wired to public content data
+✅ src/app/pages/BusinessApplicationsPage.tsx is wired to public content data
+✅ src/app/pages/ServicesPage.tsx is wired to public content data
+✅ src/app/pages/ManagedServicesPage.tsx is wired to public content data
 
 ## Anchor destination checks
 ✅ src/app/pages/ServicesPage.tsx has expected anchor markers

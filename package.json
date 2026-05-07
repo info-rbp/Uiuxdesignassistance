@@ -22,7 +22,8 @@
     "audit:admin-utility-functions": "node scripts/audit-admin-utility-functions.mjs",
     "audit:admin-table-controls": "node scripts/audit-admin-table-controls.mjs",
     "audit:backend-collection-contracts": "node scripts/audit-backend-collection-contracts.mjs",
-    "audit:backend-resources-help-center": "node scripts/audit-backend-resources-help-center.mjs"
+    "audit:backend-resources-help-center": "node scripts/audit-backend-resources-help-center.mjs",
+    "audit:firebase-auth-security-plan": "node scripts/audit-firebase-auth-security-plan.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

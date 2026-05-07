@@ -23,8 +23,8 @@ const requiredFiles = [
 const wiredPageChecks = [
   {
     page: "src/app/pages/ResourcesPage.tsx",
-    imports: ["../data/resources"],
-    markers: ["publicResources", "resourceTypeFilters", "resourceCategoryFilters"]
+    imports: ["../data/resources", "../hooks/usePublicBackendContent"],
+    markers: ["usePublicBackendContent", "resourceTypeFilters", "resourceCategoryFilters", "resources.filter"]
   },
   {
     page: "src/app/pages/OffersPage.tsx",
@@ -33,8 +33,8 @@ const wiredPageChecks = [
   },
   {
     page: "src/app/pages/HelpCenterPage.tsx",
-    imports: ["../data/helpCenter"],
-    markers: ["helpArticles", "helpSections"]
+    imports: ["../data/helpCenter", "../hooks/usePublicBackendContent"],
+    markers: ["usePublicBackendContent", "helpSections", "structuredHelpArticles.filter"]
   },
   {
     page: "src/app/pages/BusinessApplicationsPage.tsx",
@@ -212,7 +212,7 @@ for (const check of wiredPageChecks) {
   const missingMarkers = check.markers.filter((item) => !text.includes(item));
 
   if (missingImports.length === 0 && missingMarkers.length === 0) {
-    pass(`${check.page} is wired to static data`);
+    pass(`${check.page} is wired to public content data`);
   } else {
     if (missingImports.length) {
       fail(`${check.page} missing imports: ${missingImports.join(", ")}`);
