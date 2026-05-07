@@ -10,7 +10,8 @@
     "audit:admin-content-model": "node scripts/audit-admin-content-model.mjs",
     "audit:admin-crud-schema": "node scripts/audit-admin-crud-schema.mjs",
     "audit:admin-crud-scaffold": "node scripts/audit-admin-crud-scaffold.mjs",
-    "audit:admin-ui-primitives": "node scripts/audit-admin-ui-primitives.mjs"
+    "audit:admin-ui-primitives": "node scripts/audit-admin-ui-primitives.mjs",
+    "audit:admin-record-form-scaffold": "node scripts/audit-admin-record-form-scaffold.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
