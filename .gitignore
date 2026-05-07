@@ -8,3 +8,7 @@ node_modules/
 # Local Stitch source exports
 /docs/stitch/_source-zips/
 /docs/stitch/_extracted/
+
+# Local external source material staging
+/docs/source-material/_incoming/
+/docs/source-material/_raw/
