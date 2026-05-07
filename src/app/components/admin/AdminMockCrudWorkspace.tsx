@@ -25,6 +25,11 @@ import {
 } from "../../data/offers";
 
 import {
+  marketplaceSections,
+  type MarketplaceSection,
+} from "../../data/marketplace";
+
+import {
   applicationCategories,
   type ApplicationCategory,
 } from "../../data/applications";
@@ -61,6 +66,31 @@ type HelpDraft = Pick<
 type OfferDraft = Pick<
   PublicOffer,
   "title" | "partner" | "summary" | "category" | "offerType" | "href" | "status"
+>;
+
+type MarketplaceListingType =
+  | "rbp-product"
+  | "rbp-asset"
+  | "third-party-product"
+  | "third-party-asset"
+  | "service"
+  | "process";
+
+interface AdminMarketplaceRecord {
+  id: string;
+  title: string;
+  summary: string;
+  href: string;
+  status: ContentStatus;
+  listingType: MarketplaceListingType;
+  supplierName: string;
+  price: string;
+  enquiryRequired: "yes" | "no";
+}
+
+type MarketplaceDraft = Pick<
+  AdminMarketplaceRecord,
+  "title" | "summary" | "href" | "status" | "listingType" | "supplierName" | "price" | "enquiryRequired"
 >;
 
 type ApplicationDraft = Pick<
@@ -125,6 +155,41 @@ function createOfferDraft(): OfferDraft {
     href: "/offers",
     status: "ready",
   };
+}
+
+function createMarketplaceDraft(): MarketplaceDraft {
+  return {
+    title: "",
+    summary: "",
+    href: "/marketplace",
+    status: "ready",
+    listingType: "service",
+    supplierName: "",
+    price: "Enquire",
+    enquiryRequired: "yes",
+  };
+}
+
+function inferMarketplaceListingType(section: MarketplaceSection): MarketplaceListingType {
+  if (section.id.includes("rbp-products")) return "rbp-product";
+  if (section.id.includes("rbp-assets")) return "rbp-asset";
+  if (section.id.includes("third-party")) return "third-party-product";
+  if (section.id.includes("buying-process")) return "process";
+  return "service";
+}
+
+function createMarketplaceRecords(): AdminMarketplaceRecord[] {
+  return marketplaceSections.map((section) => ({
+    id: section.id,
+    title: section.title,
+    summary: section.summary,
+    href: section.href,
+    status: section.status,
+    listingType: inferMarketplaceListingType(section),
+    supplierName: section.id.startsWith("rbp") ? "Remote Business Partner" : "Marketplace Partner",
+    price: section.id.includes("process") || section.id.includes("list-with-us") ? "N/A" : "Enquire",
+    enquiryRequired: section.id.includes("process") ? "no" : "yes",
+  }));
 }
 
 function createApplicationDraft(): ApplicationDraft {
@@ -547,6 +612,230 @@ function HelpCenterMockCrud() {
             </select>
           </Field>
         </div>
+      </AdminFormShell>
+    </section>
+  );
+}
+
+function MarketplaceMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<AdminMarketplaceRecord, MarketplaceDraft>({
+    initialRecords: createMarketplaceRecords(),
+    createDraft: createMarketplaceDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      summary: record.summary,
+      href: record.href,
+      status: record.status,
+      listingType: record.listingType,
+      supplierName: record.supplierName,
+      price: record.price,
+      enquiryRequired: record.enquiryRequired,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `marketplace-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || "/marketplace",
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(
+        currentDraft.title.trim() &&
+          currentDraft.summary.trim() &&
+          currentDraft.supplierName.trim()
+      ),
+  });
+
+  const columns: AdminTableColumn<AdminMarketplaceRecord>[] = [
+    {
+      key: "title",
+      header: "Listing",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "supplierName",
+      header: "Supplier",
+      render: (row) => <span className="text-slate-600">{row.supplierName}</span>,
+    },
+    {
+      key: "listingType",
+      header: "Type",
+      render: (row) => <AdminStatusBadge label={row.listingType} status="ready" />,
+    },
+    {
+      key: "price",
+      header: "Price",
+      render: (row) => <span className="text-slate-600">{row.price}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit marketplace listing"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete marketplace listing"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Marketplace Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete marketplace listing records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Marketplace Listing" : "Create Marketplace Listing"}
+        description="Local mock form for marketplace products, assets, supplier listings, pricing labels, and enquiry settings."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Listing"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Marketplace Listing"
+          />
+        </Field>
+
+        <Field label="Supplier Name">
+          <input
+            className={inputClass}
+            value={draft.supplierName}
+            onChange={(event) => updateDraft({ supplierName: event.target.value })}
+            placeholder="Example Supplier"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short marketplace listing summary"
+            rows={4}
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Listing Type">
+            <select
+              className={inputClass}
+              value={draft.listingType}
+              onChange={(event) =>
+                updateDraft({ listingType: event.target.value as MarketplaceListingType })
+              }
+            >
+              <option value="rbp-product">RBP Product</option>
+              <option value="rbp-asset">RBP Asset</option>
+              <option value="third-party-product">Third Party Product</option>
+              <option value="third-party-asset">Third Party Asset</option>
+              <option value="service">Service</option>
+              <option value="process">Process</option>
+            </select>
+          </Field>
+
+          <Field label="Enquiry Required">
+            <select
+              className={inputClass}
+              value={draft.enquiryRequired}
+              onChange={(event) =>
+                updateDraft({ enquiryRequired: event.target.value as MarketplaceDraft["enquiryRequired"] })
+              }
+            >
+              <option value="yes">Yes</option>
+              <option value="no">No</option>
+            </select>
+          </Field>
+        </div>
+
+        <Field label="Price / Display Price">
+          <input
+            className={inputClass}
+            value={draft.price}
+            onChange={(event) => updateDraft({ price: event.target.value })}
+            placeholder="Enquire"
+          />
+        </Field>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/marketplace#example"
+          />
+        </Field>
+
+        <Field label="Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as ContentStatus })}
+          >
+            <option value="ready">Ready</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="content-required">Content Required</option>
+            <option value="backend-later">Backend Later</option>
+          </select>
+        </Field>
       </AdminFormShell>
     </section>
   );
@@ -1132,6 +1421,10 @@ export function AdminMockCrudWorkspace() {
     return <OfferMockCrud />;
   }
 
+  if (location.pathname.startsWith("/admin/marketplace")) {
+    return <MarketplaceMockCrud />;
+  }
+
   if (location.pathname.startsWith("/admin/help-center")) {
     return <HelpCenterMockCrud />;
   }
@@ -1156,7 +1449,7 @@ export function AdminMockCrudWorkspace() {
       <AdminEmptyState
         icon={HelpCircle}
         title="Mock CRUD not enabled for this section"
-        description="Resources, Help Center, Applications, Operations, Services, and Offers are enabled first. Marketplace, membership, and legal workflows come later, because chaos deserves a queue."
+        description="Resources, Help Center, Applications, Operations, Services, Offers, and Marketplace are enabled first. Membership and legal workflows come later, because chaos deserves a queue."
       />
     </AdminFormShell>
   );
