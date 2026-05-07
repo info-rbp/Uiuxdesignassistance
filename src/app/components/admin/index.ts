@@ -6,3 +6,4 @@ export { AdminStatCard } from "./AdminStatCard";
 export { AdminStatusBadge } from "./AdminStatusBadge";
 export { AdminTable, type AdminTableColumn } from "./AdminTable";
 export { AdminRecordFormPreview } from "./AdminRecordFormPreview";
+export { AdminMockCrudWorkspace } from "./AdminMockCrudWorkspace";
