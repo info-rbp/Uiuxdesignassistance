@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { advisoryCategories } from "../data/onDemandServices";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -67,74 +68,10 @@ const services = [
   },
 ];
 
-const advisoryAnchorSections = [
-  {
-    id: "operations-advisory",
-    title: "Operations Advisory",
-    description:
-      "Practical guidance to improve workflows, remove bottlenecks, document processes, and strengthen day-to-day business operations.",
-  },
-  {
-    id: "human-resource-advisory",
-    title: "Human Resource Advisory",
-    description:
-      "Support for role clarity, employment documentation, onboarding, people processes, and practical HR operations.",
-  },
-  {
-    id: "accounting-finance",
-    title: "Accounting & Finance",
-    description:
-      "Advisory support for finance readiness, reporting discipline, cash flow planning, and internal financial administration.",
-  },
-  {
-    id: "sales-marketing",
-    title: "Sales & Marketing",
-    description:
-      "Support for positioning, sales process improvement, customer communication, campaign planning, and growth activity.",
-  },
-  {
-    id: "management-consulting",
-    title: "Management Consulting",
-    description:
-      "Commercial guidance for business owners around structure, performance, planning, and operational decision-making.",
-  },
-  {
-    id: "change-management",
-    title: "Change Management",
-    description:
-      "Support to help businesses manage process, people, technology, and operating model changes with less chaos.",
-  },
-  {
-    id: "ai-advisory",
-    title: "AI Advisory",
-    description:
-      "Practical advisory on where AI can improve business workflows, reduce manual work, and support better decision-making.",
-  },
-  {
-    id: "research-development",
-    title: "Research & Development",
-    description:
-      "Guidance for validating ideas, exploring opportunities, documenting findings, and planning business improvement initiatives.",
-  },
-  {
-    id: "information-technology",
-    title: "Information Technology",
-    description:
-      "Support for business systems, digital tools, technology planning, and operational technology decisions.",
-  },
-  {
-    id: "public-relations",
-    title: "Public Relations",
-    description:
-      "Advisory support for communication, reputation, stakeholder messaging, and public-facing business positioning.",
-  },
-  {
-    id: "customised-solutions",
-    title: "Customised Solutions",
-    description:
-      "Flexible support for business issues that do not fit neatly into one category, because naturally business problems refuse to behave.",
-  },
-];
+const advisoryAnchorSections = advisoryCategories.map((item) => ({
+  ...item,
+  description: `${item.title} support and advisory content will be expanded as the service catalogue is refined.`,
+}));
 
 export function ServicesPage() {
   return (

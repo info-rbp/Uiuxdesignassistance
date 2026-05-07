@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router";
+import { applicationCategories } from "../data/applications";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { ArrowRight, Search, Layers, CheckCircle, X, ChevronRight } from "lucide-react";
@@ -49,80 +50,7 @@ const statusColors: Record<Status, string> = {
   "Setup Required": "bg-blue-100 text-blue-700",
 };
 
-const applicationAnchorSections = [
-  {
-    id: "how-these-work",
-    title: "How These Work",
-    description:
-      "Applications can be configured, branded, and supported for your business so your team can work from a more connected operating system.",
-  },
-  {
-    id: "integrations",
-    title: "Integrations",
-    description:
-      "Connect applications, workflows, customer data, documents, finance systems, and operational tools where integration is available.",
-  },
-  {
-    id: "operations-finance",
-    title: "Operations and Finance",
-    description:
-      "Applications for business operations, accounting, reporting, inventory, finance workflows, and management visibility.",
-  },
-  {
-    id: "people-hr",
-    title: "People and HR",
-    description:
-      "Applications for employee records, onboarding, leave, payroll structure, performance, learning, and people operations.",
-  },
-  {
-    id: "sales-crm",
-    title: "Sales and CRM",
-    description:
-      "Applications for leads, contacts, opportunities, pipelines, customer communication, and sales process management.",
-  },
-  {
-    id: "documents",
-    title: "Documents",
-    description:
-      "Applications and tools for business documents, document control, knowledge bases, internal files, and document workflows.",
-  },
-  {
-    id: "support-desk",
-    title: "Support Desk",
-    description:
-      "Applications for tickets, customer support, service workflows, knowledge base content, and issue resolution.",
-  },
-  {
-    id: "learning",
-    title: "Learning",
-    description:
-      "Learning management tools for internal training, onboarding pathways, courses, assessments, and education delivery.",
-  },
-  {
-    id: "analytics",
-    title: "Analytics",
-    description:
-      "Reporting and analytics tools to help businesses understand performance, trends, operations, customers, and workflow health.",
-  },
-  {
-    id: "payments-billing",
-    title: "Payments and Billing",
-    description:
-      "Applications and integrations for invoicing, payments, subscriptions, ecommerce, and billing workflows.",
-  },
-  {
-    id: "fleet-management",
-    title: "Fleet Management",
-    description:
-      "Future application support for vehicle, asset, maintenance, allocation, usage, and fleet administration workflows.",
-  },
-  {
-    id: "business-watchlist",
-    title: "Business Watchlist",
-    description:
-      "A future risk-focused application concept for managing business watchlists, supplier concerns, and company risk records.",
-  },
-];
+const applicationAnchorSections = applicationCategories;
 
 export function BusinessApplicationsPage() {
   const [search, setSearch] = useState("");
