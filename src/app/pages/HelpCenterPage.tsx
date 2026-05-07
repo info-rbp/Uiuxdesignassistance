@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
 import {
-  helpArticles,
   helpCategories as helpDataCategories,
   helpSections,
 } from "../data/helpCenter";
+import { usePublicBackendContent } from "../hooks/usePublicBackendContent";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { HelpCircle, Search, ChevronDown, ChevronUp, MessageCircle, ArrowRight, BookOpen, Zap, ShoppingBag, Layers, CreditCard, FileText } from "lucide-react";
@@ -120,12 +120,13 @@ export function HelpCenterPage() {
 
   const [search, setSearch] = useState("");
   const [activeSection, setActiveSection] = useState<string | null>(queryFaqSection);
+  const { helpArticles: structuredHelpArticles } = usePublicBackendContent();
 
   useEffect(() => {
     setActiveSection(queryFaqSection);
   }, [queryFaqSection]);
 
-  const filteredHelpArticles = helpArticles.filter((article) => {
+  const filteredHelpArticles = structuredHelpArticles.filter((article) => {
     const matchesSection = !sectionParam || article.section === sectionParam;
     const matchesCategory = !categoryParam || article.category === categoryParam;
     const matchesSearch =
