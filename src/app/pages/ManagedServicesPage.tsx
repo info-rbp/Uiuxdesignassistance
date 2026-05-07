@@ -65,13 +65,13 @@ export function ManagedServicesPage() {
         breadcrumb="Managed Services"
         image={heroImage}
         bullets={["Retained support arrangements", "Consistent, reliable delivery", "Expert teams"]}
-        ctaPrimary={{ label: "Explore Managed Services", href: "/contact" }}
+        ctaPrimary={{ label: "Request Managed Services", href: "/contact?reason=managed-services" }}
         ctaSecondary={{ label: "On-Demand Instead", href: "/on-demand" }}
         stat={{ value: "3", label: "Core Service Areas", sublabel: "Bid · Real Estate · HR" }}
       />
 
       {/* Services */}
-      <section className="py-20 lg:py-28">
+      <section id="overview" className="py-20 lg:py-28 scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-block text-xs font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full mb-4">Service Areas</span>
@@ -174,7 +174,7 @@ export function ManagedServicesPage() {
       {/* Process */}
       <section id="engagement-process" className="py-20 scroll-mt-32">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
+          <div id="how-managed-services-work" className="text-center mb-10 scroll-mt-32">
             <h2 className="text-2xl font-extrabold text-slate-900 mb-2">How managed services work</h2>
             <p className="text-slate-500">A straightforward onboarding and delivery process.</p>
           </div>

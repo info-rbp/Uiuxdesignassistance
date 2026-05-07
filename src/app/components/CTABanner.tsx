@@ -25,14 +25,14 @@ export function CTABanner() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-3">
               <Link
-                to="/contact"
+                to="/contact?reason=discovery-call"
                 className="inline-flex items-center justify-center gap-2 bg-white hover:bg-blue-50 text-blue-900 px-8 py-3.5 rounded-xl font-bold transition-all hover:-translate-y-0.5 shadow-lg"
               >
-                Contact Us
+                Book Discovery Call
                 <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
-                to="/services"
+                to="/on-demand/services"
                 className="inline-flex items-center justify-center gap-2 bg-transparent hover:bg-blue-800 text-white border-2 border-white/30 hover:border-white px-8 py-3.5 rounded-xl font-bold transition-all hover:-translate-y-0.5"
               >
                 View Services

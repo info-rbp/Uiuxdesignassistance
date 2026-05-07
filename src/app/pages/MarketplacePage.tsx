@@ -20,7 +20,7 @@ const products: Product[] = [
   { id: "biz-in-box-starter", name: "Business Starter Pack", category: "Business-in-a-Box", price: "$499", forWho: "New business owners", desc: "Everything you need to launch your business with a professional foundation — documents, digital setup, and operational framework.", includes: ["Business plan template", "Company profile", "Website setup", "Privacy policy & T&Cs", "Brand guidelines"], delivery: "Digital + setup", timeline: "7–10 days", featured: true },
   { id: "biz-in-box-growth", name: "Business Growth Pack", category: "Business-in-a-Box", price: "$999", forWho: "Growing SMEs", desc: "A comprehensive business improvement bundle for businesses ready to scale — strategy, systems, and operations.", includes: ["Operations manual", "Business strategy session", "CRM setup", "HR document pack", "Finance templates"], delivery: "Digital + advisory", timeline: "10–14 days", featured: true },
   { id: "website-starter", name: "Website Starter Package", category: "Website & Digital", price: "$349", forWho: "New businesses, sole traders", desc: "A professional, mobile-responsive business website — set up, branded, and ready to go.", includes: ["5-page website", "Mobile responsive design", "Contact form setup", "SEO basics", "Hosting guidance"], delivery: "Setup + handover", timeline: "5–7 days" },
-  { id: "website-ecommerce", name: "Ecommerce Website Package", category: "Website & Digital", price: "$799", forWho: "Product-based businesses", desc: "A full ecommerce setup with product catalogue, cart, and payment processing.", includes: ["Webshop setup", "Product catalogue (up to 50)", "Payment gateway", "Order management", "Shipping integration"], delivery: "Setup + training", timeline: "10–14 days" },
+  { id: "website-ecommerce", name: "Ecommerce Website Package", category: "Website & Digital", price: "$799", forWho: "Product-based businesses", desc: "A full ecommerce setup concept with product catalogue, cart, and payment pathway planning for later implementation.", includes: ["Webshop setup", "Product catalogue (up to 50)", "Payment gateway planning", "Order management", "Shipping integration planning"], delivery: "Setup + training", timeline: "10–14 days" },
   { id: "crm-setup", name: "CRM Setup Package", category: "Application Setup", price: "$299", forWho: "Sales-led businesses", desc: "Full setup of RBP SalesDesk (Frappe CRM) — configured for your sales process and team.", includes: ["CRM installation", "Pipeline configuration", "Contact import", "User setup & training", "30-day support"], delivery: "Setup + training", timeline: "3–5 days", featured: true },
   { id: "erp-setup", name: "BusinessCore ERP Setup", category: "Application Setup", price: "$699", forWho: "Operations-heavy businesses", desc: "Full ERPNext implementation for your business — accounts, inventory, and operations in one system.", includes: ["ERPNext installation", "Chart of accounts setup", "Module configuration", "Data migration support", "Team training"], delivery: "Setup + training", timeline: "10–14 days" },
   { id: "hr-setup", name: "HR System Setup", category: "Application Setup", price: "$349", forWho: "Businesses with 5+ staff", desc: "RBP PeopleDesk (HRMS) setup — employee records, leave, payroll structure, and onboarding workflows.", includes: ["HRMS installation", "Employee data setup", "Leave policy config", "Payroll structure", "Manager training"], delivery: "Setup + training", timeline: "5–7 days" },
@@ -56,7 +56,7 @@ const marketplaceAnchorSections = [
     id: "buying-process",
     title: "Buying Process",
     description:
-      "A clear buying pathway covering enquiry, confirmation, payment or approval, delivery, and follow-up support.",
+      "A clear Phase 1 buying pathway covering enquiry, mock confirmation, payment planning, delivery expectations, and follow-up support.",
   },
   {
     id: "list-with-us",
@@ -103,7 +103,7 @@ export function MarketplacePage() {
                   </div>
                 ))}
               </div>
-              <Link to="/contact" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-7 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
+              <Link to="#rbp-products" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-7 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
                 Browse the Marketplace <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
@@ -271,7 +271,7 @@ export function MarketplacePage() {
           <ShoppingBag className="w-12 h-12 text-amber-400 mx-auto mb-5" />
           <h2 className="text-3xl font-extrabold mb-4">Need something bespoke?</h2>
           <p className="text-slate-300 mb-8">If you don't see exactly what you need, contact us — we can scope a custom package for your business.</p>
-          <Link to="/contact" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
+          <Link to="/contact?reason=marketplace-product" className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold px-8 py-4 rounded-xl transition-all shadow-lg hover:-translate-y-0.5">
             Enquire About a Custom Package <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

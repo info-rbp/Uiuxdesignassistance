@@ -105,7 +105,7 @@ export function ResourcesPage() {
         image={heroImage}
         bullets={["Industry reports & guides", "Downloadable templates", "Webinar & training library"]}
         ctaPrimary={{ label: "Browse Resources", href: "#categories" }}
-        ctaSecondary={{ label: "Talk to an Advisor", href: "/contact" }}
+        ctaSecondary={{ label: "Talk to an Advisor", href: "/contact?reason=discovery-call" }}
         stat={{ value: "150+", label: "Resources Available", sublabel: "Updated regularly" }}
       />
 
@@ -213,7 +213,7 @@ export function ResourcesPage() {
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Featured Resources</h2>
             </div>
             <Link
-              to="/contact"
+              to="/contact?reason=resource-request"
               className="hidden sm:inline-flex items-center gap-2 text-blue-700 font-bold text-sm hover:text-blue-800 transition-colors"
             >
               Request a resource <ArrowRight className="w-4 h-4" />
@@ -259,7 +259,7 @@ export function ResourcesPage() {
             Get Resources in Your Inbox
           </h2>
           <p className="text-slate-600 mb-8">
-            Subscribe to our newsletter and receive curated business insights, new templates, and market updates every fortnight.
+            Join the Phase 1 newsletter placeholder to preview how resource updates will be presented later.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <input
@@ -268,10 +268,10 @@ export function ResourcesPage() {
               className="flex-grow px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
             />
             <button className="bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl transition-all whitespace-nowrap">
-              Subscribe
+              Preview Subscribe
             </button>
           </div>
-          <p className="text-slate-400 text-xs mt-3">No spam. Unsubscribe at any time.</p>
+          <p className="text-slate-400 text-xs mt-3">Frontend-only placeholder. No email subscription or backend record is created.</p>
         </div>
       </section>
 

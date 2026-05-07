@@ -27,6 +27,12 @@ const reasonLabels: Record<string, string> = {
   "application-setup": "Business Applications enquiry",
   "managed-services": "Managed Services enquiry",
   "list-with-us": "Marketplace product enquiry",
+  "marketplace-product": "Marketplace product enquiry",
+  "offers-partnership": "Offers / partnership enquiry",
+  "offer-enquiry": "Offers / partnership enquiry",
+  "resource-request": "General enquiry",
+  "support": "Support request",
+  "billing": "Billing enquiry",
   "operations-advisory": "On-Demand Services enquiry",
   "human-resource-advisory": "On-Demand Services enquiry",
   "accounting-finance": "Finance enquiry",
@@ -53,6 +59,12 @@ const reasonTitles: Record<string, string> = {
   "application-setup": "Application Setup",
   "managed-services": "Managed Services",
   "list-with-us": "List With Us",
+  "marketplace-product": "Marketplace Product",
+  "offers-partnership": "Offers Partnership",
+  "offer-enquiry": "Offer Enquiry",
+  "resource-request": "Resource Request",
+  "support": "Support",
+  "billing": "Billing",
   "operations-advisory": "Operations Advisory",
   "human-resource-advisory": "Human Resource Advisory",
   "accounting-finance": "Accounting & Finance",
@@ -123,8 +135,8 @@ export function ContactPage() {
                     <CheckCircle className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl font-extrabold text-slate-900 mb-3">Enquiry received</h2>
-                  <p className="text-slate-600 mb-2">Thank you, <strong>{form.name}</strong>. We've received your enquiry and will be in touch within 1–2 business days.</p>
-                  <p className="text-slate-500 text-sm">If your matter is urgent, please call us directly.</p>
+                  <p className="text-slate-600 mb-2">Thank you, <strong>{form.name}</strong>. This Phase 1 shell has simulated your enquiry submission.</p>
+                  <p className="text-slate-500 text-sm">No email, CRM, booking, or backend service was triggered by this mock confirmation.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -230,7 +242,7 @@ export function ContactPage() {
                   </button>
 
                   <p className="text-slate-400 text-xs">
-                    We aim to respond within 1–2 business days. For urgent matters, please call us directly.
+                    Phase 1 note: this form validates locally and displays a mock confirmation only. No real email or backend submission is sent.
                   </p>
                 </form>
               )}
@@ -243,9 +255,9 @@ export function ContactPage() {
                 <h3 className="font-bold text-slate-900 mb-4">What happens next?</h3>
                 <div className="space-y-4">
                   {[
-                    { step: "1", text: "Your enquiry is routed to the relevant team based on your selected enquiry type." },
-                    { step: "2", text: "A team member reviews your message and prepares a tailored response." },
-                    { step: "3", text: "We respond within 1–2 business days with next steps or a call booking." },
+                    { step: "1", text: "Your enquiry type is selected in the frontend shell." },
+                    { step: "2", text: "A mock confirmation state appears after local validation." },
+                    { step: "3", text: "Real routing, CRM, email, and booking behaviour belongs to a later phase." },
                   ].map((s) => (
                     <div key={s.step} className="flex gap-3">
                       <div className="w-6 h-6 bg-blue-700 text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">{s.step}</div>

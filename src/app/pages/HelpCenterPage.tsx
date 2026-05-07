@@ -14,7 +14,7 @@ const helpCategories = [
   { icon: FileText, label: "Documents", desc: "Ordering, delivery, revisions, and downloads", href: "/on-demand/documents", color: "bg-teal-100 text-teal-700" },
   { icon: Layers, label: "Applications", desc: "Setup requests, access, and technical help", href: "/applications", color: "bg-violet-100 text-violet-700" },
   { icon: ShoppingBag, label: "Marketplace", desc: "Orders, packages, delivery, and enquiries", href: "/marketplace", color: "bg-amber-100 text-amber-700" },
-  { icon: CreditCard, label: "Billing & Payments", desc: "Invoices, payments, and refund queries", href: "/contact", color: "bg-emerald-100 text-emerald-700" },
+  { icon: CreditCard, label: "Billing & Payments", desc: "Invoices, payments, and refund queries", href: "/contact?reason=billing", color: "bg-emerald-100 text-emerald-700" },
   { icon: BookOpen, label: "Resources", desc: "Accessing guides, templates, and tools", href: "/resources", color: "bg-blue-100 text-blue-700" },
 ];
 
@@ -219,7 +219,7 @@ export function HelpCenterPage() {
             {search ? `Search results for "${search}"` : "Frequently Asked Questions"}
           </h2>
           {filteredFaqs.length === 0 ? (
-            <div className="text-center py-12 text-slate-400">No FAQs match your search. <Link to="/contact" className="text-blue-600 font-semibold hover:underline">Contact us instead</Link>.</div>
+            <div className="text-center py-12 text-slate-400">No FAQs match your search. <Link to="/help?section=support" className="text-blue-600 font-semibold hover:underline">Contact support instead</Link>.</div>
           ) : (
             <div className="space-y-10">
               {filteredFaqs
@@ -269,9 +269,9 @@ export function HelpCenterPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-extrabold text-slate-900 text-lg mb-1">Still need help?</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">Our support team is available to help with any queries not covered in the FAQs above. Use the contact form and select your enquiry type for the fastest response.</p>
+              <p className="text-slate-500 text-sm leading-relaxed">This public shell directs unresolved queries to a frontend-only support enquiry path. Real ticketing and notification delivery are deferred.</p>
             </div>
-            <Link to="/contact" className="flex-shrink-0 inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 whitespace-nowrap">
+            <Link to="/contact?reason=support" className="flex-shrink-0 inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-800 text-white font-bold px-6 py-3 rounded-xl transition-all hover:-translate-y-0.5 whitespace-nowrap">
               Contact Support <ArrowRight className="w-4 h-4" />
             </Link>
           </div>

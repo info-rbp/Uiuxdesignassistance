@@ -140,12 +140,13 @@ export function OffersPage() {
         image={heroImage}
         bullets={["Vendor-negotiated discounts", "Member-only packages", "Regularly updated deals"]}
         ctaPrimary={{ label: "View Offers", href: "#exclusive" }}
-        ctaSecondary={{ label: "Talk to Us", href: "/contact" }}
+        ctaSecondary={{ label: "Talk to Us", href: "/contact?reason=offers-partnership" }}
         stat={{ value: "30%", label: "Avg. Cost Savings", sublabel: "For our members" }}
       />
 
       {/* Featured Partner Offers */}
-      <section id="exclusive" className="py-20 lg:py-28 scroll-mt-32">
+      <section id="overview" className="py-20 lg:py-28 scroll-mt-32">
+        <div id="exclusive" className="scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
             <span className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-widest bg-blue-50 px-3 py-1 rounded-full mb-4">
@@ -266,7 +267,7 @@ export function OffersPage() {
 
                   {/* CTA */}
                   <Link
-                    to="/contact"
+                    to="/contact?reason=offer-enquiry"
                     className={`inline-flex items-center justify-center gap-2 font-bold py-2.5 px-5 rounded-xl transition-all text-sm ${
                       offer.highlight
                         ? "bg-white text-blue-700 hover:bg-blue-50"
@@ -282,10 +283,11 @@ export function OffersPage() {
 
           <p className="text-center text-slate-500 text-sm mt-10">
             All partner offers are subject to individual partner terms and conditions.{" "}
-            <Link to="/contact" className="text-blue-700 font-semibold hover:underline">
+            <Link to="/contact?reason=offer-enquiry" className="text-blue-700 font-semibold hover:underline">
               Contact us for details.
             </Link>
           </p>
+        </div>
         </div>
       </section>
 
@@ -317,7 +319,7 @@ export function OffersPage() {
           </div>
           <p className="text-center text-slate-500 text-sm mt-8">
             Partner deals are available to all active RBP clients.{" "}
-            <Link to="/contact" className="text-blue-700 font-semibold hover:underline">
+            <Link to="/contact?reason=offer-enquiry" className="text-blue-700 font-semibold hover:underline">
               Contact us to learn more.
             </Link>
           </p>
