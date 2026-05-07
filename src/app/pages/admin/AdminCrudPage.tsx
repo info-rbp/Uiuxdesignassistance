@@ -18,6 +18,14 @@ import {
   type AdminContentEntity,
 } from "../../data/adminContentModel";
 
+import {
+  AdminPageHeader,
+  AdminStatCard,
+  AdminStatusBadge,
+  AdminTable,
+  type AdminTableColumn,
+} from "../../components/admin";
+
 const routeLabels: Record<string, { title: string; description: string }> = {
   "/admin/tasks": {
     title: "To Do Tasks",
@@ -49,6 +57,15 @@ const routeLabels: Record<string, { title: string; description: string }> = {
   },
 };
 
+interface AdminCrudRow {
+  id: string;
+  title: string;
+  route: string;
+  source: string;
+  status: string;
+  visibility: string;
+}
+
 function humanisePath(pathname: string) {
   const lastSegment = pathname.split("/").filter(Boolean).pop() ?? "admin";
   return lastSegment
@@ -66,17 +83,6 @@ function statusLabel(status: AdminContentEntity["status"]) {
   };
 
   return labels[status] ?? status;
-}
-
-function statusClass(status: AdminContentEntity["status"]) {
-  const classes: Record<AdminContentEntity["status"], string> = {
-    "ready-for-admin-planning": "bg-emerald-50 text-emerald-700 border-emerald-100",
-    "backend-later": "bg-amber-50 text-amber-700 border-amber-100",
-    "legal-review-required": "bg-rose-50 text-rose-700 border-rose-100",
-    "future-enhancement": "bg-slate-100 text-slate-600 border-slate-200",
-  };
-
-  return classes[status] ?? "bg-slate-100 text-slate-600 border-slate-200";
 }
 
 function getEntityForPath(pathname: string): AdminContentEntity | null {
@@ -110,7 +116,7 @@ function createFallbackEntity(pathname: string): AdminContentEntity {
   };
 }
 
-function createRows(entity: AdminContentEntity) {
+function createRows(entity: AdminContentEntity): AdminCrudRow[] {
   const routes = entity.publicRoutes.length > 0 ? entity.publicRoutes : [entity.adminPath];
 
   return routes.map((route, index) => ({
@@ -123,52 +129,72 @@ function createRows(entity: AdminContentEntity) {
   }));
 }
 
-function StatCard({
-  label,
-  value,
-  icon: Icon,
-}: {
-  label: string;
-  value: string | number;
-  icon: React.ElementType;
-}) {
-  return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-      <div className="w-10 h-10 bg-blue-50 text-blue-700 rounded-xl flex items-center justify-center mb-4">
-        <Icon className="w-5 h-5" />
-      </div>
-      <div className="text-2xl font-extrabold text-slate-900">{value}</div>
-      <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">
-        {label}
-      </div>
-    </div>
-  );
-}
-
 export function AdminCrudPage() {
   const location = useLocation();
   const entity = getEntityForPath(location.pathname) ?? createFallbackEntity(location.pathname);
   const rows = createRows(entity);
 
+  const columns: AdminTableColumn<AdminCrudRow>[] = [
+    {
+      key: "title",
+      header: "Title",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-400 mt-1">{row.visibility}</div>
+        </div>
+      ),
+    },
+    {
+      key: "route",
+      header: "Route",
+      render: (row) => <span className="text-slate-600">{row.route}</span>,
+    },
+    {
+      key: "source",
+      header: "Source",
+      render: (row) => (
+        <code className="bg-slate-100 rounded-lg px-2 py-1 text-xs text-slate-500">
+          {row.source}
+        </code>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={entity.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: () => (
+        <div className="flex items-center gap-2">
+          <button
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="View scaffold"
+          >
+            <Eye className="w-4 h-4" />
+          </button>
+          <button
+            className="p-2 rounded-lg text-slate-400 hover:text-amber-700 hover:bg-amber-50 transition-all"
+            title="Edit scaffold"
+          >
+            <Pencil className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
-      <section className="bg-slate-950 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden">
-        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-blue-700/20" />
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
-          <div>
-            <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-blue-200 bg-blue-500/10 border border-blue-400/20 rounded-full px-3 py-1 mb-4">
-              <Database className="w-3.5 h-3.5" />
-              Admin CRUD Scaffold
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight mb-3">
-              {entity.label}
-            </h1>
-            <p className="text-sm text-slate-300 max-w-3xl leading-relaxed">
-              {entity.description}
-            </p>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
+      <AdminPageHeader
+        eyebrow="Admin CRUD Scaffold"
+        title={entity.label}
+        description={entity.description}
+        icon={Database}
+        actions={
+          <>
             <button className="inline-flex items-center gap-2 bg-blue-700 hover:bg-blue-600 text-white text-xs font-bold rounded-xl px-4 py-2.5 transition-all">
               <Plus className="w-4 h-4" />
               New Record
@@ -177,15 +203,15 @@ export function AdminCrudPage() {
               <Filter className="w-4 h-4" />
               Filters
             </button>
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <StatCard label="Scaffold Records" value={rows.length} icon={ListChecks} />
-        <StatCard label="Public Routes" value={entity.publicRoutes.length} icon={Eye} />
-        <StatCard label="Backend Required" value={entity.backendRequired ? "Yes" : "No"} icon={Database} />
-        <StatCard label="Access" value={entity.access.replaceAll("-", " ")} icon={ShieldCheck} />
+        <AdminStatCard label="Scaffold Records" value={rows.length} icon={ListChecks} />
+        <AdminStatCard label="Public Routes" value={entity.publicRoutes.length} icon={Eye} tone="emerald" />
+        <AdminStatCard label="Backend Required" value={entity.backendRequired ? "Yes" : "No"} icon={Database} tone="amber" />
+        <AdminStatCard label="Access" value={entity.access.replaceAll("-", " ")} icon={ShieldCheck} tone="slate" />
       </section>
 
       <section className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
@@ -207,48 +233,7 @@ export function AdminCrudPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="bg-slate-50 text-left text-xs uppercase tracking-widest text-slate-400">
-                <th className="px-5 py-3 font-bold">Title</th>
-                <th className="px-5 py-3 font-bold">Route</th>
-                <th className="px-5 py-3 font-bold">Source</th>
-                <th className="px-5 py-3 font-bold">Status</th>
-                <th className="px-5 py-3 font-bold">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {rows.map((row) => (
-                <tr key={row.id} className="hover:bg-slate-50/70">
-                  <td className="px-5 py-4">
-                    <div className="font-bold text-slate-900">{row.title}</div>
-                    <div className="text-xs text-slate-400 mt-1">{row.visibility}</div>
-                  </td>
-                  <td className="px-5 py-4 text-slate-600">{row.route}</td>
-                  <td className="px-5 py-4 text-slate-500">
-                    <code className="bg-slate-100 rounded-lg px-2 py-1 text-xs">{row.source}</code>
-                  </td>
-                  <td className="px-5 py-4">
-                    <span className={`inline-flex border rounded-full px-2.5 py-1 text-[10px] font-bold ${statusClass(entity.status)}`}>
-                      {row.status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-4">
-                    <div className="flex items-center gap-2">
-                      <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all" title="View scaffold">
-                        <Eye className="w-4 h-4" />
-                      </button>
-                      <button className="p-2 rounded-lg text-slate-400 hover:text-amber-700 hover:bg-amber-50 transition-all" title="Edit scaffold">
-                        <Pencil className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <AdminTable rows={rows} columns={columns} />
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-4">
