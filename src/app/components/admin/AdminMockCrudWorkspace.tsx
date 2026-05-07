@@ -56,6 +56,7 @@ import {
 } from "../../data/managedServices";
 
 import { useAdminLocalCrud } from "../../hooks/useAdminLocalCrud";
+import { useAdminTableControls } from "../../hooks/useAdminTableControls";
 
 import {
   createMockRecordId,
@@ -68,6 +69,7 @@ import { AdminEmptyState } from "./AdminEmptyState";
 import { AdminFormShell } from "./AdminFormShell";
 import { AdminStatusBadge } from "./AdminStatusBadge";
 import { AdminTable, type AdminTableColumn } from "./AdminTable";
+import { AdminTableControls } from "./AdminTableControls";
 
 type ContentStatus =
   | "ready"
@@ -426,6 +428,80 @@ function MockNotice() {
   );
 }
 
+function getRecordStringValue(record: unknown, keys: string[]) {
+  const source = record as Record<string, unknown>;
+
+  for (const key of keys) {
+    const value = source[key];
+
+    if (typeof value === "string" && value.trim()) {
+      return value;
+    }
+
+    if (typeof value === "number" || typeof value === "boolean") {
+      return String(value);
+    }
+  }
+
+  return "";
+}
+
+function createRecordSearchText(record: unknown) {
+  return Object.values(record as Record<string, unknown>)
+    .filter((value) => ["string", "number", "boolean"].includes(typeof value))
+    .join(" ");
+}
+
+function useMockTableControls<TRecord>(records: TRecord[]) {
+  return useAdminTableControls({
+    records,
+    getSearchText: createRecordSearchText,
+    getStatus: (record) => getRecordStringValue(record, ["status", "approvalStatus"]),
+    getCategory: (record) =>
+      getRecordStringValue(record, [
+        "category",
+        "type",
+        "section",
+        "offerType",
+        "listingType",
+        "serviceType",
+        "pageType",
+        "policyType",
+        "memberVisibility",
+      ]),
+    sortOptions: [
+      {
+        id: "title",
+        label: "Title",
+        getValue: (record) => getRecordStringValue(record, ["title", "question"]),
+      },
+      {
+        id: "status",
+        label: "Status",
+        getValue: (record) => getRecordStringValue(record, ["status", "approvalStatus"]),
+      },
+      {
+        id: "category",
+        label: "Category",
+        getValue: (record) =>
+          getRecordStringValue(record, [
+            "category",
+            "type",
+            "section",
+            "offerType",
+            "listingType",
+            "serviceType",
+            "pageType",
+            "policyType",
+            "memberVisibility",
+          ]),
+      },
+    ],
+    defaultSortId: "title",
+  });
+}
+
+
 function ResourceMockCrud() {
   const {
     records,
@@ -457,6 +533,8 @@ function ResourceMockCrud() {
     validateDraft: (currentDraft) =>
       hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
+
+  const table = useMockTableControls(records);
 
   const columns: AdminTableColumn<PublicResource>[] = [
     {
@@ -517,7 +595,8 @@ function ResourceMockCrud() {
             Create, edit, and delete resource records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -636,6 +715,8 @@ function HelpCenterMockCrud() {
       hasRequiredTextFields(currentDraft.question, currentDraft.answer),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<HelpArticle>[] = [
     {
       key: "question",
@@ -695,7 +776,8 @@ function HelpCenterMockCrud() {
             Create, edit, and delete help content in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -811,6 +893,8 @@ function LegalPagesMockCrud() {
       hasRequiredTextFields(currentDraft.title, currentDraft.summary, currentDraft.version),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<AdminLegalRecord>[] = [
     {
       key: "title",
@@ -875,7 +959,8 @@ function LegalPagesMockCrud() {
             Create, edit, and delete legal page records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -1056,6 +1141,8 @@ function MembershipMockCrud() {
       hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<AdminMembershipRecord>[] = [
     {
       key: "title",
@@ -1120,7 +1207,8 @@ function MembershipMockCrud() {
             Create, edit, and delete membership content records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -1311,6 +1399,8 @@ function MarketplaceMockCrud() {
       hasRequiredTextFields(currentDraft.title, currentDraft.summary, currentDraft.supplierName),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<AdminMarketplaceRecord>[] = [
     {
       key: "title",
@@ -1375,7 +1465,8 @@ function MarketplaceMockCrud() {
             Create, edit, and delete marketplace listing records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -1530,6 +1621,8 @@ function OfferMockCrud() {
       hasRequiredTextFields(currentDraft.title, currentDraft.partner, currentDraft.summary),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<PublicOffer>[] = [
     {
       key: "title",
@@ -1594,7 +1687,8 @@ function OfferMockCrud() {
             Create, edit, and delete offer records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -1735,6 +1829,8 @@ function ApplicationMockCrud() {
       hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<ApplicationCategory>[] = [
     {
       key: "title",
@@ -1789,7 +1885,8 @@ function ApplicationMockCrud() {
             Create, edit, and delete application catalogue records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell
@@ -1894,6 +1991,8 @@ function ServiceMockCrud() {
       hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
+  const table = useMockTableControls(records);
+
   const columns: AdminTableColumn<AdminServiceRecord>[] = [
     {
       key: "title",
@@ -1953,7 +2052,8 @@ function ServiceMockCrud() {
             Create, edit, and delete on-demand and managed service records in local component state.
           </p>
         </div>
-        <AdminTable rows={records} columns={columns} />
+        <AdminTableControls controls={table} />
+        <AdminTable rows={table.rows} columns={columns} />
       </div>
 
       <AdminFormShell

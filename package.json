@@ -19,7 +19,8 @@
     "audit:admin-marketplace-mock-crud": "node scripts/audit-admin-marketplace-mock-crud.mjs",
     "audit:admin-membership-mock-crud": "node scripts/audit-admin-membership-mock-crud.mjs",
     "audit:admin-legal-pages-mock-crud": "node scripts/audit-admin-legal-pages-mock-crud.mjs",
-    "audit:admin-utility-functions": "node scripts/audit-admin-utility-functions.mjs"
+    "audit:admin-utility-functions": "node scripts/audit-admin-utility-functions.mjs",
+    "audit:admin-table-controls": "node scripts/audit-admin-table-controls.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
