@@ -67,6 +67,75 @@ const services = [
   },
 ];
 
+const advisoryAnchorSections = [
+  {
+    id: "operations-advisory",
+    title: "Operations Advisory",
+    description:
+      "Practical guidance to improve workflows, remove bottlenecks, document processes, and strengthen day-to-day business operations.",
+  },
+  {
+    id: "human-resource-advisory",
+    title: "Human Resource Advisory",
+    description:
+      "Support for role clarity, employment documentation, onboarding, people processes, and practical HR operations.",
+  },
+  {
+    id: "accounting-finance",
+    title: "Accounting & Finance",
+    description:
+      "Advisory support for finance readiness, reporting discipline, cash flow planning, and internal financial administration.",
+  },
+  {
+    id: "sales-marketing",
+    title: "Sales & Marketing",
+    description:
+      "Support for positioning, sales process improvement, customer communication, campaign planning, and growth activity.",
+  },
+  {
+    id: "management-consulting",
+    title: "Management Consulting",
+    description:
+      "Commercial guidance for business owners around structure, performance, planning, and operational decision-making.",
+  },
+  {
+    id: "change-management",
+    title: "Change Management",
+    description:
+      "Support to help businesses manage process, people, technology, and operating model changes with less chaos.",
+  },
+  {
+    id: "ai-advisory",
+    title: "AI Advisory",
+    description:
+      "Practical advisory on where AI can improve business workflows, reduce manual work, and support better decision-making.",
+  },
+  {
+    id: "research-development",
+    title: "Research & Development",
+    description:
+      "Guidance for validating ideas, exploring opportunities, documenting findings, and planning business improvement initiatives.",
+  },
+  {
+    id: "information-technology",
+    title: "Information Technology",
+    description:
+      "Support for business systems, digital tools, technology planning, and operational technology decisions.",
+  },
+  {
+    id: "public-relations",
+    title: "Public Relations",
+    description:
+      "Advisory support for communication, reputation, stakeholder messaging, and public-facing business positioning.",
+  },
+  {
+    id: "customised-solutions",
+    title: "Customised Solutions",
+    description:
+      "Flexible support for business issues that do not fit neatly into one category, because naturally business problems refuse to behave.",
+  },
+];
+
 export function ServicesPage() {
   return (
     <div className="bg-white min-h-screen">
@@ -131,6 +200,49 @@ export function ServicesPage() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Advisory anchor sections */}
+      <section id="advisory-categories" className="py-16 bg-slate-50 scroll-mt-32">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div id="overview" className="text-center mb-12 scroll-mt-32">
+            <span className="inline-block text-xs font-bold text-blue-700 uppercase tracking-widest bg-white px-3 py-1 rounded-full mb-4">
+              Advisory Categories
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-4 tracking-tight">
+              Explore On-Demand Advisory Areas
+            </h2>
+            <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+              These sections support the public navigation links and give each advisory category a clear destination on the page.
+            </p>
+          </div>
+
+          <div id="how-it-works" className="bg-white border border-slate-200 rounded-2xl p-7 mb-8 scroll-mt-32">
+            <h3 className="text-xl font-bold text-slate-900 mb-2">How On-Demand Services Work</h3>
+            <p className="text-slate-600 text-sm leading-relaxed">
+              Choose the support area that best matches your business need, submit an enquiry, and we will scope the most suitable advisory pathway.
+            </p>
+          </div>
+
+          <div id="core-services" className="grid grid-cols-1 md:grid-cols-2 gap-5 scroll-mt-32">
+            {advisoryAnchorSections.map((item) => (
+              <div
+                key={item.id}
+                id={item.id}
+                className="bg-white border border-slate-200 rounded-2xl p-7 shadow-sm scroll-mt-32"
+              >
+                <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
+                <p className="text-slate-600 text-sm leading-relaxed mb-5">{item.description}</p>
+                <Link
+                  to={`/contact?reason=${item.id}`}
+                  className="inline-flex items-center gap-2 text-blue-700 font-bold text-sm hover:text-blue-800"
+                >
+                  Enquire about {item.title} <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
