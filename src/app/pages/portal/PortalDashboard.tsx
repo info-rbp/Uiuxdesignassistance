@@ -6,6 +6,10 @@ import {
   decisionDeskFlowStorageKey,
   type DecisionDeskStoredState,
 } from "../../features/decision-desk";
+import {
+  docuShareFlowStorageKey,
+  type DocuShareStoredState,
+} from "../../features/docushare";
 import { membershipFlowStorageKey } from "../../features/membership/MembershipPurchaseOnboardingFlow";
 import { mockPortalDashboard } from "../../mock";
 import {
@@ -47,6 +51,20 @@ function readDecisionDeskDashboardState(): DecisionDeskStoredState | null {
 
   try {
     return JSON.parse(rawValue) as DecisionDeskStoredState;
+  } catch {
+    return null;
+  }
+}
+
+function readDocuShareDashboardState(): DocuShareStoredState | null {
+  const rawValue = window.sessionStorage.getItem(docuShareFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DocuShareStoredState;
   } catch {
     return null;
   }
@@ -117,6 +135,7 @@ const CONSULTANT_ASSIGNED = true;
 export function PortalDashboard() {
   const membershipState = readMembershipDashboardState();
   const decisionDeskState = readDecisionDeskDashboardState();
+  const docuShareState = readDocuShareDashboardState();
   const memberName = mockPortalDashboard.user.contact.name;
   const businessName =
     membershipState?.businessName ??
@@ -147,6 +166,15 @@ export function PortalDashboard() {
           description={`${decisionDeskState.businessName} submitted "${decisionDeskState.title}" as a Phase 1 mock request. No real advisor has been assigned.`}
           status={decisionDeskState.status}
           href={decisionDeskState.requestHref}
+        />
+      ) : null}
+
+      {docuShareState ? (
+        <PortalStatusCard
+          title={`DocuShare brief ${docuShareState.reference}`}
+          description={`${docuShareState.businessName} submitted "${docuShareState.documentType}" as a Phase 1 mock document brief. No files were uploaded and no real document is being produced.`}
+          status={docuShareState.status}
+          href={docuShareState.documentsHref}
         />
       ) : null}
 

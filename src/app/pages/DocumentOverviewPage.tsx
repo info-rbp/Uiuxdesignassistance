@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
+import { mockDocuShareDocumentGroups } from "../mock";
 import {
   FolderOpen,
   ArrowRight,
@@ -16,59 +17,19 @@ const heroImage =
   "https://images.unsplash.com/photo-1768875820800-1c2a6f2e8280?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxkb2N1bWVudCUyMG1hbmFnZW1lbnQlMjBvZmZpY2UlMjBwYXBlciUyMGZpbGluZyUyMGJ1c2luZXNzfGVufDF8fHx8MTc3Njk1MTE4OHww&ixlib=rb-4.1.0&q=80&w=1080";
 
 // ── Document Categories ──
-const categories = [
-  {
-    id: "A",
-    title: "Category A",
-    subtitle: "Placeholder — to be updated",
-    desc: "This category covers a range of essential business documents. Full details, included document types, and use cases will be updated shortly.",
-    color: "bg-blue-700",
-    lightColor: "bg-blue-50 border-blue-200",
-    textColor: "text-blue-700",
-    items: [
-      "Document type 1",
-      "Document type 2",
-      "Document type 3",
-      "Document type 4",
-    ],
-    tag: "Core",
-    tagColor: "bg-blue-100 text-blue-700",
-  },
-  {
-    id: "B",
-    title: "Category B",
-    subtitle: "Placeholder — to be updated",
-    desc: "This category covers a range of supporting business documents. Full details, included document types, and use cases will be updated shortly.",
-    color: "bg-violet-700",
-    lightColor: "bg-violet-50 border-violet-200",
-    textColor: "text-violet-700",
-    items: [
-      "Document type 1",
-      "Document type 2",
-      "Document type 3",
-      "Document type 4",
-    ],
-    tag: "Supporting",
-    tagColor: "bg-violet-100 text-violet-700",
-  },
-  {
-    id: "C",
-    title: "Category C",
-    subtitle: "Placeholder — to be updated",
-    desc: "This category covers a range of specialist business documents. Full details, included document types, and use cases will be updated shortly.",
-    color: "bg-emerald-700",
-    lightColor: "bg-emerald-50 border-emerald-200",
-    textColor: "text-emerald-700",
-    items: [
-      "Document type 1",
-      "Document type 2",
-      "Document type 3",
-      "Document type 4",
-    ],
-    tag: "Specialist",
-    tagColor: "bg-emerald-100 text-emerald-700",
-  },
-];
+const categories = mockDocuShareDocumentGroups.map((group) => ({
+  ...group,
+  lightColor: `${group.lightBg} border-slate-200`,
+  textColor: group.accent,
+  items:
+    group.id === "templates"
+      ? ["Policies", "Proposals", "Company profiles", "Brand guidelines"]
+      : group.id === "documentation-suites"
+        ? ["Operations manuals", "HR suites", "Governance packs", "Sales documentation"]
+        : group.id === "toolkits"
+          ? ["Checklists", "Templates", "Instructions", "Examples"]
+          : ["SOPs", "Workflow guides", "Approval paths", "Handover notes"],
+}));
 
 // ── 5-Step Process ──
 const steps = [
@@ -145,6 +106,13 @@ export function DocumentOverviewPage() {
               Browse Categories
               <ArrowRight className="w-4 h-4" />
             </a>
+            <Link
+              to="/document-nucleus/brief"
+              className="inline-flex items-center gap-2 bg-white text-slate-950 hover:bg-blue-50 font-bold px-7 py-3.5 rounded-xl transition-all hover:-translate-y-0.5"
+            >
+              Start a document brief
+              <ArrowRight className="w-4 h-4" />
+            </Link>
             <a
               href="#process"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold px-7 py-3.5 rounded-xl transition-all hover:-translate-y-0.5"
@@ -160,9 +128,9 @@ export function DocumentOverviewPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
             {[
-              { value: "3", label: "Document Categories" },
-              { value: "5-Step", label: "Creation Process" },
-              { value: "100%", label: "Professionally Created" },
+              { value: "4", label: "Mock Document Groups" },
+              { value: "9-Step", label: "Brief Flow" },
+              { value: "Phase 1", label: "Frontend Mock" },
             ].map((s) => (
               <div key={s.label}>
                 <div className="text-3xl font-extrabold text-white mb-1">{s.value}</div>
@@ -181,10 +149,10 @@ export function DocumentOverviewPage() {
               Document Categories
             </span>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mb-4">
-              Three categories of business documents
+              Four mock groups of business documents
             </h2>
             <p className="text-slate-600 leading-relaxed">
-              Our document library is organised into three categories. Select the one that matches your current business need.
+              Our Phase 1 document library is organised into mock groups. Select the one that matches your current business need, then continue into the DocuShare brief flow.
             </p>
           </div>
 
@@ -197,7 +165,7 @@ export function DocumentOverviewPage() {
                 {/* Card header */}
                 <div className={`${cat.color} px-8 py-8 flex items-center gap-5`}>
                   <div className="w-14 h-14 bg-white/20 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <span className="text-white text-2xl font-extrabold">{cat.id}</span>
+                    <span className="text-white text-2xl font-extrabold">{cat.title.slice(0, 1)}</span>
                   </div>
                   <div>
                     <div className="text-white/70 text-xs font-bold uppercase tracking-widest mb-0.5">Category</div>
@@ -210,7 +178,7 @@ export function DocumentOverviewPage() {
                   <span className={`inline-block text-xs font-bold px-2.5 py-1 rounded-full mb-4 ${cat.tagColor}`}>
                     {cat.tag}
                   </span>
-                  <p className="text-slate-600 text-sm leading-relaxed mb-6">{cat.desc}</p>
+                  <p className="text-slate-600 text-sm leading-relaxed mb-6">{cat.description}</p>
                   <div className="space-y-2.5">
                     {cat.items.map((item) => (
                       <div key={item} className="flex items-center gap-3">
@@ -221,10 +189,17 @@ export function DocumentOverviewPage() {
                   </div>
                   <div className="mt-6 pt-6 border-t border-current/10">
                     <Link
-                      to={`/document-nucleus/category/${cat.id.toLowerCase()}`}
+                      to={`/document-nucleus/category/${cat.id}`}
                       className={`inline-flex items-center gap-2 font-bold text-sm ${cat.textColor} hover:underline`}
                     >
-                      Browse Category {cat.id}
+                      Browse {cat.title}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      to={`/document-nucleus/brief?category=${cat.id}`}
+                      className="mt-3 inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-700"
+                    >
+                      Create a mock DocuShare brief
                       <ArrowRight className="w-4 h-4" />
                     </Link>
                   </div>
@@ -235,7 +210,7 @@ export function DocumentOverviewPage() {
 
           <div className="mt-10 text-center">
             <p className="text-slate-400 text-sm italic">
-              Document categories and types will be updated with full details shortly.
+              Document groups and brief statuses are simulated for Phase 1 frontend review.
             </p>
           </div>
         </div>
@@ -306,17 +281,17 @@ export function DocumentOverviewPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <FolderOpen className="w-12 h-12 text-blue-300 mx-auto mb-5" />
           <h2 className="text-3xl font-extrabold tracking-tight mb-4">
-            Ready to get your documents created?
+            Ready to create a mock document brief?
           </h2>
           <p className="text-blue-100 leading-relaxed mb-8">
-            Get in touch and our team will guide you through the process from initial requirements to final delivery.
+            Use the Phase 1 DocuShare flow to review document requirements, mock uploads, review, submit and simulated portal status.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
-              to="/contact"
+              to="/document-nucleus/brief"
               className="inline-flex items-center gap-2 bg-white text-blue-700 font-bold px-8 py-4 rounded-xl hover:bg-blue-50 transition-all shadow-lg hover:-translate-y-0.5"
             >
-              Start a Document Request
+              Start a document brief
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link

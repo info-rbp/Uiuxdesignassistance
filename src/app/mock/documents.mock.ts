@@ -35,4 +35,17 @@ export const mockPortalDocuments: MockPortalDocument[] = [
       status: "mock-only",
     },
   },
+  {
+    id: "portal-doc-003",
+    title: "Mock DocuShare Brief Placeholder",
+    category: "DocuShare",
+    status: "submitted",
+    file: {
+      id: "file-docushare-brief",
+      fileName: "docushare-brief-placeholder.pdf",
+      fileType: "PDF",
+      sizeLabel: "Mock file",
+      status: "mock-only",
+    },
+  },
 ];

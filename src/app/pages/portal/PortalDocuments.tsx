@@ -1,11 +1,12 @@
 import { FileText, Download, Eye, Search, Filter, Clock, CheckCircle, AlertCircle, UploadCloud } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
+import {
+  docuShareFlowStorageKey,
+  type DocuShareStoredState,
+} from "../../features/docushare";
 import { mockPortalDocumentActivity } from "../../mock";
-
-const documents = mockPortalDocumentActivity;
-
-const categories = ["All", ...Array.from(new Set(documents.map((document) => document.category)))];
 
 const categoryIcon: Record<string, string> = {
   Advisory: "bg-blue-50 text-blue-700",
@@ -14,6 +15,7 @@ const categoryIcon: Record<string, string> = {
   Bids:     "bg-amber-50 text-amber-700",
   Membership: "bg-blue-50 text-blue-700",
   "Decision Desk": "bg-amber-50 text-amber-700",
+  DocuShare: "bg-blue-50 text-blue-700",
 };
 
 const statusColor: Record<string, string> = {
@@ -25,9 +27,38 @@ const statusColor: Record<string, string> = {
   submitted: "bg-blue-50 text-blue-700",
 };
 
+function readDocuShareDocumentState(): DocuShareStoredState | null {
+  const rawValue = window.sessionStorage.getItem(docuShareFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DocuShareStoredState;
+  } catch {
+    return null;
+  }
+}
+
 export function PortalDocuments() {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const docuShareState = readDocuShareDocumentState();
+  const documents = docuShareState
+    ? [
+        {
+          id: "portal-docushare-current",
+          name: `${docuShareState.documentType} brief placeholder`,
+          category: "DocuShare",
+          date: "Just now",
+          size: "Mock file",
+          status: docuShareState.status,
+        },
+        ...mockPortalDocumentActivity,
+      ]
+    : mockPortalDocumentActivity;
+  const categories = ["All", ...Array.from(new Set(documents.map((document) => document.category)))];
 
   const filtered = documents.filter((d) => {
     const matchCat = activeCategory === "All" || d.category === activeCategory;
@@ -46,6 +77,21 @@ export function PortalDocuments() {
       <div>
         <h2 className="text-xl font-extrabold text-slate-900 mb-1">Documents</h2>
         <p className="text-sm text-slate-500">Access mock document activity, file placeholders, and document-related CTAs.</p>
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <Link
+          to="/document-nucleus/brief"
+          className="inline-flex items-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800"
+        >
+          Create a mock DocuShare brief
+        </Link>
+        <Link
+          to="/document-nucleus/overview"
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+        >
+          View document options
+        </Link>
       </div>
 
       <div className="bg-blue-50 border border-blue-100 rounded-2xl px-5 py-4 flex items-start gap-3">
@@ -135,10 +181,10 @@ export function PortalDocuments() {
                     <span className={`text-[10px] font-bold px-2 py-1 rounded-lg hidden sm:inline-block capitalize ${statusColor[doc.status] ?? "bg-slate-100 text-slate-600"}`}>
                     {doc.status.replace(/-/g, " ")}
                   </span>
-                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Preview">
+                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Mock preview only">
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="Download">
+                  <button className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-colors" title="No real download in Phase 1">
                     <Download className="w-4 h-4" />
                   </button>
                 </div>

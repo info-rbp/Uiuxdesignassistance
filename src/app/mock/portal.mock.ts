@@ -263,7 +263,7 @@ export const mockPortalFlowStatuses: MockPortalFlowStatus[] = [
     title: "DocuShare brief",
     description: "DOC-MOCK-001 has supporting placeholder files attached.",
     status: "submitted",
-    href: "/document-nucleus/overview",
+    href: "/document-nucleus/brief",
   },
   {
     id: "flow-connectivity",
@@ -309,9 +309,9 @@ export const mockPortalServiceRequests: MockPortalServiceRequest[] = [
     status: brief.status,
     description: `Mock ${brief.jurisdiction} document brief for ${brief.intendedUse.toLowerCase()}.`,
     lastUpdated: "7 May 2026",
-    nextAction: "Awaiting document review",
-    ctaLabel: "Open Document Nucleus",
-    ctaHref: "/document-nucleus/overview",
+    nextAction: "Review simulated document status",
+    ctaLabel: "Open DocuShare brief",
+    ctaHref: "/document-nucleus/brief",
   })),
   ...mockConnectivityOrders.map((order) => ({
     id: "connectivity-order",
@@ -361,7 +361,7 @@ export const mockPortalDocumentActivity: MockPortalDocumentActivity[] = [
     status: document.status,
   })),
   {
-    id: "portal-doc-003",
+    id: "portal-doc-004",
     name: "Cash Flow Forecast Template",
     category: "Finance",
     date: "5 May 2026",
@@ -369,7 +369,7 @@ export const mockPortalDocumentActivity: MockPortalDocumentActivity[] = [
     status: "in-progress",
   },
   {
-    id: "portal-doc-004",
+    id: "portal-doc-005",
     name: "Tender Submission Review",
     category: "Bids",
     date: "4 May 2026",

@@ -5,6 +5,10 @@ import {
   decisionDeskFlowStorageKey,
   type DecisionDeskStoredState,
 } from "../../features/decision-desk";
+import {
+  docuShareFlowStorageKey,
+  type DocuShareStoredState,
+} from "../../features/docushare";
 import { mockPortalServiceRequests } from "../../mock";
 import {
   Zap, ArrowRight, ChevronRight, CheckCircle, Clock,
@@ -104,6 +108,20 @@ function readDecisionDeskServiceState(): DecisionDeskStoredState | null {
   }
 }
 
+function readDocuShareServiceState(): DocuShareStoredState | null {
+  const rawValue = window.sessionStorage.getItem(docuShareFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DocuShareStoredState;
+  } catch {
+    return null;
+  }
+}
+
 const STATUS_CONFIG: Record<ServiceStatus, { color: string; dot: string }> = {
   Active:      { color: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500" },
   "In Progress": { color: "bg-amber-50 text-amber-700",   dot: "bg-amber-500" },
@@ -134,8 +152,10 @@ function getButtonStyle(status: ServiceStatus) {
 export function PortalServices() {
   const [activeFilter, setActiveFilter] = useState<ServiceStatus | "All">("All");
   const decisionDeskState = readDecisionDeskServiceState();
-  const services = decisionDeskState
-    ? [
+  const docuShareState = readDocuShareServiceState();
+  const services = [
+    ...(decisionDeskState
+      ? [
         {
           id: "decision-desk",
           title: "Decision Desk",
@@ -147,9 +167,29 @@ export function PortalServices() {
           buttonLabel: "Open Decision Desk",
           icon: Zap,
         },
-        ...SERVICES.filter((service) => service.id !== "decision-desk"),
       ]
-    : SERVICES;
+      : []),
+    ...(docuShareState
+      ? [
+          {
+            id: "docushare-brief",
+            title: "DocuShare",
+            category: docuShareState.documentGroup,
+            status: statusLabel(docuShareState.status),
+            description: `${docuShareState.reference}: ${docuShareState.documentType} brief for ${docuShareState.businessName}. No real document is being produced.`,
+            lastUpdated: "Just now",
+            nextAction: "View simulated document status",
+            buttonLabel: "Open documents",
+            icon: FileText,
+          },
+        ]
+      : []),
+    ...SERVICES.filter(
+      (service) =>
+        (!decisionDeskState || service.id !== "decision-desk") &&
+        (!docuShareState || service.id !== "docushare-brief")
+    ),
+  ];
 
   const filtered =
     activeFilter === "All"
@@ -182,7 +222,7 @@ export function PortalServices() {
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3">
         {[
           { label: "Start Decision Desk", href: "/on-demand/decision-desk" },
-          { label: "Start DocuShare", href: "/document-nucleus/overview" },
+          { label: "Start DocuShare", href: "/document-nucleus/brief" },
           { label: "Order Connectivity", href: "/operations/connectivity" },
           { label: "Run Risk Advisor", href: "/on-demand/risk-advisor" },
           { label: "Request The Fixer", href: "/on-demand/the-fixer" },

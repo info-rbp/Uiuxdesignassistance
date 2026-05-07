@@ -33,6 +33,7 @@ import { RiskAdvisorPage } from "./pages/on-demand/RiskAdvisorPage";
 import { DocumentOverviewPage } from "./pages/DocumentOverviewPage";
 import { DocumentCategoryPage } from "./pages/DocumentCategoryPage";
 import { DocumentProductPage } from "./pages/DocumentProductPage";
+import { DocuShareOnboardingPage } from "./pages/DocuShareOnboardingPage";
 
 // ── Managed Services pages ────────────────────────────────────────────────────
 
@@ -163,6 +164,7 @@ export const router = createBrowserRouter([
       // ── Document Nucleus ───────────────────────────────────────────────────
 
       { path: "document-nucleus/overview", Component: DocumentOverviewPage },
+      { path: "document-nucleus/brief", Component: DocuShareOnboardingPage },
       { path: "document-nucleus/category/:id", Component: DocumentCategoryPage },
       { path: "document-nucleus/product/:id", Component: DocumentProductPage },
 
