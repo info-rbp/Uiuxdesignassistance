@@ -4,3 +4,7 @@ node_modules/
 # Local Firebase/Vite secrets
 .env.local
 .env.*.local
+
+# Local Stitch source exports
+/docs/stitch/_source-zips/
+/docs/stitch/_extracted/
