@@ -1,10 +1,24 @@
-import { mockDecisionDeskCategories, mockDecisionDeskRequests, mockDecisionDeskTimeline } from "../../mock";
+import {
+  mockDecisionDeskBusinessSizeOptions,
+  mockDecisionDeskBusinessStageOptions,
+  mockDecisionDeskCategories,
+  mockDecisionDeskConstraintOptions,
+  mockDecisionDeskHelpTypes,
+  mockDecisionDeskOutcomeOptions,
+  mockDecisionDeskRequests,
+  mockDecisionDeskSupportingInfoTypes,
+  mockDecisionDeskTimeline,
+  mockDecisionDeskUrgencyOptions,
+} from "../../mock";
 import { createMockReference, mockFailure, mockGet, mockPost, requireFields } from "./mockClient";
 
 export interface MockDecisionDeskPayload extends Record<string, unknown> {
+  businessName?: string;
+  industry?: string;
   decisionTitle?: string;
   decisionCategory?: string;
   decisionSummary?: string;
+  currentSituation?: string;
   urgency?: string;
   desiredOutcome?: string;
 }
@@ -21,6 +35,13 @@ export function getMockDecisionDeskSetup() {
     "/mock/decision-desk/setup",
     {
       categories: mockDecisionDeskCategories,
+      businessSizes: mockDecisionDeskBusinessSizeOptions,
+      businessStages: mockDecisionDeskBusinessStageOptions,
+      helpTypes: mockDecisionDeskHelpTypes,
+      urgencyOptions: mockDecisionDeskUrgencyOptions,
+      constraintOptions: mockDecisionDeskConstraintOptions,
+      outcomeOptions: mockDecisionDeskOutcomeOptions,
+      supportingInfoTypes: mockDecisionDeskSupportingInfoTypes,
       examples: mockDecisionDeskRequests,
     },
     "Mock Decision Desk setup returned."
@@ -29,9 +50,12 @@ export function getMockDecisionDeskSetup() {
 
 export function submitMockDecisionDeskRequest(payload: MockDecisionDeskPayload) {
   const errors = requireFields(payload, [
+    "businessName",
+    "industry",
     "decisionTitle",
     "decisionCategory",
     "decisionSummary",
+    "currentSituation",
     "urgency",
     "desiredOutcome",
   ]);

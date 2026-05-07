@@ -2,6 +2,10 @@ import { Link } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
 import { PortalStatusCard } from "../../components/domain";
 import { StatusBadge } from "../../components/status";
+import {
+  decisionDeskFlowStorageKey,
+  type DecisionDeskStoredState,
+} from "../../features/decision-desk";
 import { membershipFlowStorageKey } from "../../features/membership/MembershipPurchaseOnboardingFlow";
 import { mockPortalDashboard } from "../../mock";
 import {
@@ -29,6 +33,20 @@ function readMembershipDashboardState(): StoredMembershipDashboardState | null {
 
   try {
     return JSON.parse(rawValue) as StoredMembershipDashboardState;
+  } catch {
+    return null;
+  }
+}
+
+function readDecisionDeskDashboardState(): DecisionDeskStoredState | null {
+  const rawValue = window.sessionStorage.getItem(decisionDeskFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DecisionDeskStoredState;
   } catch {
     return null;
   }
@@ -98,6 +116,7 @@ const CONSULTANT_ASSIGNED = true;
 
 export function PortalDashboard() {
   const membershipState = readMembershipDashboardState();
+  const decisionDeskState = readDecisionDeskDashboardState();
   const memberName = mockPortalDashboard.user.contact.name;
   const businessName =
     membershipState?.businessName ??
@@ -121,6 +140,15 @@ export function PortalDashboard() {
         status={membershipState?.onboardingStatus === "complete" ? "active" : "in-progress"}
         href="/membership/confirmation"
       />
+
+      {decisionDeskState ? (
+        <PortalStatusCard
+          title={`Decision Desk ${decisionDeskState.reference}`}
+          description={`${decisionDeskState.businessName} submitted "${decisionDeskState.title}" as a Phase 1 mock request. No real advisor has been assigned.`}
+          status={decisionDeskState.status}
+          href={decisionDeskState.requestHref}
+        />
+      ) : null}
 
       {/* ── Welcome banner ── */}
       <div className="bg-blue-700 rounded-2xl px-6 py-5 relative overflow-hidden">

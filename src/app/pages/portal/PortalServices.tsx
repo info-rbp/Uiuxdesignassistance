@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { PortalAdminReference } from "./PortalAdminReference";
+import {
+  decisionDeskFlowStorageKey,
+  type DecisionDeskStoredState,
+} from "../../features/decision-desk";
 import { mockPortalServiceRequests } from "../../mock";
 import {
   Zap, ArrowRight, ChevronRight, CheckCircle, Clock,
@@ -86,6 +90,20 @@ export const SERVICES: Service[] = [
   },
 ];
 
+function readDecisionDeskServiceState(): DecisionDeskStoredState | null {
+  const rawValue = window.sessionStorage.getItem(decisionDeskFlowStorageKey);
+
+  if (!rawValue) {
+    return null;
+  }
+
+  try {
+    return JSON.parse(rawValue) as DecisionDeskStoredState;
+  } catch {
+    return null;
+  }
+}
+
 const STATUS_CONFIG: Record<ServiceStatus, { color: string; dot: string }> = {
   Active:      { color: "bg-emerald-50 text-emerald-700", dot: "bg-emerald-500" },
   "In Progress": { color: "bg-amber-50 text-amber-700",   dot: "bg-amber-500" },
@@ -115,11 +133,28 @@ function getButtonStyle(status: ServiceStatus) {
 
 export function PortalServices() {
   const [activeFilter, setActiveFilter] = useState<ServiceStatus | "All">("All");
+  const decisionDeskState = readDecisionDeskServiceState();
+  const services = decisionDeskState
+    ? [
+        {
+          id: "decision-desk",
+          title: "Decision Desk",
+          category: decisionDeskState.category,
+          status: statusLabel(decisionDeskState.status),
+          description: `${decisionDeskState.reference}: ${decisionDeskState.title}. This is a Phase 1 mock submission with no real advisor assigned.`,
+          lastUpdated: "Just now",
+          nextAction: "View mock status timeline",
+          buttonLabel: "Open Decision Desk",
+          icon: Zap,
+        },
+        ...SERVICES.filter((service) => service.id !== "decision-desk"),
+      ]
+    : SERVICES;
 
   const filtered =
     activeFilter === "All"
-      ? SERVICES
-      : SERVICES.filter((s) => s.status === activeFilter);
+      ? services
+      : services.filter((s) => s.status === activeFilter);
 
   return (
     <div className="px-4 sm:px-6 py-6 space-y-6">
@@ -174,7 +209,7 @@ export function PortalServices() {
             }`}
           >
             <div className="text-2xl font-extrabold mb-0.5">
-              {SERVICES.filter((sv) => sv.status === s.key).length}
+              {services.filter((sv) => sv.status === s.key).length}
             </div>
             <div className="text-xs font-semibold">{s.label}</div>
           </button>
@@ -196,7 +231,7 @@ export function PortalServices() {
             {tab}
             {tab !== "All" && (
               <span className={`ml-1.5 text-[10px] ${activeFilter === tab ? "text-blue-200" : "text-slate-400"}`}>
-                {SERVICES.filter((s) => s.status === tab).length}
+                {services.filter((s) => s.status === tab).length}
               </span>
             )}
           </button>
