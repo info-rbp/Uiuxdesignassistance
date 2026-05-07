@@ -1,5 +1,20 @@
-import { mockAdminReviewQueues } from "../../mock";
-import { createMockReference, mockFailure, mockGet, mockPost, requireFields } from "./mockClient";
+import {
+  mockAdminActionOptions,
+  mockAdminAuditRecords,
+  mockAdminAuditTrail,
+  mockAdminContentRecords,
+  mockAdminMetrics,
+  mockAdminQueues,
+  mockAdminReviewQueues,
+  mockAdminReviewRecords,
+} from "../../mock";
+import {
+  createMockReference,
+  mockFailure,
+  mockGet,
+  mockPost,
+  requireFields,
+} from "./mockClient";
 
 export interface MockAdminReviewActionPayload extends Record<string, unknown> {
   recordId?: string;
@@ -11,12 +26,22 @@ export interface MockAdminReviewActionResult {
   reference: string;
   status: "submitted";
   reviewQueueHref: string;
+  auditHref: string;
 }
 
 export function getMockAdminReviewQueues() {
   return mockGet(
     "/mock/admin/review-queues",
-    mockAdminReviewQueues,
+    {
+      metrics: mockAdminMetrics,
+      queues: mockAdminQueues,
+      records: mockAdminReviewRecords,
+      content: mockAdminContentRecords,
+      auditRecords: mockAdminAuditRecords,
+      auditTrail: mockAdminAuditTrail,
+      actions: mockAdminActionOptions,
+      grouped: mockAdminReviewQueues,
+    },
     "Mock admin review queues returned."
   );
 }
@@ -41,6 +66,7 @@ export function submitMockAdminReviewAction(payload: MockAdminReviewActionPayloa
       reference: createMockReference("ADM"),
       status: "submitted" as const,
       reviewQueueHref: "/admin/requests",
+      auditHref: "/admin/audit-review",
     }),
     "Mock admin review action submitted."
   );
