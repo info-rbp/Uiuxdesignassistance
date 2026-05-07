@@ -8,7 +8,8 @@
     "dev": "vite",
     "audit:public-content": "node scripts/audit-public-content.mjs",
     "audit:admin-content-model": "node scripts/audit-admin-content-model.mjs",
-    "audit:admin-crud-schema": "node scripts/audit-admin-crud-schema.mjs"
+    "audit:admin-crud-schema": "node scripts/audit-admin-crud-schema.mjs",
+    "audit:admin-crud-scaffold": "node scripts/audit-admin-crud-scaffold.mjs"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

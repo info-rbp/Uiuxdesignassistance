@@ -116,6 +116,7 @@ import { PortalSettings } from "./pages/portal/PortalSettings";
 import { AdminSignInPage } from "./pages/admin/AdminSignInPage";
 import { AdminLayout } from "./pages/admin/AdminLayout";
 import { AdminDashboard } from "./pages/admin/AdminDashboard";
+import { AdminCrudPage } from "./pages/admin/AdminCrudPage";
 
 function Root() {
   return (
@@ -350,15 +351,45 @@ export const router = createBrowserRouter([
             Component: AdminLayout,
             children: [
               { path: "dashboard", Component: AdminDashboard },
-              { path: "members", Component: AdminDashboard },
-              { path: "services", Component: AdminDashboard },
-              { path: "applications", Component: AdminDashboard },
-              { path: "sessions", Component: AdminDashboard },
-              { path: "documents", Component: AdminDashboard },
-              { path: "offers", Component: AdminDashboard },
-              { path: "the-fixer", Component: AdminDashboard },
-              { path: "settings", Component: AdminDashboard },
-              { path: "*", Component: AdminDashboard },
+
+              // Admin dashboard utility routes.
+              { path: "tasks", Component: AdminCrudPage },
+              { path: "discovery-calls", Component: AdminCrudPage },
+              { path: "other", Component: AdminCrudPage },
+
+              // Top-level legacy/admin shortcuts.
+              { path: "members", Component: AdminCrudPage },
+              { path: "services", Component: AdminCrudPage },
+              { path: "sessions", Component: AdminCrudPage },
+              { path: "documents", Component: AdminCrudPage },
+              { path: "the-fixer", Component: AdminCrudPage },
+
+              // Admin CRUD scaffold sections.
+              { path: "on-demand", Component: AdminCrudPage },
+              { path: "on-demand/*", Component: AdminCrudPage },
+              { path: "managed-services", Component: AdminCrudPage },
+              { path: "managed-services/*", Component: AdminCrudPage },
+              { path: "applications", Component: AdminCrudPage },
+              { path: "applications/*", Component: AdminCrudPage },
+              { path: "operations", Component: AdminCrudPage },
+              { path: "operations/*", Component: AdminCrudPage },
+              { path: "marketplace", Component: AdminCrudPage },
+              { path: "marketplace/*", Component: AdminCrudPage },
+              { path: "membership", Component: AdminCrudPage },
+              { path: "membership/*", Component: AdminCrudPage },
+              { path: "offers", Component: AdminCrudPage },
+              { path: "offers/*", Component: AdminCrudPage },
+              { path: "resources", Component: AdminCrudPage },
+              { path: "resources/*", Component: AdminCrudPage },
+              { path: "help-center", Component: AdminCrudPage },
+              { path: "help-center/*", Component: AdminCrudPage },
+              { path: "site-content", Component: AdminCrudPage },
+              { path: "site-content/*", Component: AdminCrudPage },
+              { path: "settings", Component: AdminCrudPage },
+              { path: "settings/*", Component: AdminCrudPage },
+
+              // Admin fallback.
+              { path: "*", Component: AdminCrudPage },
             ],
           },
         ],
