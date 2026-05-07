@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { Mail, Phone, MapPin, Clock, CheckCircle, ArrowRight, MessageCircle } from "lucide-react";
@@ -20,10 +21,68 @@ const enquiryTypes = [
   "Billing enquiry",
 ];
 
+
+const reasonLabels: Record<string, string> = {
+  "discovery-call": "General enquiry",
+  "application-setup": "Business Applications enquiry",
+  "managed-services": "Managed Services enquiry",
+  "list-with-us": "Marketplace product enquiry",
+  "operations-advisory": "On-Demand Services enquiry",
+  "human-resource-advisory": "On-Demand Services enquiry",
+  "accounting-finance": "Finance enquiry",
+  "sales-marketing": "On-Demand Services enquiry",
+  "management-consulting": "On-Demand Services enquiry",
+  "change-management": "Managed Services enquiry",
+  "ai-advisory": "On-Demand Services enquiry",
+  "research-development": "On-Demand Services enquiry",
+  "information-technology": "Business Applications enquiry",
+  "public-relations": "On-Demand Services enquiry",
+  "customised-solutions": "On-Demand Services enquiry",
+  "document-management": "Managed Services enquiry",
+  "business-sale-support": "Managed Services enquiry",
+  "franchise": "Managed Services enquiry",
+  "lms": "Managed Services enquiry",
+  "custom-solutions": "Managed Services enquiry",
+  "integrations": "Business Applications enquiry",
+  "fleet-management": "Business Applications enquiry",
+  "business-watchlist": "Business Applications enquiry",
+};
+
+const reasonTitles: Record<string, string> = {
+  "discovery-call": "Discovery Call",
+  "application-setup": "Application Setup",
+  "managed-services": "Managed Services",
+  "list-with-us": "List With Us",
+  "operations-advisory": "Operations Advisory",
+  "human-resource-advisory": "Human Resource Advisory",
+  "accounting-finance": "Accounting & Finance",
+  "sales-marketing": "Sales & Marketing",
+  "management-consulting": "Management Consulting",
+  "change-management": "Change Management",
+  "ai-advisory": "AI Advisory",
+  "research-development": "Research & Development",
+  "information-technology": "Information Technology",
+  "public-relations": "Public Relations",
+  "customised-solutions": "Customised Solutions",
+  "document-management": "Document Management",
+  "business-sale-support": "Business Sale Support",
+  "franchise": "Franchise",
+  "lms": "LMS",
+  "custom-solutions": "Custom Solutions",
+  "integrations": "Integrations",
+  "fleet-management": "Fleet Management",
+  "business-watchlist": "Business Watchlist",
+};
+
 export function ContactPage() {
+  const [searchParams] = useSearchParams();
+  const reason = searchParams.get("reason") ?? "";
+  const selectedReasonTitle = reasonTitles[reason] ?? "";
+  const selectedEnquiryType = reasonLabels[reason] ?? "";
+
   const [submitted, setSubmitted] = useState(false);
   const [form, setForm] = useState({
-    name: "", email: "", company: "", phone: "", enquiryType: "", message: "",
+    name: "", email: "", company: "", phone: "", enquiryType: selectedEnquiryType, message: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -72,6 +131,16 @@ export function ContactPage() {
                   <div>
                     <h2 className="text-2xl font-extrabold text-slate-900 mb-1">Send us an enquiry</h2>
                     <p className="text-slate-500 text-sm">Select your enquiry type so we can route your message to the right team.</p>
+                    {selectedReasonTitle && (
+                      <div className="mt-4 bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                        <div className="text-xs font-bold text-blue-700 uppercase tracking-widest mb-1">
+                          Selected enquiry pathway
+                        </div>
+                        <p className="text-sm text-slate-700">
+                          You followed a link for <strong>{selectedReasonTitle}</strong>. We have preselected the most relevant enquiry type where possible.
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   {/* Enquiry type */}

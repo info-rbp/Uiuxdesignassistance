@@ -1,4 +1,4 @@
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { CTABanner } from "../components/CTABanner";
@@ -67,7 +67,63 @@ const featured = [
   },
 ];
 
+
+const resourceTypeFilters = [
+  { id: "articles", label: "Articles" },
+  { id: "guides", label: "Guides" },
+  { id: "tools", label: "Tools" },
+  { id: "downloads", label: "Downloads" },
+  { id: "educational", label: "Educational" },
+];
+
+const resourceCategoryFilters = [
+  { id: "strategy", label: "Strategy" },
+  { id: "finance", label: "Finance" },
+  { id: "sales-marketing", label: "Sales & Marketing" },
+  { id: "research-development", label: "Research & Development" },
+  { id: "information-technology", label: "Information Technology" },
+  { id: "customer-service", label: "Customer Service" },
+  { id: "human-resources", label: "Human Resources" },
+  { id: "design", label: "Design" },
+  { id: "communications", label: "Communications" },
+  { id: "governance", label: "Governance" },
+  { id: "production", label: "Production" },
+  { id: "sourcing", label: "Sourcing" },
+  { id: "quality-management", label: "Quality Management" },
+  { id: "distribution", label: "Distribution" },
+  { id: "operations", label: "Operations" },
+  { id: "other", label: "Other" },
+];
+
+const resourceTypeLabels = Object.fromEntries(
+  resourceTypeFilters.map((type) => [type.id, type.label])
+);
+
+const resourceCategoryLabels = Object.fromEntries(
+  resourceCategoryFilters.map((category) => [category.id, category.label])
+);
+
+const resourceMeta: Record<string, { type: string; category: string }> = {
+  "The Small Business Operations Playbook": { type: "guides", category: "operations" },
+  "90-Day Business Planning Template": { type: "downloads", category: "strategy" },
+  "How a 5-Person Agency Grew Revenue by 3x": { type: "articles", category: "sales-marketing" },
+  "AI Tools for Small Business in 2024": { type: "educational", category: "information-technology" },
+  "HR Essentials: Your First Employee Handbook": { type: "guides", category: "human-resources" },
+  "UK SME Funding Landscape 2024": { type: "articles", category: "finance" },
+};
+
 export function ResourcesPage() {
+  const [searchParams] = useSearchParams();
+  const selectedType = searchParams.get("type") ?? "";
+  const selectedCategory = searchParams.get("category") ?? "";
+
+  const filteredResources = featured.filter((resource) => {
+    const meta = resourceMeta[resource.title];
+    const matchesType = !selectedType || meta?.type === selectedType;
+    const matchesCategory = !selectedCategory || meta?.category === selectedCategory;
+    return matchesType && matchesCategory;
+  });
+
   return (
     <div className="bg-white min-h-screen">
       <Navbar />
@@ -85,10 +141,77 @@ export function ResourcesPage() {
       />
 
       {/* Categories */}
-      <section className="py-16 bg-slate-50">
+      <section id="categories" className="py-16 bg-slate-50 scroll-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
-            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-2">Browse by Category</h2>
+            <h2 className="text-2xl font-extrabold text-slate-900 tracking-tight mb-2">Browse Resources</h2>
+            <p className="text-slate-500 text-sm">
+              Filter by resource type or business category using the links below.
+            </p>
+          </div>
+
+          <div className="mb-8 space-y-4">
+            <div>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Resource Types</div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  to={selectedCategory ? `/resources?category=${selectedCategory}` : "/resources"}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                    !selectedType ? "bg-blue-700 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  All Types
+                </Link>
+                {resourceTypeFilters.map((type) => (
+                  <Link
+                    key={type.id}
+                    to={`/resources?type=${type.id}${selectedCategory ? `&category=${selectedCategory}` : ""}`}
+                    className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                      selectedType === type.id ? "bg-blue-700 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
+                    }`}
+                  >
+                    {type.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Business Categories</div>
+              <div className="flex flex-wrap gap-2">
+                <Link
+                  to={selectedType ? `/resources?type=${selectedType}` : "/resources"}
+                  className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                    !selectedCategory ? "bg-blue-700 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
+                  }`}
+                >
+                  All Categories
+                </Link>
+                {resourceCategoryFilters.map((category) => (
+                  <Link
+                    key={category.id}
+                    to={`/resources?category=${category.id}${selectedType ? `&type=${selectedType}` : ""}`}
+                    className={`text-xs font-bold px-3 py-1.5 rounded-full transition-all ${
+                      selectedCategory === category.id ? "bg-blue-700 text-white" : "bg-white text-slate-600 hover:bg-slate-100"
+                    }`}
+                  >
+                    {category.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {(selectedType || selectedCategory) && (
+              <div className="bg-blue-50 border border-blue-100 rounded-2xl p-4">
+                <p className="text-sm text-slate-700">
+                  Showing resources
+                  {selectedType && <> of type <strong>{resourceTypeLabels[selectedType] || selectedType}</strong></>}
+                  {selectedCategory && <> in <strong>{resourceCategoryLabels[selectedCategory] || selectedCategory}</strong></>}
+                  .
+                  {filteredResources.length === 0 && " No matching resources are currently listed."}
+                </p>
+              </div>
+            )}
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
             {categories.map((cat) => {
@@ -129,7 +252,7 @@ export function ResourcesPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featured.map((res) => {
+            {filteredResources.map((res) => {
               const Icon = res.icon;
               return (
                 <div
