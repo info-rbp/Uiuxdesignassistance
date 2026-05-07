@@ -17,12 +17,29 @@ import {
   type HelpSectionId,
 } from "../../data/helpCenter";
 
+import {
+  applicationCategories,
+  type ApplicationCategory,
+} from "../../data/applications";
+
+import {
+  onDemandServices,
+  type OnDemandService,
+} from "../../data/onDemandServices";
+
+import {
+  managedServices,
+  type ManagedService,
+} from "../../data/managedServices";
+
 import { useAdminLocalCrud } from "../../hooks/useAdminLocalCrud";
 
 import { AdminEmptyState } from "./AdminEmptyState";
 import { AdminFormShell } from "./AdminFormShell";
 import { AdminStatusBadge } from "./AdminStatusBadge";
 import { AdminTable, type AdminTableColumn } from "./AdminTable";
+
+type ContentStatus = "ready" | "placeholder" | "content-required" | "backend-later";
 
 type ResourceDraft = Pick<
   PublicResource,
@@ -32,6 +49,27 @@ type ResourceDraft = Pick<
 type HelpDraft = Pick<
   HelpArticle,
   "question" | "answer" | "section" | "category" | "status"
+>;
+
+type ApplicationDraft = Pick<
+  ApplicationCategory,
+  "title" | "summary" | "href" | "status"
+>;
+
+interface AdminServiceRecord {
+  id: string;
+  title: string;
+  summary: string;
+  href: string;
+  category: string;
+  serviceType: "on-demand" | "managed";
+  linkType: "route" | "anchor";
+  status: ContentStatus;
+}
+
+type ServiceDraft = Pick<
+  AdminServiceRecord,
+  "title" | "summary" | "href" | "category" | "serviceType" | "linkType" | "status"
 >;
 
 function slugify(value: string) {
@@ -63,6 +101,53 @@ function createHelpDraft(): HelpDraft {
     category: "other",
     status: "ready",
   };
+}
+
+function createApplicationDraft(): ApplicationDraft {
+  return {
+    title: "",
+    summary: "",
+    href: "/applications",
+    status: "ready",
+  };
+}
+
+function createServiceDraft(): ServiceDraft {
+  return {
+    title: "",
+    summary: "",
+    href: "/on-demand",
+    category: "operations",
+    serviceType: "on-demand",
+    linkType: "route",
+    status: "ready",
+  };
+}
+
+function createServiceRecords(): AdminServiceRecord[] {
+  const onDemandRecords: AdminServiceRecord[] = onDemandServices.map((service: OnDemandService) => ({
+    id: service.id,
+    title: service.title,
+    summary: service.summary,
+    href: service.href,
+    category: service.category,
+    serviceType: "on-demand",
+    linkType: "route",
+    status: service.status,
+  }));
+
+  const managedRecords: AdminServiceRecord[] = managedServices.map((service: ManagedService) => ({
+    id: service.id,
+    title: service.title,
+    summary: service.summary,
+    href: service.href,
+    category: "operations",
+    serviceType: "managed",
+    linkType: service.type,
+    status: service.status,
+  }));
+
+  return [...onDemandRecords, ...managedRecords];
 }
 
 const inputClass =
@@ -443,6 +528,363 @@ function HelpCenterMockCrud() {
   );
 }
 
+function ApplicationMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<ApplicationCategory, ApplicationDraft>({
+    initialRecords: applicationCategories,
+    createDraft: createApplicationDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      summary: record.summary,
+      href: record.href,
+      status: record.status,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `application-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || `/applications#${slugify(currentDraft.title)}`,
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+  });
+
+  const columns: AdminTableColumn<ApplicationCategory>[] = [
+    {
+      key: "title",
+      header: "Application Area",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "href",
+      header: "Public Link",
+      render: (row) => <span className="text-slate-600">{row.href}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit application"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete application"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Application Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete application catalogue records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Application" : "Create Application"}
+        description="Local mock form for application catalogue areas."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Application"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Application Area"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short application summary"
+            rows={4}
+          />
+        </Field>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/applications#example"
+          />
+        </Field>
+
+        <Field label="Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as ContentStatus })}
+          >
+            <option value="ready">Ready</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="content-required">Content Required</option>
+            <option value="backend-later">Backend Later</option>
+          </select>
+        </Field>
+      </AdminFormShell>
+    </section>
+  );
+}
+
+function ServiceMockCrud() {
+  const {
+    records,
+    draft,
+    editingRecord,
+    canSave,
+    updateDraft,
+    resetForm,
+    startEdit,
+    saveRecord,
+    deleteRecord,
+  } = useAdminLocalCrud<AdminServiceRecord, ServiceDraft>({
+    initialRecords: createServiceRecords(),
+    createDraft: createServiceDraft,
+    toDraft: (record) => ({
+      title: record.title,
+      summary: record.summary,
+      href: record.href,
+      category: record.category,
+      serviceType: record.serviceType,
+      linkType: record.linkType,
+      status: record.status,
+    }),
+    fromDraft: (currentDraft, existingRecord) => ({
+      id: existingRecord?.id ?? (slugify(currentDraft.title) || `service-${Date.now()}`),
+      ...currentDraft,
+      href: currentDraft.href || "/on-demand",
+    }),
+    validateDraft: (currentDraft) =>
+      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+  });
+
+  const columns: AdminTableColumn<AdminServiceRecord>[] = [
+    {
+      key: "title",
+      header: "Service",
+      render: (row) => (
+        <div>
+          <div className="font-bold text-slate-900">{row.title}</div>
+          <div className="text-xs text-slate-500 mt-1">{row.summary}</div>
+        </div>
+      ),
+    },
+    {
+      key: "serviceType",
+      header: "Type",
+      render: (row) => <AdminStatusBadge label={row.serviceType} status="ready" />,
+    },
+    {
+      key: "linkType",
+      header: "Link",
+      render: (row) => <span className="text-slate-600">{row.linkType}</span>,
+    },
+    {
+      key: "status",
+      header: "Status",
+      render: (row) => <AdminStatusBadge label={row.status} status={row.status} />,
+    },
+    {
+      key: "actions",
+      header: "Actions",
+      render: (row) => (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => startEdit(row)}
+            className="p-2 rounded-lg text-slate-400 hover:text-blue-700 hover:bg-blue-50 transition-all"
+            title="Edit service"
+          >
+            <Edit3 className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => deleteRecord(row.id)}
+            className="p-2 rounded-lg text-slate-400 hover:text-red-700 hover:bg-red-50 transition-all"
+            title="Delete service"
+          >
+            <Trash2 className="w-4 h-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <section className="grid grid-cols-1 xl:grid-cols-[1fr_420px] gap-6">
+      <div className="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden">
+        <div className="px-5 py-4 border-b border-slate-100">
+          <h2 className="text-sm font-extrabold text-slate-900">Mock Service Records</h2>
+          <p className="text-xs text-slate-500 mt-1">
+            Create, edit, and delete on-demand and managed service records in local component state.
+          </p>
+        </div>
+        <AdminTable rows={records} columns={columns} />
+      </div>
+
+      <AdminFormShell
+        title={editingRecord ? "Edit Service" : "Create Service"}
+        description="Local mock form for on-demand and managed service catalogue records."
+        footer={
+          <div className="flex items-center gap-2">
+            <button
+              onClick={resetForm}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition-all"
+            >
+              <X className="w-4 h-4" />
+              Clear
+            </button>
+            <button
+              onClick={saveRecord}
+              disabled={!canSave}
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2.5 text-xs font-bold text-white hover:bg-blue-800 disabled:opacity-40 transition-all"
+            >
+              {editingRecord ? <Save className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+              {editingRecord ? "Save Mock Edit" : "Add Mock Service"}
+            </button>
+          </div>
+        }
+      >
+        <MockNotice />
+
+        <Field label="Title">
+          <input
+            className={inputClass}
+            value={draft.title}
+            onChange={(event) => updateDraft({ title: event.target.value })}
+            placeholder="Example Service"
+          />
+        </Field>
+
+        <Field label="Summary">
+          <textarea
+            className={inputClass}
+            value={draft.summary}
+            onChange={(event) => updateDraft({ summary: event.target.value })}
+            placeholder="Short service summary"
+            rows={4}
+          />
+        </Field>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field label="Service Type">
+            <select
+              className={inputClass}
+              value={draft.serviceType}
+              onChange={(event) =>
+                updateDraft({ serviceType: event.target.value as ServiceDraft["serviceType"] })
+              }
+            >
+              <option value="on-demand">On-Demand</option>
+              <option value="managed">Managed</option>
+            </select>
+          </Field>
+
+          <Field label="Link Type">
+            <select
+              className={inputClass}
+              value={draft.linkType}
+              onChange={(event) =>
+                updateDraft({ linkType: event.target.value as ServiceDraft["linkType"] })
+              }
+            >
+              <option value="route">Route</option>
+              <option value="anchor">Anchor</option>
+            </select>
+          </Field>
+        </div>
+
+        <Field label="Category">
+          <input
+            className={inputClass}
+            value={draft.category}
+            onChange={(event) => updateDraft({ category: event.target.value })}
+            placeholder="operations"
+          />
+        </Field>
+
+        <Field label="Public Link">
+          <input
+            className={inputClass}
+            value={draft.href}
+            onChange={(event) => updateDraft({ href: event.target.value })}
+            placeholder="/on-demand/example"
+          />
+        </Field>
+
+        <Field label="Status">
+          <select
+            className={inputClass}
+            value={draft.status}
+            onChange={(event) => updateDraft({ status: event.target.value as ContentStatus })}
+          >
+            <option value="ready">Ready</option>
+            <option value="placeholder">Placeholder</option>
+            <option value="content-required">Content Required</option>
+            <option value="backend-later">Backend Later</option>
+          </select>
+        </Field>
+      </AdminFormShell>
+    </section>
+  );
+}
+
 export function AdminMockCrudWorkspace() {
   const location = useLocation();
 
@@ -454,6 +896,18 @@ export function AdminMockCrudWorkspace() {
     return <HelpCenterMockCrud />;
   }
 
+  if (location.pathname.startsWith("/admin/applications")) {
+    return <ApplicationMockCrud />;
+  }
+
+  if (
+    location.pathname.startsWith("/admin/services") ||
+    location.pathname.startsWith("/admin/on-demand") ||
+    location.pathname.startsWith("/admin/managed-services")
+  ) {
+    return <ServiceMockCrud />;
+  }
+
   return (
     <AdminFormShell
       title="Local Mock CRUD"
@@ -462,7 +916,7 @@ export function AdminMockCrudWorkspace() {
       <AdminEmptyState
         icon={HelpCircle}
         title="Mock CRUD not enabled for this section"
-        description="Resources and Help Center are enabled first because they are low-risk content areas. Commercial, membership, marketplace, and legal workflows come later, because chaos deserves a queue."
+        description="Resources, Help Center, Applications, and Services are enabled first because they are lower-risk content areas. Commercial, membership, marketplace, and legal workflows come later, because chaos deserves a queue."
       />
     </AdminFormShell>
   );
