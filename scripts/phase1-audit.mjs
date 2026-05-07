@@ -83,6 +83,19 @@ function walkFiles(dir, extensions = [".ts", ".tsx", ".js", ".jsx", ".mjs"]) {
   return output.sort();
 }
 
+const nestedRouteSignatures = {
+  "/membership/confirmation": [
+    "path: \"membership\"",
+    "path: \"confirmation\"",
+    "MembershipConfirmationPage",
+  ],
+  "/admin/content": [
+    "path: \"admin\"",
+    "path: \"content\"",
+    "AdminCrudPage",
+  ],
+};
+
 function checkRoute(route) {
   const routeFiles = [
     "src/app/routes.tsx",
@@ -90,9 +103,17 @@ function checkRoute(route) {
     "src/app/config/navigation.ts",
   ].filter((filePath) => exists(filePath));
 
-  const found = routeFiles.some((filePath) => read(filePath).includes(route));
+  const fileContents = routeFiles.map((filePath) => read(filePath));
+  const foundExact = fileContents.some((content) => content.includes(route));
 
-  if (found) {
+  const nestedSignature = nestedRouteSignatures[route];
+  const foundNested = nestedSignature
+    ? fileContents.some((content) =>
+        nestedSignature.every((signature) => content.includes(signature))
+      )
+    : false;
+
+  if (foundExact || foundNested) {
     pass(`route registered or documented: ${route}`);
   } else {
     fail(`route missing from route config/registry/navigation: ${route}`);
