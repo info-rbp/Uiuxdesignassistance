@@ -57,6 +57,13 @@ import {
 
 import { useAdminLocalCrud } from "../../hooks/useAdminLocalCrud";
 
+import {
+  createMockRecordId,
+  hasRequiredTextFields,
+  slugify,
+  withFallbackHref,
+} from "../../utils/adminCrud";
+
 import { AdminEmptyState } from "./AdminEmptyState";
 import { AdminFormShell } from "./AdminFormShell";
 import { AdminStatusBadge } from "./AdminStatusBadge";
@@ -188,14 +195,6 @@ type ServiceDraft = Pick<
   "title" | "summary" | "href" | "category" | "serviceType" | "linkType" | "status"
 >;
 
-function slugify(value: string) {
-  return value
-    .toLowerCase()
-    .trim()
-    .replace(/&/g, "and")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-}
 
 function createResourceDraft(): ResourceDraft {
   return {
@@ -451,12 +450,12 @@ function ResourceMockCrud() {
       status: record.status,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `resource-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("resource", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || "/resources",
+      href: withFallbackHref(currentDraft.href, "/resources"),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+      hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
   const columns: AdminTableColumn<PublicResource>[] = [
@@ -630,11 +629,11 @@ function HelpCenterMockCrud() {
       status: record.status,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.question) || `help-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("help", currentDraft.question),
       ...currentDraft,
     }),
     validateDraft: (currentDraft) =>
-      Boolean(currentDraft.question.trim() && currentDraft.answer.trim()),
+      hasRequiredTextFields(currentDraft.question, currentDraft.answer),
   });
 
   const columns: AdminTableColumn<HelpArticle>[] = [
@@ -804,16 +803,12 @@ function LegalPagesMockCrud() {
       approvedAt: record.approvedAt,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `legal-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("legal", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || "/legal",
+      href: withFallbackHref(currentDraft.href, "/legal"),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(
-        currentDraft.title.trim() &&
-          currentDraft.summary.trim() &&
-          currentDraft.version.trim()
-      ),
+      hasRequiredTextFields(currentDraft.title, currentDraft.summary, currentDraft.version),
   });
 
   const columns: AdminTableColumn<AdminLegalRecord>[] = [
@@ -1053,12 +1048,12 @@ function MembershipMockCrud() {
       memberVisibility: record.memberVisibility,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `membership-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("membership", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || "/membership",
+      href: withFallbackHref(currentDraft.href, "/membership"),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+      hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
   const columns: AdminTableColumn<AdminMembershipRecord>[] = [
@@ -1308,16 +1303,12 @@ function MarketplaceMockCrud() {
       enquiryRequired: record.enquiryRequired,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `marketplace-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("marketplace", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || "/marketplace",
+      href: withFallbackHref(currentDraft.href, "/marketplace"),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(
-        currentDraft.title.trim() &&
-          currentDraft.summary.trim() &&
-          currentDraft.supplierName.trim()
-      ),
+      hasRequiredTextFields(currentDraft.title, currentDraft.summary, currentDraft.supplierName),
   });
 
   const columns: AdminTableColumn<AdminMarketplaceRecord>[] = [
@@ -1531,16 +1522,12 @@ function OfferMockCrud() {
       status: record.status,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `offer-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("offer", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || "/offers",
+      href: withFallbackHref(currentDraft.href, "/offers"),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(
-        currentDraft.title.trim() &&
-          currentDraft.partner.trim() &&
-          currentDraft.summary.trim()
-      ),
+      hasRequiredTextFields(currentDraft.title, currentDraft.partner, currentDraft.summary),
   });
 
   const columns: AdminTableColumn<PublicOffer>[] = [
@@ -1740,12 +1727,12 @@ function ApplicationMockCrud() {
       status: record.status,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `application-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("application", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || `/applications#${slugify(currentDraft.title)}`,
+      href: withFallbackHref(currentDraft.href, `/applications#${slugify(currentDraft.title)}`),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+      hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
   const columns: AdminTableColumn<ApplicationCategory>[] = [
@@ -1899,12 +1886,12 @@ function ServiceMockCrud() {
       status: record.status,
     }),
     fromDraft: (currentDraft, existingRecord) => ({
-      id: existingRecord?.id ?? (slugify(currentDraft.title) || `service-${Date.now()}`),
+      id: existingRecord?.id ?? createMockRecordId("service", currentDraft.title),
       ...currentDraft,
-      href: currentDraft.href || "/on-demand",
+      href: withFallbackHref(currentDraft.href, "/on-demand"),
     }),
     validateDraft: (currentDraft) =>
-      Boolean(currentDraft.title.trim() && currentDraft.summary.trim()),
+      hasRequiredTextFields(currentDraft.title, currentDraft.summary),
   });
 
   const columns: AdminTableColumn<AdminServiceRecord>[] = [
