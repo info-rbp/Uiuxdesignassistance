@@ -40,3 +40,14 @@ Do not treat this repository as the authoritative production source unless a fut
 
   Run `npm run dev` to start the development server.
   
+
+## Phase 5 Notice
+
+This repository is now reference/source-history only.
+
+Active Phase 5 Integration work must use:
+
+    https://github.com/info-rbp/rbp-platform
+    branch: main
+
+Do not begin Phase 5 implementation work from this repository.
